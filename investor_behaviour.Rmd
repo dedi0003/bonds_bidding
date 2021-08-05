@@ -1,0 +1,44 @@
+---
+title: "Analysis on Investor Behaviour"
+author: "Dea Avega Editya"
+date: "8/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(readr)
+library(stringr)
+library(lubridate)
+
+bonds <- read.csv("data/FR0087.csv", header = F) %>% 
+  mutate(date = as_date(substr(V5, 1, 6)), series = V2, bid_no = V1, yield = V3, bid = V4, bidder = V6, bidder_code = V8, 
+         inv = gsub("\\s", "", V8), group = case_when(V10 == "CB" ~ "CB", TRUE ~ "non-CB"), custody = V11, alloted_unit = V12, proceed = V13, acr_int = V14) %>% 
+  mutate(ivt = sub('.*-', '', inv), type = substr(bidder_code, 1, 2)) %>% 
+  mutate(bidder_type = case_when(bidder %in% c("CITIBANK  N.A.", "KC JPMORGAN CHASE BANK  N.A.", "DEUTSCHE BANK  A.G.", "STANDCHART BANK") ~ "foreign", TRUE ~ "resident"),investor = case_when(
+    ivt == "00" ~ bidder, TRUE ~ ivt),  
+         investor_ty = substr(bidder_code, 4, 5)) %>% 
+  mutate(investor_type = case_when(investor_ty == "IB" ~ "Investment Bank", 
+                                   investor_ty == "PF" ~ "Pension Fund",
+                                   investor_ty == "SC" ~ "Securities Company",
+                                   investor_ty == "IS" ~ "Insurance")) %>% 
+  select(-V1, -V2, -V3, -V4, -V6, -V5, -V7, -V8, -V9, -V10, -V11, -V12, -V13, -V14, -inv, -type, -ivt, -investor_ty) %>% 
+  as_tibble()
+
+###
+unique(bonds$investor_type)
+typeof(bonds$investor_type)
+foreign <- bonds %>% filter(bidder_type == "foreign")
+```
+
+There are several category of investors:
+1. Investment Bank
+2. Securities Company
+3. Pension Fund
+4. Insurance
+
+
