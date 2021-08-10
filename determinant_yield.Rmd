@@ -178,6 +178,18 @@ yield_factor %>%
   filter(year(date) == 2018) %>% 
 GGally::ggscatmat()
 
+yield_factor %>% 
+GGally::ggscatmat(columns = c(2,3,4,5))
+
+model <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y, data = yield_factor)
+
+# reduce to "best fit" model with
+model_best <- step(model, trace = FALSE)
+summary(model_best)
+
+#diagnose model
+ggnostic(model_best)
+
 ```
 
 As we can see from the plot, in 2015 and 2016 foreign ownership seems to have no strong relationship with the yield. Different situation happened in 2017-2019 where the changes in foreign ownership seems to strong-negatively affect the bonds yield movement. 
