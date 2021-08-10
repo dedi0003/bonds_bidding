@@ -11,7 +11,7 @@ Outlines:
 a. Literature review:
 - Description of LCB 10y Yield,
 - Description of Determinant factors:
-US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR)
+US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR), Issuance Mechanism in Primary Market (new policy of greenshoe auction)
 - Purpose of study
 - Data sources
 - Limitation
@@ -22,11 +22,14 @@ b. CDS vs Yield
 c. Foreign Ownership vs Yield
 d. Policy Rate vs Yield
 e. Exhange rate (JIBOR) vs Yield
+f. Greenshoe mechanism vs Yield (also need to check historical Weighted Average Yield-awarded)
 
-3. Key Findings?
+3. Key Findings
+Unknown yet
 i.e.: pandemic effect, 
-shifting power from foreign to domestic participant (central bank/domestic banks)?
-suplementary auction (greenshoe) effect on yield?
+any changed patterns?
+shifting power from foreign to domestic participant (Do central bank/domestic banks become more dominant)?
+suplementary auction (greenshoe) reduces yield?
 
 Summary
 
