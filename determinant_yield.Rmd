@@ -185,7 +185,7 @@ In 2020, the pattern is quite anomaly in which increase from 0.25-0.33% in forei
 
 In January-August 2021, the relationship seems non-linear with no obvious pattern. The ownership drops below 25% but yield decreases further (6-7%).
 
-We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that occured since early 2020. As we aware that the capital excess were absorbed by domestic participants, including Indonesian central bank (Bank Indonesia), thus we will further analyse the pattern of domestic ownership to prove this assumption.
+We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that occurred since early 2020. The decrease in foreign portion maybe because they sell their bonds, or because the issued bonds were mostly absorbed by domestic participants, including the central bank (Bank Indonesia), thus we will track the pattern of domestic ownership in these years to check our assumption.
 
 ```{r}
 
