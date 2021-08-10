@@ -1,9 +1,43 @@
 ---
-title: "Analysis on Investor Behaviour"
+title: "Analysis on Indonesian 10y Sovereign Bonds Yield"
 author: "Dea Avega Editya"
 date: "8/5/2021"
 output: html_document
 ---
+
+Outlines:
+
+1. Introduction:
+a. Literature review:
+- Description of LCB 10y Yield,
+- Description of Determinant factors:
+US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR)
+- Purpose of study
+- Data sources
+- Limitation
+
+2. Understanding the Relationship through EDA
+a. UST vs Yield
+b. CDS vs Yield
+c. Foreign Ownership vs Yield
+d. Policy Rate vs Yield
+e. Exhange rate (JIBOR) vs Yield
+
+3. Key Findings?
+i.e.: pandemic effect, 
+shifting power from foreign to domestic participant (central bank/domestic banks)?
+suplementary auction (greenshoe) effect on yield?
+
+Summary
+
+Bibliography
+
+##Timeline
+Chapter 1 31 Aug 2021
+Chapter 2 1 Sep - 25 Oct 2021
+Chapter 3 26 Oct - 12 Nov 2021
+Summary, Bibliography, cleaning Code, creating slides 13 - 19 Nov 2021
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -12,80 +46,182 @@ library(dplyr)
 library(ggplot2)
 library(tidyverse)
 library(readr)
+library(readxl)
 library(stringr)
 library(lubridate)
+library(janitor)
+library(cleaner)
+library(plotly)
+library(tsibble)
+library(openxlsx)
+library(zoo)
 
-bonds <- read.csv("data/FR0087.csv", header = F) %>% 
-  mutate(date = as_date(substr(V5, 1, 6)), series = V2, bid_no = V1, yield = V3, bid = V4, bidder = V6, bidder_code = V8, 
-         inv = gsub("\\s", "", V8), group = case_when(V10 == "CB" ~ "CB", TRUE ~ "non-CB"), custody = V11, alloted_unit = V12, proceed = V13, acr_int = V14) %>% 
-  mutate(ivt = sub('.*-', '', inv), type = substr(bidder_code, 1, 2)) %>% 
-  mutate(location = case_when(bidder %in% c("CITIBANK  N.A.", "KC JPMORGAN CHASE BANK  N.A.", "DEUTSCHE BANK  A.G.", "STANDCHART BANK") ~ "foreign", TRUE ~ "resident"),
-         investor = case_when(
-    ivt == "00" ~ bidder, TRUE ~ ivt)
-          ) %>% 
-  mutate(investor_type = case_when(substr(bidder_code, 4, 5) == "IB" ~ "investment bank", 
-                                   substr(bidder_code, 4, 5) == "PF" ~ "pension fund",
-                                   substr(bidder_code, 4, 5) == "SC" ~ "securities company",
-                                   substr(bidder_code, 4, 5) == "IS" ~ "insurance")) %>% 
-  mutate(investor = case_when(investor == "DanareksaSeku" ~ "BRI DANAREKSA SEKURITAS",
-                              tolower(substr(investor, 1, 8)) == tolower("MandiriS") ~ "PT. MANDIRI SEKURITAS",
-                              tolower(investor) == tolower("Trimegah") ~ "PT. TRIMEGAH SEKURITAS INDONESIA",
-                              
-                             tolower(substr(investor, 1, 6)) == tolower("Bahana") ~ "PT. BAHANA SEKURITAS",
-                          TRUE ~ investor)) %>% 
-  mutate(bidder_type = case_when(
-    bidder %in% c("PT. MANDIRI SEKURITAS", "BRI DANAREKSA SEKURITAS", "PT Bank Mandiri (Persero), Tbk.", "PT Bank Negara Indonesia (Persero), Tbk.", "PT Bank Rakyat Indonesia, Tbk.") ~ "state-owned", TRUE ~ "private"
-  )) %>% 
-  select(-V1, -V2, -V3, -V4, -V6, -V5, -V7, -V8, -V9, -V10, -V11, -V12, -V13, -V14, -inv, -type, -ivt) %>% 
+#read UST, Yield, cds
+fac1 <- readxl::read_xlsx("data/forecast_new.xlsx", col_names = T, sheet = 2) %>%
+  clean_names() %>% as_tibble()
+
+#read inflation
+cpi <- read_csv("data/cpi_worldbank.csv", skip = 4) %>% 
+  filter(`Country Name` == "Indonesia") %>% as_tibble()
+
+cpi_t <- t(cpi[-1:-4]) 
+colnames(cpi_t) <- cpi[ ,1]
+
+cpi_t <- cbind(year = rownames(cpi_t), cpi_t)
+rownames(cpi_t) <- NULL
+
+cpi_t <- cpi_t %>% as_tibble() %>% 
+  mutate(year = as.numeric(year), inflation = as.numeric(Indonesia)) %>% 
+  select(-2) %>% drop_na()
+
+#read ownership
+own <- readxl::read_xlsx("data/kepemilikan asing.xlsx", col_names = T) %>% drop_na() %>%  janitor::clean_names() %>%  as_tibble()
+
+own_total <- read_xlsx("data/TOTAL KEPEMILIKAN.xlsx", col_names = F) %>%
+  rename(date = 1, ownership = 2) %>% 
   as_tibble()
 
-###
-unique(bonds$investor_type)
-typeof(bonds$investor_type)
-foreign <- bonds %>% filter(bidder_type == "foreign")
-```
+ownership <- left_join(x = own, y = own_total, by = "date") %>% 
+  filter(date >= date("2015-01-02"))
 
-There are several category of investors:
-1. Investment Bank
-2. Securities Company
-3. Pension Fund
-4. Insurance
+#combine all factors
+yield_join <- left_join(fac1, ownership, by = "date") %>% 
+  fill(c(ownership, foreign_own), .direction = "down") %>% 
+  mutate(foreign_pct = foreign_own/ownership, year = year(date))
 
-```{r}
-bonds %>% 
-  select(investor_type, yield, alloted_unit) %>% 
-  filter(yield > 0, alloted_unit > 0) %>% 
-  ggplot(aes(x = investor_type, y = yield))+
-  geom_boxplot()
+yield_factor <- left_join(yield_join, cpi_t, by = "year") %>% select(-year) %>% 
+  na_replace(inflation, replacement = 1.4)
 
+#impute inflation for 2021
+na_replace(yield_factor$inflation, replacement = 1.4)
 
-bonds %>% 
-  select(investor_type, yield, alloted_unit) %>%
-  group_by(investor_type) %>% 
-  filter(yield > 0, alloted_unit > 0) %>% 
-  ggplot(aes(x = investor_type, y = yield))+
-  geom_boxplot()
+yield_factor <- yield_factor %>% 
+  mutate(for_chg = foreign_pct - lag(foreign_pct, default = first(foreign_pct)), 
+         up_down = case_when(for_chg < 0 ~ "down",
+                             for_chg > 0 ~ "up", TRUE ~ "no change")) %>% 
+  rename(domestic_10y = domestik_10y)
 
 
-bonds %>% 
-  select(bidder_type, yield, alloted_unit) %>%
-  group_by(bidder_type) %>% 
-  filter(yield > 0, alloted_unit > 0) %>% 
-  ggplot(aes(x = bidder_type, y = yield))+
-  geom_boxplot()
 ```
 
 ```{r}
-bonds %>% 
-  filter(investor_type == "Insurance") %>% 
-summary()
+yield_factor %>% 
+  mutate(year = year(date)) %>% 
+  group_by(year) %>% 
+  summarise(avg_10y = mean(domestik_10y), inflation) %>% 
+  ggplot(aes(x = avg_10y, y = inflation)) + 
+  geom_point()
 
-securities_comp <- bonds %>% 
-  filter(investor_type == "Securities Company")
+#foreign changes
+yield_factor %>% 
+  mutate(week_year = yearweek(date)) %>% 
+  group_by(week_year) %>% 
+  summarise(avg_10y = mean(domestik_10y), avg_chg = mean(foreign_pct)) %>% 
+  ggplot(aes(x = avg_chg, y = avg_10y)) + 
+  geom_point()
+
+```
+
+Several studies indicates the relationship between bonds yield and foreign ownership (i.e......). We will observe the relationship between these two variables through visualization approach. By just putting the number, we can not see any clear pattern from these variables. However, if we facet the plot by year, now obvious patterns of the relationship arises.
+
+```{r foreign_yield, fig.cap = "Foreign Ownership and Domestic 10y Yield"}
+
+yield_factor %>% 
+  mutate(year = year(date)) %>% 
+  ggplot(aes(x = foreign_pct, y = domestic_10y)) + 
+  geom_point() +
+  facet_wrap(~ year)
+
+```
+
+As we can see from the plot, in 2015 and 2016 foreign ownership seems to have no strong relationship with the yield. Different situation happened in 2017-2019 where the changes in foreign ownership seems to negatively affect the bonds yield movement. The changes of ownership relatively wider in 2018 compared to 2017 and 2019. 
+
+In 2020, the pattern is quite anomaly in which increase from 0.25-0.33% in foreign ownership seems to raise the yield from 6 up to 8.5%. The yield stumbles afterwards with the increase of foreign ownership up to 40%. 
+
+In January-August 2021, the relationship seems non-linear with no obvious pattern. The ownership drops below 25% but yield decreases further (6-7%).
+
+We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that occured since early 2020. As we aware that the capital excess were absorbed by domestic participants, including Indonesian central bank (Bank Indonesia), thus we will further analyse the pattern of domestic ownership to prove this assumption.
+
+```{r}
+
+read_cleansheet <- function(filename, sheet = sheet){
+  x <- read_xlsx(filename, col_names = T, sheet = sheet) %>% 
+  setNames(., c('id', format(as.Date(as.numeric(names(.)[-1]), 
+                   origin = '1899-12-30'), '%m/%d/%Y'))) %>%
+  as_tibble() %>% 
+  pivot_longer(names_to = "date", cols = -1) %>% 
+  mutate(id = tolower(sub("[*]", "", id))) %>% 
+  mutate(id = gsub(".*/ ","",id)) %>% 
+  filter(!(id %in% c("government institution", "non-banks", "non-bank/non-banks"))) %>% 
+  mutate(id = gsub(".*/","",id), date = as.Date(gsub("[/]", "", date), format = "%m%d%Y")) %>% 
+  mutate(group = factor(case_when(id == "bank indonesia" ~ "government",
+                           id == "banks" ~ "bank",
+                           id == "incl. foreign government(s) & central bank(s) *" ~ "non-bank (part of foreign holders)",
+                           id %in% c("mutual funds", "insurance company", "foreign holders", "pension funds", "securities company", "individual", "others")~"non-bank", TRUE ~ "government"))
+         )
+}
   
+#2015
+own_2015_jan <- read_cleansheet("data/ownership_2015.xlsx",sheet = 1)
+own_2015_feb <- read_cleansheet("data/ownership_2015.xlsx",sheet = 2)
+own_2015_mar <- read_cleansheet("data/ownership_2015.xlsx",sheet = 3)
+own_2015_apr <- read_cleansheet("data/ownership_2015.xlsx",sheet = 4)
+own_2015_may <- read_cleansheet("data/ownership_2015.xlsx",sheet = 5)
+own_2015_jun <- read_cleansheet("data/ownership_2015.xlsx",sheet = 6)
+own_2015_jul <- read_cleansheet("data/ownership_2015.xlsx",sheet = 7)
+own_2015_aug <- read_cleansheet("data/ownership_2015.xlsx",sheet = 8)
+own_2015_sep <- read_cleansheet("data/ownership_2015.xlsx",sheet = 9)
+own_2015_oct <- read_cleansheet("data/ownership_2015.xlsx",sheet = 10)
+own_2015_nov <- read_cleansheet("data/ownership_2015.xlsx",sheet = 11)
+own_2015_dec <- read_cleansheet("data/ownership_2015.xlsx",sheet = 12)
+
+ownership_2015 <- bind_rows(list(own_2015_jan, own_2015_feb, own_2015_mar, own_2015_apr, own_2015_may, own_2015_jun, own_2015_jul, own_2015_aug, own_2015_sep, own_2015_oct, own_2015_nov, own_2015_dec))
+
+#2016
+
+own_2016 <- read.xlsx(xlsxFile = "data/ownership_2016.xlsx", fillMergedCells = TRUE, colNames = F, startRow = 2) %>% 
+  # pivot_longer(names_to = "date", cols = -1) %>%
+  as.data.frame()
+
+date_header <- read_xlsx("data/ownership_2016.xlsx", n_max = 1, col_names = F) %>% t() %>% as.data.frame() %>% 
+  do(na.locf(.)) %>% t()
+
+date_header[setdiff(names(own_2016), names(date_header))] <- NA
+# own_2016[setdiff(names(date_header), names(own_2016))] <- NA
+
+merge <- rbind(date_header, own_2016) %>% as_tibble() %>% 
+mutate(X63 = coalesce(X62,X63), X64 = coalesce(X63, X64))
+
+names(merge) <- merge[1, ]
+
+merge_test <- merge %>% 
+pivot_longer(names_to = "date", cols = c(-1)) %>% 
+  rename(id = INSTITUTION) %>% 
+  filter(!id %in% c("INSTITUTION", "BANK*", "Government Institution", "NON-BANK", NA))
+
+ownership_clean <- merge_test %>%  
+  mutate(type = rep(c("sun", "sbsn", "total"), nrow(merge_test)/3)) %>% 
+  mutate(id = tolower(trimws(id))) %>%
+  mutate(id = case_when(id == "non resident" ~ "foreign holders", 
+                        str_extract(id, "net") == "net" ~ "bank indonesia",
+                        str_extract(id, "net") == "net" ~ "bank indonesia",
+                        
+                        TRUE ~ id))%>% 
+  mutate(date = ymd(date), 
+         group = factor(case_when(
+           str_extract(id,"net") == "net" ~ "government",
+           str_extract(id, "monetary operation") == "monetary operation" ~ "government (part of BI)",
+          str_extract(id, "gross") == "gross" ~ "government (part of BI)",
+                                  id %in% c("conventional bank", "islamic bank") ~ "bank",
+                                  
+          str_extract(id, "foreign government") == "foreign government" ~ "non-bank (part of foreign holders)",
+        id %in% c("mutual funds", "insurance company", "foreign holders", "pension funds", "securities company", "individual", "others")~"non-bank", TRUE ~ "government"))
+         )
+
+
+
 ```
 
-Insurance ~ Investment Bank
-Pension fund < IB
-Securities Comp tend to more than IB
+
+
 
