@@ -12,7 +12,8 @@ b. Motivation:
   
 
 c. Data sources + available links
-- Limitation
+
+d. Scope and Limitation
 
 2. Understanding the Relationship through EDA
 
@@ -26,7 +27,7 @@ d. Bank Indo Rate vs Yield
 
 e. Exhange rate (JIBOR) vs Yield
 
-f. Greenshoe mechanism vs Yield (also need to check historical Weighted Average Yield-awarded)
+f. Greenshoe mechanism vs Yield (also need to check historical Weighted Average Yield-awarded before and after greenshoe)
 
 3. Key Findings
 
@@ -37,7 +38,7 @@ any changed patterns?
 
 factors that steadily affect the yield?
 
-pandemic effect? 
+pandemic effect? i.e. holding spending for investing in safe instrument? (need to check ownership of banks, mutual funds, insurance) 
 
 shifting power (bonds ownership) foreign to domestic participant (Do central bank/domestic banks become more dominant)?
 
