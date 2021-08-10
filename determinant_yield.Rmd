@@ -153,6 +153,13 @@ yield_factor %>%
 Several studies indicates the relationship between bonds yield and foreign ownership (i.e......). We will observe the relationship between these two variables through visualization approach. By just putting the number, we can not see any clear pattern from these variables. However, if we facet the plot by year, now obvious patterns of the relationship arises.
 
 ```{r foreign_yield, fig.cap = "Foreign Ownership and Domestic 10y Yield"}
+ownership_2015 %>% 
+  mutate(cg = factor(case_when(group == "government" ~ "bi", TRUE ~ "non"))) %>% 
+  ggplot(aes(x = id, y = value/1000, fill = cg))+
+  geom_col()+
+  coord_flip()+
+  theme(legend.title = element_blank()) 
+
 
 yield_factor %>% 
   mutate(year = year(date)) %>% 
@@ -160,9 +167,19 @@ yield_factor %>%
   geom_point() +
   facet_wrap(~ year)
 
+library(GGally)
+
+yield_factor %>% 
+  filter(year(date) == 2016) %>% 
+GGally::ggscatmat()
+
+yield_factor %>% 
+  filter(year(date) == 2018) %>% 
+GGally::ggscatmat()
+
 ```
 
-As we can see from the plot, in 2015 and 2016 foreign ownership seems to have no strong relationship with the yield. Different situation happened in 2017-2019 where the changes in foreign ownership seems to negatively affect the bonds yield movement. The changes of ownership relatively wider in 2018 compared to 2017 and 2019. 
+As we can see from the plot, in 2015 and 2016 foreign ownership seems to have no strong relationship with the yield. Different situation happened in 2017-2019 where the changes in foreign ownership seems to strong-negatively affect the bonds yield movement. To mention, 2017 is the year when Indonesia got investment grade rating from S&P, following FITCH and Moody's in previous years. 
 
 In 2020, the pattern is quite anomaly in which increase from 0.25-0.33% in foreign ownership seems to raise the yield from 6 up to 8.5%. The yield stumbles afterwards with the increase of foreign ownership up to 40%. 
 
@@ -245,8 +262,6 @@ ownership_clean <- merge_test %>%
           str_extract(id, "foreign government") == "foreign government" ~ "non-bank (part of foreign holders)",
         id %in% c("mutual funds", "insurance company", "foreign holders", "pension funds", "securities company", "individual", "others")~"non-bank", TRUE ~ "government"))
          )
-
-
 
 ```
 
