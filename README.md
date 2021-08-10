@@ -3,13 +3,13 @@
 1. Introduction:
 
 a. Literature review:
-- Description of Local Currency Bonds 10y, its roles and yield,
+- Description of Sovereign Bonds (IDR benchmark series 10y), its roles and yield,
 - Description of Determinant factors:
 US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR), Issuance Mechanism in Primary Market (i.w. new policy of greenshoe auction since early 2020)
 
 b. Motivation: 
 - Understanding several factors that determine the yield
-- Finding alternative explanation of the relationship between the factors and the yield through exploratory data analysis
+- Providing alternative explanation for the relationship between the factors and the yield through exploratory data analysis approach
 
 c. Data sources (including links)
 
