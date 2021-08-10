@@ -1,21 +1,20 @@
 #Outlines:
-
 1. Introduction:
 
 a. Literature review:
-- Description of Sovereign Bonds (IDR benchmark series 10y), its roles and yield,
+- Description of Local Currency Bonds 10y, its roles and yield,
 - Description of Determinant factors:
-US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR), Issuance Mechanism in Primary Market (i.w. new policy of greenshoe auction since early 2020)
+US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR), Issuance Mechanism in Primary Market (new policy of greenshoe auction in 2020)
 
 b. Motivation: 
-- Understanding several factors that determine the yield
-- Providing alternative explanation for the relationship between the factors and the yield through exploratory data analysis approach
-
-c. Data sources (including links)
+- Previous researches are mixed on what determining bonds yield and only few of them cover Indonesia,
+- Understanding factors that determining the 10y-bonds yield in Indonesia,
+  
+c. Data sources + available links
 
 d. Scope and Limitation
 
-2. Analysis of the Relationship through EDA
+2. Understanding the Relationship through EDA
 
 a. UST vs Yield
 
@@ -25,7 +24,7 @@ c. Foreign Ownership vs Yield
 
 d. Bank Indo Rate vs Yield
 
-e. Exhange rate (JIBOR) vs Yield
+e. Exchange rate (JIBOR) vs Yield
 
 f. Greenshoe mechanism vs Yield (also need to check historical Weighted Average Yield-awarded before and after greenshoe)
 
@@ -38,9 +37,9 @@ any changed patterns?
 
 factors that steadily affect the yield?
 
-pandemic effect? i.e. hold spending for investing in safe instrument? (need to check ownership of banks, mutual funds, insurance) 
+pandemic effect? i.e. holding spending for investing in safe instrument? (need to check ownership of banks, mutual funds, insurance) 
 
-shifting power (bonds ownership) foreign to domestic participant (Do central bank/domestic banks become more dominant)? Quantitave easing scheme
+shifting power (bonds ownership) foreign to domestic participant (Do central bank/domestic banks become more dominant)?
 
 suplementary auction (greenshoe) can reduce yield in 2020-2021?
 
@@ -48,7 +47,6 @@ suplementary auction (greenshoe) can reduce yield in 2020-2021?
 Summary
 
 Bibliography
-
 
 #Timeline
 
