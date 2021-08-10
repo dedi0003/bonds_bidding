@@ -5,17 +5,17 @@
 a. Literature review:
 - Description of Local Currency Bonds 10y, its roles and yield,
 - Description of Determinant factors:
-US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR), Issuance Mechanism in Primary Market (new policy of greenshoe auction in 2020)
+US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR), Issuance Mechanism in Primary Market (i.w. new policy of greenshoe auction since early 2020)
 
 b. Motivation: 
-- Understanding factors that determining the yield,
-  
+- Understanding several factors that determine the yield
+- Finding alternative explanation of the relationship between the factors and the yield through exploratory data analysis
 
-c. Data sources + available links
+c. Data sources (including links)
 
 d. Scope and Limitation
 
-2. Understanding the Relationship through EDA
+2. Analysis of the Relationship through EDA
 
 a. UST vs Yield
 
