@@ -15,7 +15,8 @@ a. Literature review:
 US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR), Issuance Mechanism in Primary Market (new policy of greenshoe auction in 2020)
 
 b. Motivation: 
-- Understanding factors that determining the yield,
+- Previous researches are mixed on what determining bonds yield and only few of them cover Indonesia,
+- Understanding factors that determining the 10y-bonds yield in Indonesia,
   
 c. Data sources + available links
 
@@ -31,7 +32,7 @@ c. Foreign Ownership vs Yield
 
 d. Bank Indo Rate vs Yield
 
-e. Exhange rate (JIBOR) vs Yield
+e. Exchange rate (JIBOR) vs Yield
 
 f. Greenshoe mechanism vs Yield (also need to check historical Weighted Average Yield-awarded before and after greenshoe)
 
@@ -185,7 +186,7 @@ In 2020, the pattern is quite anomaly in which increase from 0.25-0.33% in forei
 
 In January-August 2021, the relationship seems non-linear with no obvious pattern. The ownership drops below 25% but yield decreases further (6-7%).
 
-We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that occurred since early 2020. The decrease in foreign portion maybe because they sell their bonds, or because the issued bonds were mostly absorbed by domestic participants, including the central bank (Bank Indonesia), thus we will track the pattern of domestic ownership in these years to check our assumption.
+We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that occurred since early 2020. The government is increasing funding to sustain the economy. The decrease in foreign portion could be because foreigners sell their bonds, or because the issued bonds were mostly absorbed by domestic participants, including the central bank (Bank Indonesia), thus we will track the pattern of domestic ownership in these years to check our assumption.
 
 ```{r}
 
