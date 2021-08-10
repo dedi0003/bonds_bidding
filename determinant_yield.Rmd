@@ -180,13 +180,15 @@ GGally::ggscatmat()
 
 ```
 
-As we can see from the plot, in 2015 and 2016 foreign ownership seems to have no strong relationship with the yield. Different situation happened in 2017-2019 where the changes in foreign ownership seems to strong-negatively affect the bonds yield movement. To mention, 2017 is the year when Indonesia got investment grade rating from S&P, following FITCH and Moody's in previous years. 
+As we can see from the plot, in 2015 and 2016 foreign ownership seems to have no strong relationship with the yield. Different situation happened in 2017-2019 where the changes in foreign ownership seems to strong-negatively affect the bonds yield movement. 
 
-In 2020, the pattern is quite anomaly in which increase from 0.25-0.33% in foreign ownership seems to raise the yield from 6 up to 8.5%. The yield stumbles afterwards with the increase of foreign ownership up to 40%. 
+To mention, 2017 is the year when Indonesia got investment grade rating from S&P, following FITCH and Moody's in previous years. It means that broader category of foreign investment entities (i.e. pension funds and insurance) can enter the country's market since Indonesia's rating has fulfilled their criteria of investment (yunianto, 2018). 
 
-In January-August 2021, the relationship seems non-linear with no obvious pattern. The ownership drops below 25% but yield decreases further (6-7%).
+Particularly In 2020, the pattern is quite anomaly in which increase from 0.25-0.33% in foreign ownership seems to raise the yield from 6 up to 8.5%. The yield stumbles afterwards with the increase of foreign ownership up to 40%. 
 
-We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that occurred since early 2020. The government is increasing funding to sustain the economy. The decrease in foreign portion could be because foreigners sell their bonds, or because the issued bonds were mostly absorbed by domestic participants, including the central bank (Bank Indonesia), thus we will track the pattern of domestic ownership in these years to check our assumption.
+In January-August 2021, the relationship looks non-linear with no obvious pattern. The ownership drops below 25% but interestingly yield decreases further (6-7%).
+
+We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that occurred since early 2020. The government is increasing its funding to sustain the economy. The decrease in foreign portion could be because foreigners sell their bonds more than their buying (net sell), or another reason is because their portion is deluged by domestic participants (i.e. central bank), thus we will track the pattern of domestic ownership in these years to check our assumption.
 
 ```{r}
 
