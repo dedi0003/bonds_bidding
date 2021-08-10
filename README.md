@@ -38,7 +38,7 @@ any changed patterns?
 
 factors that steadily affect the yield?
 
-pandemic effect? i.e. holding spending for investing in safe instrument? (need to check ownership of banks, mutual funds, insurance) 
+pandemic effect? i.e. hold spending for investing in safe instrument? (need to check ownership of banks, mutual funds, insurance) 
 
 shifting power (bonds ownership) foreign to domestic participant (Do central bank/domestic banks become more dominant)?
 
