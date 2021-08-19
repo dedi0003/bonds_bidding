@@ -145,13 +145,15 @@ yield_factor %>%
 yield_factor %>% 
   mutate(week_year = yearweek(date)) %>% 
   group_by(week_year) %>% 
-  summarise(avg_10y = mean(domestik_10y), avg_chg = mean(foreign_pct)) %>% 
+  summarise(avg_10y = mean(domestic_10y), avg_chg = mean(foreign_pct)) %>% 
   ggplot(aes(x = avg_chg, y = avg_10y)) + 
   geom_point()
 
 ```
 
-Several studies indicates the relationship between bonds yield and foreign ownership (i.e......). We will observe the relationship between these two variables through visualization approach. By just putting the number, we can not see any clear pattern from these variables. However, if we facet the plot by year, now obvious patterns of the relationship arises.
+Several studies indicates the relationship between bonds yield and foreign ownership (i.e......). We will observe the relationship between these two variables through visualization approach. 
+
+By just putting the number, we can not see any clear pattern from these variables. However, if we facet the plot by year, now obvious patterns of the relationship arises.
 
 ```{r foreign_yield, fig.cap = "Foreign Ownership and Domestic 10y Yield"}
 ownership_2015 %>% 
@@ -181,7 +183,7 @@ GGally::ggscatmat()
 yield_factor %>% 
 GGally::ggscatmat(columns = c(2,3,4,5))
 
-model <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y, data = yield_factor)
+model <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct, data = yield_factor)
 
 # reduce to "best fit" model with
 model_best <- step(model, trace = FALSE)
@@ -203,83 +205,19 @@ In January-August 2021, the relationship looks non-linear with no obvious patter
 We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that occurred since early 2020. The government is increasing its funding to sustain the economy. The decrease in foreign portion could be because foreigners sell their bonds more than their buying (net sell), or another reason is because their portion is deluged by domestic participants (i.e. central bank), thus we will track the pattern of domestic ownership in these years to check our assumption.
 
 ```{r}
+#load bonds ownership
+ownership_bonds <- readRDS('ownership_bonds.rds') %>% 
+  mutate(value = as.double(value), type = factor(type))
 
-read_cleansheet <- function(filename, sheet = sheet){
-  x <- read_xlsx(filename, col_names = T, sheet = sheet) %>% 
-  setNames(., c('id', format(as.Date(as.numeric(names(.)[-1]), 
-                   origin = '1899-12-30'), '%m/%d/%Y'))) %>%
-  as_tibble() %>% 
-  pivot_longer(names_to = "date", cols = -1) %>% 
-  mutate(id = tolower(sub("[*]", "", id))) %>% 
-  mutate(id = gsub(".*/ ","",id)) %>% 
-  filter(!(id %in% c("government institution", "non-banks", "non-bank/non-banks"))) %>% 
-  mutate(id = gsub(".*/","",id), date = as.Date(gsub("[/]", "", date), format = "%m%d%Y")) %>% 
-  mutate(group = factor(case_when(id == "bank indonesia" ~ "government",
-                           id == "banks" ~ "bank",
-                           id == "incl. foreign government(s) & central bank(s) *" ~ "non-bank (part of foreign holders)",
-                           id %in% c("mutual funds", "insurance company", "foreign holders", "pension funds", "securities company", "individual", "others")~"non-bank", TRUE ~ "government"))
-         )
-}
-  
-#2015
-own_2015_jan <- read_cleansheet("data/ownership_2015.xlsx",sheet = 1)
-own_2015_feb <- read_cleansheet("data/ownership_2015.xlsx",sheet = 2)
-own_2015_mar <- read_cleansheet("data/ownership_2015.xlsx",sheet = 3)
-own_2015_apr <- read_cleansheet("data/ownership_2015.xlsx",sheet = 4)
-own_2015_may <- read_cleansheet("data/ownership_2015.xlsx",sheet = 5)
-own_2015_jun <- read_cleansheet("data/ownership_2015.xlsx",sheet = 6)
-own_2015_jul <- read_cleansheet("data/ownership_2015.xlsx",sheet = 7)
-own_2015_aug <- read_cleansheet("data/ownership_2015.xlsx",sheet = 8)
-own_2015_sep <- read_cleansheet("data/ownership_2015.xlsx",sheet = 9)
-own_2015_oct <- read_cleansheet("data/ownership_2015.xlsx",sheet = 10)
-own_2015_nov <- read_cleansheet("data/ownership_2015.xlsx",sheet = 11)
-own_2015_dec <- read_cleansheet("data/ownership_2015.xlsx",sheet = 12)
-
-ownership_2015 <- bind_rows(list(own_2015_jan, own_2015_feb, own_2015_mar, own_2015_apr, own_2015_may, own_2015_jun, own_2015_jul, own_2015_aug, own_2015_sep, own_2015_oct, own_2015_nov, own_2015_dec))
-
-#2016
-
-own_2016 <- read.xlsx(xlsxFile = "data/ownership_2016.xlsx", fillMergedCells = TRUE, colNames = F, startRow = 2) %>% 
-  # pivot_longer(names_to = "date", cols = -1) %>%
-  as.data.frame()
-
-date_header <- read_xlsx("data/ownership_2016.xlsx", n_max = 1, col_names = F) %>% t() %>% as.data.frame() %>% 
-  do(na.locf(.)) %>% t()
-
-date_header[setdiff(names(own_2016), names(date_header))] <- NA
-# own_2016[setdiff(names(date_header), names(own_2016))] <- NA
-
-merge <- rbind(date_header, own_2016) %>% as_tibble() %>% 
-mutate(X63 = coalesce(X62,X63), X64 = coalesce(X63, X64))
-
-names(merge) <- merge[1, ]
-
-merge_test <- merge %>% 
-pivot_longer(names_to = "date", cols = c(-1)) %>% 
-  rename(id = INSTITUTION) %>% 
-  filter(!id %in% c("INSTITUTION", "BANK*", "Government Institution", "NON-BANK", NA))
-
-ownership_clean <- merge_test %>%  
-  mutate(type = rep(c("sun", "sbsn", "total"), nrow(merge_test)/3)) %>% 
-  mutate(id = tolower(trimws(id))) %>%
-  mutate(id = case_when(id == "non resident" ~ "foreign holders", 
-                        str_extract(id, "net") == "net" ~ "bank indonesia",
-                        str_extract(id, "net") == "net" ~ "bank indonesia",
-                        
-                        TRUE ~ id))%>% 
-  mutate(date = ymd(date), 
-         group = factor(case_when(
-           str_extract(id,"net") == "net" ~ "government",
-           str_extract(id, "monetary operation") == "monetary operation" ~ "government (part of BI)",
-          str_extract(id, "gross") == "gross" ~ "government (part of BI)",
-                                  id %in% c("conventional bank", "islamic bank") ~ "bank",
-                                  
-          str_extract(id, "foreign government") == "foreign government" ~ "non-bank (part of foreign holders)",
-        id %in% c("mutual funds", "insurance company", "foreign holders", "pension funds", "securities company", "individual", "others")~"non-bank", TRUE ~ "government"))
-         )
+ownership_bonds %>% 
+  filter(!group %in% c("non-bank (part of foreign holders)", "foreign gov (part of foreign holders)", "government (part of BI)")) %>%
+  mutate(month = month(date),year = year(date)) %>% 
+  group_by(group, month, year) %>%
+  summarise(group, pct = mean(value/sum(value)*100)) %>% 
+  drop_na() %>% 
+  ggplot(aes(x = factor(month), y = pct, fill = group))+
+  geom_col(position = "dodge")+
+facet_wrap(~ year)
+  # theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```
-
-
-
-
