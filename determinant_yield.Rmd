@@ -23,6 +23,7 @@ b. Motivation:
 c. Data sources + available links
 
 d. Scope and Limitation
+Cant see average bid from each group (i.e. conventional banks, foreign, insurance/pension, others)
 
 2. Methodology
 
@@ -191,6 +192,31 @@ yield_factor %>%
   mutate(year = year(date)) %>% 
   ggplot(aes(x = foreign_pct, y = domestic_10y)) + 
   geom_point() +
+  facet_wrap(~ year)
+
+yield_factors %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_point(aes(x = foreign_pct)) + 
+  facet_wrap(~ year)
+
+## insurance and pension fund strongly positive correlation
+yield_factors %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, ins_pct = ins_pension/tot_ownership) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_point(aes(x = ins_pct)) + 
+  facet_wrap(~ year)
+
+yield_factors %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, ins_pct = ins_pension/tot_ownership, other_pct = others/tot_ownership) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_point(aes(x = other_pct))+
+  facet_wrap(~ year)
+
+yield_factors %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, ins_pct = ins_pension/tot_ownership, other_pct = others/tot_ownership) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_point(aes(x = ind_pct))+
   facet_wrap(~ year)
 
 library(GGally)
@@ -574,13 +600,15 @@ yield_factors %>%
 ## ownership pct
 yield_factors %>% 
   na.omit() %>% 
-  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership) %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, other_pct = others/tot_ownership) %>% 
    filter(year != 2015) %>% 
-  select(date, foreign_pct, bi_pct, con_pct, islam_pct, ind_pct) %>%
+  select(date, foreign_pct, bi_pct, con_pct, islam_pct, ind_pct, other_pct) %>%
   gather(key = "variable", value = "value", -date) %>% 
   ggplot(aes(x = date, y = value))+
   geom_area(aes(fill = variable), alpha = 0.7)+
   theme_classic()
+####Others = securities, corporations, and foundations.
+
 
 
 yield_factors %>% na.omit() %>% 
