@@ -18,11 +18,16 @@ b. Motivation:
 - Previous researches are mixed on what determining bonds yield and only few of them cover Indonesia,
 - Understanding factors that determining the 10y-bonds yield in Indonesia,
   
+
+
 c. Data sources + available links
 
 d. Scope and Limitation
 
-2. Understanding the Relationship through EDA
+2. Methodology
+
+Many confounding factors, hence visualizing with plots maybe can explain  
+Understanding the Relationship through EDA
 
 a. UST vs Yield
 
@@ -84,8 +89,11 @@ library(plotly)
 library(tsibble)
 library(openxlsx)
 library(zoo)
+library(purrr)
+library(sugrrants)
+library(GGally)
 
-#read UST, Yield, cds
+#script for create UST, Yield, cds, foreign
 fac1 <- readxl::read_xlsx("data/forecast_new.xlsx", col_names = T, sheet = 2) %>%
   clean_names() %>% as_tibble()
 
@@ -130,6 +138,21 @@ yield_factor <- yield_factor %>%
                              for_chg > 0 ~ "up", TRUE ~ "no change")) %>% 
   rename(domestic_10y = domestik_10y)
 
+#add policy rate
+pol_rate <- read_xlsx("data/policy_rate.xlsx", skip = 4, col_names = T) %>% 
+  mutate(date = as.Date(Tanggal), rate = as.double(parse_number(`BI-7Day-RR`))) %>%
+  select(date, rate)
+
+yield_factors <- left_join(yield_factor, pol_rate, by = "date") %>% 
+  fill(rate, .direction = "down")
+
+unique(ownership_bonds$group)
+
+cek <- ownership_bonds %>% 
+  filter()
+  summarise(date, id, )
+
+# yield_factors <- left_join(yield_factor)
 
 ```
 
@@ -183,9 +206,148 @@ GGally::ggscatmat()
 yield_factor %>% 
 GGally::ggscatmat(columns = c(2,3,4,5))
 
-model <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct, data = yield_factor)
+yield_factors <- read_rds("yield_factors.rds")
+
+###add auction days
+yield_factors <- yield_factors %>% 
+  mutate(auction_day = case_when(
+    date(date) %in% auction_date$value ~ "yes",
+                TRUE ~ "no"))
+
+yield_factors <- yield_factors %>% 
+  mutate(auction_day = case_when(auction_day == "no" & year == 2015 ~ "", TRUE ~ auction_day))
+
+inds <- which(yield_factors$auction_day == "yes")
+
+yield_factors[inds-3, "pre_auction"] <- yield_factors[inds, "auction_day"]
+
+yield_factors[inds-2, "pre_auction"] <- yield_factors[inds, "auction_day"]
+
+yield_factors[inds-1, "pre_auction"] <- yield_factors[inds, "auction_day"]
+
+yield_factors[inds-0, "pre_auction"] <- yield_factors[inds, "auction_day"]
+
+inds_yes <- which(yield_factors$pre_auction == "yes")
+
+yield_factors[inds_yes, "auction_day"] <- yield_factors[inds_yes, "pre_auction"]
+
+### auction vs non_auc days
+average_2017 <- yield_factors %>% filter(year == 2017) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2018 <- yield_factors %>% filter(year == 2018) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2019 <- yield_factors %>% filter(year == 2019) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2020 <- yield_factors %>% filter(year == 2020) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2021 <- yield_factors %>% filter(year == 2021) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+  
+yield_factors %>% filter(year == 2017) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%   
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+  geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
+  geom_hline(data = average_2017, aes(yintercept = mean), alpha = 0.5)+
+  facet_wrap(~month)
+
+yield_factors %>% filter(year == 2018) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%   
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+  geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
+  geom_hline(data = average_2018, aes(yintercept = mean), alpha = 0.5)+
+  facet_wrap(~month)
+
+yield_factors %>% filter(year == 2019) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%   
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+  geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
+  geom_hline(data = average_2019, aes(yintercept = mean), alpha = 0.5)+
+  facet_wrap(~month)
+
+yield_factors %>% filter(year == 2020) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%   
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+  geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
+  geom_hline(data = average_2020, aes(yintercept = mean), alpha = 0.5)+
+  facet_wrap(~month)
+
+yield_factors %>% filter(year == 2021) %>% 
+  mutate(month = month(date)) %>% 
+  group_by(month) %>%   
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+  geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
+  geom_hline(data = average_2021, aes(yintercept = mean), alpha = 0.5)+
+  facet_wrap(~month)
+
+cek <- yield_factors %>% 
+  group_by(auction_day) %>% select(!pre_auction)
+  # mutate(domestic_10y = as.numeric(domestic_10y)) %>% 
+
+cek %>% filter(year == 2016) %>% 
+  mutate(month = month(date)) %>% 
+  ggplot(aes(y = domestic_10y, color = auction_day)) +
+  geom_boxplot()+facet_wrap(~month)
+
+cek %>% filter(year == 2017) %>% 
+  mutate(month = month(date)) %>% 
+  ggplot(aes(y = domestic_10y, color = auction_day)) +
+  geom_boxplot()+facet_wrap(~month)
+  
+cek %>% filter(year == 2018) %>% 
+  mutate(month = month(date), date = date(date)) %>% 
+  ggplot(aes(y = domestic_10y, x= factor(date), color = auction_day)) +
+  geom_point()+facet_wrap(~month)
+
+cek %>% filter(year == 2020) %>% 
+  mutate(month = month(date)) %>% 
+  ggplot(aes(y = domestic_10y, color = auction_day)) +
+  geom_boxplot()+facet_wrap(~month)+theme(legend.position = "bottom")
+
+
+cek %>% filter(year == 2018) %>% 
+  mutate(month = month(date)) %>% 
+  ggplot(aes(x = domestic_10y, color = auction_day), group = auction_day) +
+  geom_density()+
+               facet_wrap(~ month)
+
+
+
+
+
+
+
+# yes <- wider$yes %>% na.omit()
+# no <- wider$no %>% na.omit()
+# 
+# yes_no <- cbind(yes, no) %>% as_tibble()
+# 
+# k2 <- kmeans(yes_no, center = 2, nstart = 25)
+# 
+# fviz_cluster(k2, data = yes_no)
+
+model <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct + rate, 
+            data = yield_factors %>% select(!date, !for_chg, !up_down, !tot_ownership, !foreign, !central_bank, !individual, !ins_pension, !mutual_fund, !securities_company, !con_bank, !islam_bank, !others, !year))
+
+model19 <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct, data = yield_factor %>% mutate(year = year(date)) %>%  filter(year == 2019))
+
+model20 <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct, data = yield_factor %>% mutate(year = year(date)) %>%  filter(year == 2020))
 
 # reduce to "best fit" model with
+
+summary(model)
 model_best <- step(model, trace = FALSE)
 summary(model_best)
 
@@ -207,17 +369,243 @@ We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that
 ```{r}
 #load bonds ownership
 ownership_bonds <- readRDS('ownership_bonds.rds') %>% 
-  mutate(value = as.double(value), type = factor(type))
+  mutate(value = as.double(value), type = factor(type), month = month(date), year = year(date), id = trimws(gsub(".*-", "", id)))
 
 ownership_bonds %>% 
-  filter(!group %in% c("non-bank (part of foreign holders)", "foreign gov (part of foreign holders)", "government (part of BI)")) %>%
-  mutate(month = month(date),year = year(date)) %>% 
-  group_by(group, month, year) %>%
-  summarise(group, pct = mean(value/sum(value)*100)) %>% 
-  drop_na() %>% 
-  ggplot(aes(x = factor(month), y = pct, fill = group))+
-  geom_col(position = "dodge")+
-facet_wrap(~ year)
+filter(date == "2021-08-02", group %in% c("government (part of BI)", "government"))
+
+
+ownership_bonds <- ownership_bonds %>% 
+  mutate(id = case_when(id %in% c("insurance company", "insurance", "pension funds", "insurance and pension fund", "pension fund") ~ "insurance & pension fund", 
+                        id %in% c("mutual fund", "mutual funds") ~ "mutual fund",
+                        TRUE ~ id)) %>% 
+  group_by(id, date, group, type) %>% summarise(id, date, month, year, group, type, value = sum(value)) %>% 
+  distinct()
+
+unique(ownership_bonds$group)
+
+ownership_bonds %>% 
+filter(group == "government", date == "2015-12-31")
+
+ownership_bonds %>%
+  filter(group %in% c("bank", "government", "non-bank"), year != 2015) %>% 
+  group_by(id, month, year, group) %>%
+  ggplot(aes(x = factor(month), y = value,  fill = id))+
+    geom_col(width = 5)+
+facet_wrap(~ year, ncol = 2)
   # theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
+by_id <- ownership_bonds %>% 
+  filter(type == "total") %>% 
+  summarise(id, date, value) 
+
+
+total_bonds <- by_id %>% 
+  group_by(date) %>% 
+  filter(group %in% c("government", "bank", "non-bank")) %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(tot_ownership = value)
+
+ownership_bonds %>% 
+  group_by(id) %>% 
+  filter(date == "2015-12-31", group != "non-bank (part of foreign holders)")
+
+#add total ownership
+yield_factors <- left_join(yield_factor, total_bonds, by = "date") %>% 
+  fill(tot_ownership, .direction = "down")
+
+foreign <-by_id %>% 
+  group_by(date) %>% 
+  filter(id == "foreign holders") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(foreign = value)
+
+yield_factors <- left_join(yield_factors, foreign, by = "date") %>% 
+  fill(foreign, .direction = "down")
+
+yield_factors <- yield_factors %>% 
+  select(-foreign_own, - ownership)
+
+central_bank <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "bank indonesia") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(central_bank = value)
+
+yield_factors <- left_join(yield_factors, central_bank, by = "date") %>% 
+  fill(central_bank, .direction = "down")
+
+individual <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "individual") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(individual = value)
+
+yield_factors <- left_join(yield_factors, individual, by = "date") %>% 
+  fill(individual, .direction = "down")
+
+ins_pension <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "insurance & pension fund") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(ins_pension = value)
+
+yield_factors <- left_join(yield_factors, ins_pension, by = "date") %>% 
+  fill(ins_pension, .direction = "down")
+
+
+mutual <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "mutual fund") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(mutual_fund = value)
+
+yield_factors <- left_join(yield_factors, mutual, by = "date") %>% 
+  fill(mutual_fund, .direction = "down")
+
+securities <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "securities company") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(securities_company = value)
+
+yield_factors <- left_join(yield_factors, securities, by = "date") %>% 
+  fill(securities_company, .direction = "down")
+
+unique(by_id$id)
+
+con_bank <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "conventional bank") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(con_bank = value)
+
+yield_factors <- left_join(yield_factors, con_bank, by = "date") %>% 
+  fill(con_bank, .direction = "down")
+
+islam_bank <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "islamic bank") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(islam_bank = value)
+
+yield_factors <- left_join(yield_factors, islam_bank, by = "date") %>% 
+  fill(islam_bank, .direction = "down")
+
+others <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "others") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(others = value)
+
+yield_factors <- left_join(yield_factors, others, by = "date") %>% 
+  fill(others, .direction = "down")
+
+yield_factors <- yield_factors %>% 
+  mutate(year = year(as.Date(date, tz = "UTC")))
+
+pol_rate <- read_xlsx("data/policy_rate.xlsx", skip = 4, col_names = T) %>% 
+  mutate(date = as.Date(Tanggal), rate = as.double(parse_number(`BI-7Day-RR`))) %>%
+  select(date, rate)
+
+yield_factors <- left_join(yield_factors, pol_rate, by = "date") %>% 
+  fill(rate, .direction = "down")
+
+saveRDS(yield_factors, "yield_factors.rds")
+
+#scattermatrix
+colnames(yield_factors)
+
+yield_factors %>% 
+  filter(year > 2019) %>% 
+GGally::ggscatmat(columns = c(2,3,4,5))
+
+unique(colnames(yield_factors))
+
+# yield_factors %>% 
+#   filter(year > 2019) %>% 
+#   mutate(bi_pct = central_bank/tot_ownership, indv_pct = individual/tot_ownership, insp_pct = ins_pension/tot_ownership, mut_pct = mutual_fund/tot_ownership, sec_pct = securities_company/tot_ownership, conv_pct = con_bank/tot_ownership, isl_pct = islam_bank/tot_ownership) %>% 
+#   select(domestic_10y, foreign_pct, bi_pct, indv_pct, insp_pct, mut_pct, sec_pct, conv_pct, isl_pct) %>% 
+# GGally::ggscatmat()
+
+
+yield_factors %>% 
+  filter(year > 2018) %>% 
+GGally::ggscatmat(columns = c(5, 13, 14, 15, 16, 17, 18, 19))
+
+
+model <- lm(domestic_10y ~ cds_5y + ust_10y + foreign + rate + central_bank, data = yield_factors)
+
+# reduce to "best fit" model with
+model_best <- step(model, trace = FALSE)
+summary(model_best)
+
+#diagnose model
+ggnostic(model_best)
+
 ```
+
+As shown in the plot, proportion of Bank Indonesia and Conventional Bank are getting bigger in 2020-2021, while proportion of foreign holders is diluted. This is can be seen as a result of implementation of new regulation on 1 May 2020 that mandate banks to reserve government bonds. This regulation has an impact on reducing bonds yield further in these two consecutive years.
+
+Another noticeable change is proportion of individual in the bonds ownership that is growing started from mid of 2020 up to 2021. We may argue that people who prefer to hold their spending is channelling their excess money to investment, especially in a safe instrument like government bonds.
+
+## Policy Rate
+```{r}
+
+yield_factors %>% 
+  na.omit() %>% 
+  mutate(year = year(date)) %>% 
+   filter(year != 2015) %>% 
+  select(date, domestic_10y, rate, foreign, central_bank) %>%
+  gather(key = "variable", value = "value", -date) %>% 
+  ggplot(aes(x = date, y = log(value)))+
+  geom_smooth(aes(color = variable))+theme_minimal()
+
+## ownership pct
+yield_factors %>% 
+  na.omit() %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership) %>% 
+   filter(year != 2015) %>% 
+  select(date, foreign_pct, bi_pct, con_pct, islam_pct, ind_pct) %>%
+  gather(key = "variable", value = "value", -date) %>% 
+  ggplot(aes(x = date, y = value))+
+  geom_area(aes(fill = variable), alpha = 0.7)+
+  theme_classic()
+
+
+yield_factors %>% na.omit() %>% 
+  mutate(spread_ust = rate-ust_10y) %>% 
+  ggplot(aes(x = date(date), y = ust_10y))+
+  geom_smooth(color = "green")+geom_smooth(aes(y= inflation))+geom_smooth(aes(y=rate), color = "red")
+
+
+# spread pol-rate vs yield
+yield_factors %>% 
+  na.omit() %>% 
+  mutate(year = year(date), spread = abs(domestic_10y-rate)) %>%
+  filter(year != 2015) %>% 
+  select(date, year, spread) %>% 
+  ggplot(aes(y = spread))+
+  geom_boxplot()+
+  facet_wrap(~year)
+
+yield_factors %>% 
+  filter(year > 2019)
+  
+
+```
+
+From plot above, the movement of domestic 10y yield is parallel with movement of policy rate. The median spread in 2016 until 2018 is quite the same (around 2.5) while median spread of 2019 is the lowest. In 2020 and 2021, the differents between 10y yield and policy rate are increase with median spread is about 3. The range of spread in 2020 is also the widest compared to other observed years.
+
+
+
