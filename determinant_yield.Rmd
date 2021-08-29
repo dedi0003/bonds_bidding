@@ -5,7 +5,7 @@ date: "8/5/2021"
 output: html_document
 ---
 
-#Outlines:
+# Outlines:
 
 1. Introduction:
 
@@ -63,7 +63,7 @@ Summary
 Bibliography
 
 
-#Timeline
+# Timeline
 
 Chapter 1 + Data collection/conversion from excel tables 31 Aug 2021,
 
