@@ -346,3 +346,38 @@ auction_2016 <- date(c('2016/01/05', '2016/01/19', '2016/02/02', '2016/02/16', '
                        '2016/09/13', '2016/09/27', '2016/10/11', '2016/10/25', '2016/11/08')) %>% as_tibble()
 
 auction_date <- rbind(auction_2016, auction_2017, auction_2018, auction_2019, auction_2020, auction_2021)
+
+
+# read vix
+vix <- read_excel("data/Data VIX_req Pega.xlsx") %>% 
+  mutate(date = date(Tanggal)) %>% select(-Tanggal) %>% clean_names()
+
+yield_factors <- left_join(yield_factors, vix, by = "date")
+
+debt_gdp <- read_excel("data/data_macroindicator.xlsx", col_names = F) %>% clean_names()
+
+colnames(debt_gdp) <- c("year", "month", "debt_gdp")
+
+debt_gdp <- debt_gdp %>% mutate(yearmon = paste(year, month, sep = " "))
+
+
+yield_factors <- yield_factors %>% 
+  mutate(yearmon = as.character(yearmonth(date)))
+
+yield_factors <- left_join(yield_factors, debt_gdp, by = "yearmon") %>% 
+  select(-VIX, -`Chg 1D`,-`debt_gdp.x`, -vix.x, -yearmon)
+
+yield_factors <- yield_factors %>% 
+  select(-year.x, -month.x, -debt_gdp.y, -year.y, -month.y, -for_chg, -up_down)
+
+yield_factors <- yield_factors %>% select(-debt_gdp.x, -debt_gdp.y, -x) 
+
+yield_factors <- yield_factors %>% 
+  rename(vix = vix.y)
+
+yield_factors <- yield_factors %>% 
+  rename(vix_chg = chg_1d)
+
+yield_factors <- yield_factors %>%
+  select(-foreign_pct)
+

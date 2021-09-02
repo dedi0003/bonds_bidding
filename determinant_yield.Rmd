@@ -17,7 +17,6 @@ US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (B
 b. Motivation: 
 - Previous researches are mixed on what determining bonds yield and only few of them cover Indonesia,
 - Understanding factors that determining the 10y-bonds yield in Indonesia,
-  
 
 
 c. Data sources + available links
@@ -40,7 +39,9 @@ d. Bank Indo Rate vs Yield
 
 e. Exchange rate (JIBOR) vs Yield
 
-f. Greenshoe mechanism vs Yield (also need to check historical Weighted Average Yield-awarded before and after greenshoe)
+f. Volatility index (VIX) vs Yield
+
+g. Greenshoe mechanism vs Yield (need to check before and after greenshoe)
 
 3. Key Findings
 
@@ -49,11 +50,12 @@ i.e.:
 
 any changed patterns?
 
-factors that steadily affect the yield?
+factors that steadily affect the yield? (foreign and insurance/pension fund are steadily associated with yield movement. Foreign has strongly negative correlation until 2019, while insurance/pension has strongly positive correlation)
 
-pandemic effect? i.e. holding spending for investing in safe instrument? (need to check ownership of banks, mutual funds, insurance) 
+pandemic effect? i.e. holding spending for investing in safe instrument? (need to check ownership of domestic banks, mutual funds, insurance, individual investors) 
 
 shifting power (bonds ownership) foreign to domestic participant (Do central bank/domestic banks become more dominant)?
+(Quantitative easing of Bank Indonesia and mandatory purchase of domestic banks can push down the yield)
 
 suplementary auction (greenshoe) can reduce yield in 2020-2021?
 
@@ -93,80 +95,39 @@ library(zoo)
 library(purrr)
 library(sugrrants)
 library(GGally)
+library(scales)
 
-#script for create UST, Yield, cds, foreign
-fac1 <- readxl::read_xlsx("data/forecast_new.xlsx", col_names = T, sheet = 2) %>%
-  clean_names() %>% as_tibble()
+#read compiled dataset
+yield_factors <- readRDS("yield_factors.rds")
 
-#read inflation
-cpi <- read_csv("data/cpi_worldbank.csv", skip = 4) %>% 
-  filter(`Country Name` == "Indonesia") %>% as_tibble()
+#check volatility vs yield
+yield_factors %>% mutate(year = year(date)) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_point(aes(x = vix))+
+  facet_wrap(~year)
 
-cpi_t <- t(cpi[-1:-4]) 
-colnames(cpi_t) <- cpi[ ,1]
-
-cpi_t <- cbind(year = rownames(cpi_t), cpi_t)
-rownames(cpi_t) <- NULL
-
-cpi_t <- cpi_t %>% as_tibble() %>% 
-  mutate(year = as.numeric(year), inflation = as.numeric(Indonesia)) %>% 
-  select(-2) %>% drop_na()
-
-#read ownership
-own <- readxl::read_xlsx("data/kepemilikan asing.xlsx", col_names = T) %>% drop_na() %>%  janitor::clean_names() %>%  as_tibble()
-
-own_total <- read_xlsx("data/TOTAL KEPEMILIKAN.xlsx", col_names = F) %>%
-  rename(date = 1, ownership = 2) %>% 
-  as_tibble()
-
-ownership <- left_join(x = own, y = own_total, by = "date") %>% 
-  filter(date >= date("2015-01-02"))
-
-#combine all factors
-yield_join <- left_join(fac1, ownership, by = "date") %>% 
-  fill(c(ownership, foreign_own), .direction = "down") %>% 
-  mutate(foreign_pct = foreign_own/ownership, year = year(date))
-
-yield_factor <- left_join(yield_join, cpi_t, by = "year") %>% select(-year) %>% 
-  na_replace(inflation, replacement = 1.4)
-
-#impute inflation for 2021
-na_replace(yield_factor$inflation, replacement = 1.4)
-
-yield_factor <- yield_factor %>% 
-  mutate(for_chg = foreign_pct - lag(foreign_pct, default = first(foreign_pct)), 
-         up_down = case_when(for_chg < 0 ~ "down",
-                             for_chg > 0 ~ "up", TRUE ~ "no change")) %>% 
-  rename(domestic_10y = domestik_10y)
-
-#add policy rate
-pol_rate <- read_xlsx("data/policy_rate.xlsx", skip = 4, col_names = T) %>% 
-  mutate(date = as.Date(Tanggal), rate = as.double(parse_number(`BI-7Day-RR`))) %>%
-  select(date, rate)
-
-yield_factors <- left_join(yield_factor, pol_rate, by = "date") %>% 
-  fill(rate, .direction = "down")
-
-unique(ownership_bonds$group)
-
-cek <- ownership_bonds %>% 
-  filter()
-  summarise(date, id, )
-
-# yield_factors <- left_join(yield_factor)
+#check debt_gdp ratio vs yield
+yield_factors %>% mutate(year = year(date)) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_jitter(aes(x = debt_gdp))+
+  facet_wrap(~year)
 
 ```
 
 ```{r}
-yield_factor %>% 
+
+yield_factors %>% 
   mutate(year = year(date)) %>% 
   group_by(year) %>% 
-  summarise(avg_10y = mean(domestik_10y), inflation) %>% 
-  ggplot(aes(x = avg_10y, y = inflation)) + 
+  summarise(avg_10y = mean(domestic_10y), inflation) %>% 
+  ggplot(aes(x = inflation, y = avg_10y)) + 
   geom_point()
 
 #foreign changes
-yield_factor %>% 
+#### negative relationship when foreign pct > 35%, < 35% positive relationship
+### due to quantitative easing of central bank 2020-2021, mandatory purchase for domestic banks
+
+yield_factors %>% 
   mutate(week_year = yearweek(date)) %>% 
   group_by(week_year) %>% 
   summarise(avg_10y = mean(domestic_10y), avg_chg = mean(foreign_pct)) %>% 
@@ -180,19 +141,247 @@ Several studies indicates the relationship between bonds yield and foreign owner
 By just putting the number, we can not see any clear pattern from these variables. However, if we facet the plot by year, now obvious patterns of the relationship arises.
 
 ```{r foreign_yield, fig.cap = "Foreign Ownership and Domestic 10y Yield"}
-ownership_2015 %>% 
-  mutate(cg = factor(case_when(group == "government" ~ "bi", TRUE ~ "non"))) %>% 
-  ggplot(aes(x = id, y = value/1000, fill = cg))+
+yield_factors %>% 
+  filter(year(date) == 2015) %>% 
+  select(date, foreign, central_bank, individual, mutual_fund, ) %>%
+  gather(key = "variable", value = "value", -date) %>% 
+  ggplot(aes(x = variable, y = value/1000, fill = value))+
   geom_col()+
   coord_flip()+
   theme(legend.title = element_blank()) 
 
+yield_factors %>% 
+  filter(year(date) == 2021) %>% 
+  select(date, foreign, central_bank, individual, mutual_fund, con_bank, islam_bank, ins_pension) %>%
+  gather(key = "variable", value = "value", -date) %>% 
+  ggplot(aes(x = variable, y = value/1000, fill = value))+
+  geom_col()+
+  coord_flip()+
+  theme(legend.title = element_blank()) 
 
-yield_factor %>% 
-  mutate(year = year(date)) %>% 
-  ggplot(aes(x = foreign_pct, y = domestic_10y)) + 
+yield_factors %>% 
+  filter(year(date) == 2020) %>% 
+  select(date, foreign, central_bank, individual, mutual_fund, con_bank, islam_bank, ins_pension, others) %>%
+  gather(key = "variable", value = "value", -date) %>% 
+  ggplot(aes(x = variable, y = value/1000, fill = value))+
+  geom_col()+
+  coord_flip()+
+  theme(legend.title = element_blank())
+
+yield_factors %>% 
+  filter(year(date) == 2019) %>% 
+  select(date, foreign, central_bank, individual, mutual_fund, con_bank, islam_bank, ins_pension, others) %>%
+  gather(key = "variable", value = "value", -date) %>% 
+  ggplot(aes(x = variable, y = value/1000, fill = value))+
+  geom_col()+
+  coord_flip()+
+  theme(legend.title = element_blank())
+
+
+yield_factors %>% 
+  mutate(year = year(date), con_pct = con_bank/tot_ownership, bi_pct = central_bank/tot_ownership, ins_pct = ins_pension/tot_ownership) %>% 
+  ggplot(aes(y = domestic_10y))+
+  geom_point(aes(x = con_pct, color = "red"))+
+  geom_point(aes(x = bi_pct))+
+  theme(legend.title = element_blank())+facet_wrap(~ year)
+
+## others steadily has strong positive correlation with yield
+yield_factors %>% 
+mutate(year = year(date), con_pct = con_bank/tot_ownership, bi_pct = central_bank/tot_ownership, others_pct = others/tot_ownership) %>% 
+  ggplot(aes(x = others_pct, y = domestic_10y)) + 
   geom_point() +
   facet_wrap(~ year)
+
+#check ownership in auction days
+yield_factors %>% 
+mutate(year = year(date), month = month(date), con_pct = scale(con_bank/tot_ownership), bi_pct = central_bank/tot_ownership, others_pct = scale(others/tot_ownership), ins_pct = scale(ins_pension/tot_ownership)) %>% 
+  filter(year == 2019, month == 2) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = ins_pct))+
+  geom_line(aes(y = con_pct, color = "red"))+
+  geom_point(aes(y = auction_day, color = factor(auction_day)))
+
+yield_factors %>% 
+mutate(year = year(date), month = month(date), con_pct = scale(con_bank/tot_ownership), bi_pct = central_bank/tot_ownership, others_pct = scale(others/tot_ownership), for_pct = scale(foreign/tot_ownership)) %>% 
+  filter(year == 2019, month == 4) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = for_pct))+
+  geom_line(aes(y = con_pct, color = "red"))+
+  geom_point(aes(y = auction_day, color = factor(auction_day)))
+
+yield_factors %>% 
+mutate(year = year(date), month = month(date), con_pct = scale(con_bank/tot_ownership), bi_pct = central_bank/tot_ownership, others_pct = scale(others/tot_ownership), for_pct = scale(foreign/tot_ownership)) %>% 
+  filter(year == 2019, month == 4) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = for_pct))+
+  geom_line(aes(y = con_pct, color = "red"))+
+  geom_point(aes(y = auction_day, color = factor(auction_day)))
+
+# bi and con_bank is balancing each other
+# since 2020, they move in the same direction
+yield_factors %>% 
+mutate(year = year(date), con_pct = con_bank/tot_ownership, bi_pct = central_bank/tot_ownership, others_pct = scale(others/tot_ownership), ins_pct = ins_pension/tot_ownership) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = bi_pct))+
+  geom_line(aes(y = con_pct))
+
+
+
+###CDS vs UST spread
+g <- yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y) %>%  
+  filter(year == 2021) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = sqrt(spread_10)))+
+  geom_line(aes(y = sqrt(spread_5)), color = "red", alpha = 0.5)+
+  geom_line(aes(y = spread_ust), color = "blue")+
+   scale_x_date(labels = date_format("%m-%Y"))
+
+plot_compare <- patchwork::wrap_plots(a,b,c,d,e,f,g, ncol = 4)
+
+
+### CDS vs centralbank rate spread
+
+b7 <- yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_bi = domestic_10y-rate) %>%  
+  filter(year == 2021) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = sqrt(spread_10)))+
+  geom_line(aes(y = sqrt(spread_5)), color = "red", alpha = 0.5)+
+  geom_line(aes(y = spread_bi), color = "blue")+
+   scale_x_date(labels = date_format("%m-%Y"))
+
+plot_compare_bi <- patchwork::wrap_plots(b1,b2,b3,b4,b5,b6,b7, ncol = 4)
+
+
+# ust vs policy rate vs spread rate-ust
+# check how differ central bank rate from UST
+yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate, ust_bi = rate-ust_10y) %>% 
+  filter(year > 2015) %>% 
+  ggplot(aes(x = date)) + 
+  geom_area(aes(y = ust_bi), fill = "darkgreen", alpha = 0.5)+
+  geom_line(aes(y = rate))+
+  geom_line(aes(y = ust_10y), color = "red")+
+  # geom_line(aes(y = spread_ust))+
+  # geom_line(aes(y = spread_bi), color = "red", alpha = 0.5)+
+  scale_x_date(labels = date_format("%m-%Y"))
+  
+yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate, ust_bi = rate-ust_10y) %>%  
+  filter(year > 2015) %>% 
+  ggplot(aes(x = spread_ust, y = domestic_10y))+
+  geom_jitter()
+
+###spread ust vs yield in 2019 and 2021 is not strongly associated
+yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate, ust_bi = rate-ust_10y) %>%  
+  filter(year > 2015) %>% 
+  ggplot(aes(x = spread_ust, y = domestic_10y))+
+  geom_jitter()+
+  facet_wrap(~year)
+
+
+###spread bi vs yield 
+yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate, ust_bi = rate-ust_10y) %>%  
+  filter(year > 2015) %>% 
+  ggplot(aes(x = spread_bi, y = domestic_10y))+
+  geom_jitter()+
+  facet_wrap(~year)
+
+###cds vs yield 
+yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate, ust_bi = rate-ust_10y) %>%  
+  filter(year > 2015) %>% 
+  ggplot(aes(x = cds_5y, y = domestic_10y))+
+  geom_jitter()+
+  facet_wrap(~year)
+
+yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate, ust_bi = rate-ust_10y) %>%  
+  filter(year > 2015) %>% 
+  ggplot(aes(x = cds_10y, y = domestic_10y))+
+  geom_jitter()+
+  facet_wrap(~year)
+
+
+  # spread movement
+
+spread_2016 <- yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = domestic_10y - cds_10y/100, spread_5 = domestic_10y - cds_5y/100, spread_ust = domestic_10y-ust_10y) %>% 
+  filter(year == 2016) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = spread_10))+
+  geom_line(aes(y = spread_5), color = "red", alpha = 0.5)+
+  geom_line(aes(y = spread_ust), color = "blue")+
+   scale_x_date(labels = date_format("%m-%Y"))
+
+
+spread_2017 <- yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = domestic_10y - cds_10y/100, spread_5 = domestic_10y - cds_5y/100, spread_ust = domestic_10y-ust_10y) %>% 
+  filter(year == 2017) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = spread_10))+
+  geom_line(aes(y = spread_5), color = "red", alpha = 0.5)+
+  geom_line(aes(y = spread_ust), color = "blue")+
+   scale_x_date(labels = date_format("%m-%Y"))
+
+spread_2018 <- yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = domestic_10y - cds_10y/100, spread_5 = domestic_10y - cds_5y/100, spread_ust = domestic_10y-ust_10y) %>% 
+  filter(year == 2018) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = spread_10))+
+  geom_line(aes(y = spread_5), color = "red", alpha = 0.5)+
+  geom_line(aes(y = spread_ust), color = "blue")+
+   scale_x_date(labels = date_format("%m-%Y"))
+
+spread_2019 <- yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = domestic_10y - cds_10y/100, spread_5 = domestic_10y - cds_5y/100, spread_ust = domestic_10y-ust_10y) %>% 
+  filter(year == 2019) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = spread_10))+
+  geom_line(aes(y = spread_5), color = "red", alpha = 0.5)+
+  geom_line(aes(y = spread_ust), color = "blue")+
+   scale_x_date(labels = date_format("%m-%Y"))
+
+spread_2020 <- yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = domestic_10y - cds_10y/100, spread_5 = domestic_10y - cds_5y/100, spread_ust = domestic_10y-ust_10y) %>% 
+  filter(year == 2020) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = spread_10))+
+  geom_line(aes(y = spread_5), color = "red", alpha = 0.5)+
+  geom_line(aes(y = spread_ust), color = "blue")+
+   scale_x_date(labels = date_format("%m-%Y"))
+
+spread_2021 <- yield_factors %>% 
+  mutate(year = year(date)) %>% 
+  mutate(date= date(date), month =  month(date), spread_10 = domestic_10y - cds_10y/100, spread_5 = domestic_10y - cds_5y/100, spread_ust = domestic_10y-ust_10y) %>% 
+  filter(year == 2021) %>% 
+  ggplot(aes(x = date)) + 
+  geom_line(aes(y = spread_10))+
+  geom_line(aes(y = spread_5), color = "red", alpha = 0.5)+
+  geom_line(aes(y = spread_ust), color = "blue")+
+  scale_x_date(labels = date_format("%m-%Y"))
+
+
+library(patchwork)
+
+plot_spread <- patchwork::wrap_plots(spread_2016, spread_2017, spread_2018, spread_2019, spread_2020, spread_2021, ncol = 3)
+###spread mostly below cds, except in 2016 and 2020 after pandemic in march
 
 yield_factors %>% 
   mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership) %>% 
@@ -214,14 +403,14 @@ yield_factors %>%
   facet_wrap(~ year)
 
 yield_factors %>% 
-  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, ins_pct = ins_pension/tot_ownership, other_pct = others/tot_ownership) %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, ins_pct = ins_pension/tot_ownership, other_pct = others/tot_ownership, mutual_pct = mutual_fund/tot_ownership) %>% 
   ggplot(aes(y = domestic_10y)) + 
-  geom_point(aes(x = ind_pct))+
+  geom_point(aes(x = mutual_pct))+
   facet_wrap(~ year)
 
-library(GGally)
 
-yield_factor %>% 
+
+yield_factors %>% 
   filter(year(date) == 2016) %>% 
 GGally::ggscatmat()
 
@@ -234,28 +423,40 @@ GGally::ggscatmat(columns = c(2,3,4,5))
 
 yield_factors <- read_rds("yield_factors.rds")
 
-###add auction days
+### add auction days
 yield_factors <- yield_factors %>% 
   mutate(auction_day = case_when(
-    date(date) %in% auction_date$value ~ "yes",
-                TRUE ~ "no"))
+    date(date) %in% auction_date$value ~ 1,
+                TRUE ~ 0))
 
-yield_factors <- yield_factors %>% 
-  mutate(auction_day = case_when(auction_day == "no" & year == 2015 ~ "", TRUE ~ auction_day))
+# yield_factors <- yield_factors %>% 
+#   mutate(auction_day = case_when(auction_day == 2015 ~ NA, TRUE ~ auction_day))
 
-inds <- which(yield_factors$auction_day == "yes")
+inds <- which(yield_factors$auction_day == 1)
 
-yield_factors[inds-3, "pre_auction"] <- yield_factors[inds, "auction_day"]
+yield_factors[inds-3, "pre"] <- yield_factors[inds, "auction_day"]
 
-yield_factors[inds-2, "pre_auction"] <- yield_factors[inds, "auction_day"]
+yield_factors[inds-2, "pre"] <- yield_factors[inds, "auction_day"]
 
-yield_factors[inds-1, "pre_auction"] <- yield_factors[inds, "auction_day"]
+yield_factors[inds-1, "pre"] <- yield_factors[inds, "auction_day"]
 
-yield_factors[inds-0, "pre_auction"] <- yield_factors[inds, "auction_day"]
+yield_factors[inds-0, "pre"] <- yield_factors[inds, "auction_day"]
 
-inds_yes <- which(yield_factors$pre_auction == "yes")
+inds_yes <- which(yield_factors$pre == 1)
 
-yield_factors[inds_yes, "auction_day"] <- yield_factors[inds_yes, "pre_auction"]
+yield_factors[inds_yes, "auction_day"] <- yield_factors[inds_yes, "pre"]
+
+auction_2015 <- yield_factors %>% filter(year == 2015) %>% mutate(auction_day = na_if(auction_day, 0))
+
+auction_beyond <- yield_factors %>% filter(year > 2015)
+
+yield_factors <- rbind(auction_2015, auction_beyond) %>% select(-pre)
+
+####save yield_factors with auction days
+saveRDS(yield_factors, "yield_factors.rds")
+
+# yield_factors <- readRDS("yield_factors.rds")
+
 
 ### auction vs non_auc days
 average_2017 <- yield_factors %>% filter(year == 2017) %>% 
@@ -281,7 +482,7 @@ average_2021 <- yield_factors %>% filter(year == 2021) %>%
 yield_factors %>% filter(year == 2017) %>% 
   mutate(month = month(date)) %>% 
   group_by(month) %>%   
-ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
   geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
   geom_hline(data = average_2017, aes(yintercept = mean), alpha = 0.5)+
   facet_wrap(~month)
@@ -289,7 +490,7 @@ ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha =
 yield_factors %>% filter(year == 2018) %>% 
   mutate(month = month(date)) %>% 
   group_by(month) %>%   
-ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
   geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
   geom_hline(data = average_2018, aes(yintercept = mean), alpha = 0.5)+
   facet_wrap(~month)
@@ -297,7 +498,7 @@ ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha =
 yield_factors %>% filter(year == 2019) %>% 
   mutate(month = month(date)) %>% 
   group_by(month) %>%   
-ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
   geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
   geom_hline(data = average_2019, aes(yintercept = mean), alpha = 0.5)+
   facet_wrap(~month)
@@ -305,7 +506,7 @@ ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha =
 yield_factors %>% filter(year == 2020) %>% 
   mutate(month = month(date)) %>% 
   group_by(month) %>%   
-ggplot(aes(x = factor(day(date)), y = domestic_10y, color = auction_day, alpha = 0.1))+
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
   geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
   geom_hline(data = average_2020, aes(yintercept = mean), alpha = 0.5)+
   facet_wrap(~month)
@@ -364,8 +565,58 @@ cek %>% filter(year == 2018) %>%
 # 
 # fviz_cluster(k2, data = yes_no)
 
-model <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct + rate, 
-            data = yield_factors %>% select(!date, !for_chg, !up_down, !tot_ownership, !foreign, !central_bank, !individual, !ins_pension, !mutual_fund, !securities_company, !con_bank, !islam_bank, !others, !year))
+data_model <- yield_factors %>% 
+  mutate(date= date(date), year = factor(year), month =  factor(month(date)), spread_10 = domestic_10y - cds_10y/100, spread_5 = domestic_10y - cds_5y/100, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate,
+         bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, ins_pct = ins_pension/tot_ownership, other_pct = others/tot_ownership, mutual_pct = mutual_fund/tot_ownership, auction_day = factor(auction_day))
+
+# model <- glm(domestic_10y ~ cds_5y + cds_10y + ust_10y + rate + foreign_pct+ ins_pct+ foreign_pct:year + ins_pct:year,  
+#             data = data_model)
+
+model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate:year + foreign + ins_pension +
+              +foreign:year + ins_pension:year + auction_day:month:year,
+            data = data_model)
+
+summary(model)
+best <- drop1(model, test = "F")
+summary(best)
+
+library(broom)
+aug <- augment(model)
+
+aug %>% 
+  ggplot(aes(x = .fitted, y = .resid))+
+  geom_point()
+
+aug %>% 
+  ggplot(aes(x = .cooksd, y = .hat))+
+  geom_point()
+
+aug %>% filter(.cooksd > 0.2)
+
+####remove extreme outliers
+# model <- data_model %>% slice(-c(661, 1242)) %>% lm(formula = domestic_10y ~ cds_5y + ust_10y+ rate + foreign_pct + ins_pct + 
+#               +foreign_pct:year + ins_pct:year + auction_day:month)
+
+model <- data_model %>% slice(-c(661, 1242)) %>% lm(formula = domestic_10y ~ cds_5y + ust_10y+ rate + foreign + ins_pension + 
+              +foreign:year + ins_pension:year)
+
+summary(model)
+aug <- augment(model)
+
+aug %>% 
+  ggplot(aes(x = .fitted, y = .resid))+
+  geom_point()
+
+aug %>% 
+  ggplot(aes(x = .cooksd, y = .hat))+
+  geom_point()
+
+#check multicol
+library(caret)
+car::vif(model)
+
+
+
 
 model19 <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct, data = yield_factor %>% mutate(year = year(date)) %>%  filter(year == 2019))
 
@@ -549,6 +800,8 @@ yield_factors <- left_join(yield_factors, pol_rate, by = "date") %>%
 
 saveRDS(yield_factors, "yield_factors.rds")
 
+# yield_factors <- readRDS("yield_factors.rds")
+
 #scattermatrix
 colnames(yield_factors)
 
@@ -600,13 +853,14 @@ yield_factors %>%
 ## ownership pct
 yield_factors %>% 
   na.omit() %>% 
-  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, other_pct = others/tot_ownership) %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, other_pct = others/tot_ownership, mutual_pct = mutual_fund/tot_ownership, ins_pct = ins_pension/tot_ownership) %>% 
    filter(year != 2015) %>% 
-  select(date, foreign_pct, bi_pct, con_pct, islam_pct, ind_pct, other_pct) %>%
+  select(date, foreign_pct, bi_pct, con_pct, islam_pct, ind_pct, other_pct, mutual_pct, ins_pct) %>%
   gather(key = "variable", value = "value", -date) %>% 
   ggplot(aes(x = date, y = value))+
   geom_area(aes(fill = variable), alpha = 0.7)+
   theme_classic()
+
 ####Others = securities, corporations, and foundations.
 
 
