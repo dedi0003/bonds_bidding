@@ -5,14 +5,14 @@ date: "8/5/2021"
 output: html_document
 ---
 
-# Outlines:
+#Outlines:
 
 1. Introduction:
 
 a. Literature review:
 - Description of Local Currency Bonds 10y, its roles and yield,
 - Description of Determinant factors:
-US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Offered Rate/JIBOR), Issuance Mechanism in Primary Market (new policy of greenshoe auction in 2020)
+US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), Issuance Mechanism in Primary Market (new policy of greenshoe auction in 2020)
 
 b. Motivation: 
 - Previous researches are mixed on what determining bonds yield and only few of them cover Indonesia,
@@ -37,7 +37,7 @@ c. Foreign Ownership vs Yield
 
 d. Bank Indo Rate vs Yield
 
-e. Exchange rate (JIBOR) vs Yield
+e. Exchange rate (JISDOR) vs Yield
 
 f. Volatility index (VIX) vs Yield
 
@@ -65,7 +65,7 @@ Summary
 Bibliography
 
 
-# Timeline
+#Timeline
 
 Chapter 1 + Data collection/conversion from excel tables 31 Aug 2021,
 
@@ -96,14 +96,25 @@ library(purrr)
 library(sugrrants)
 library(GGally)
 library(scales)
+library(flipTime)
+
 
 #read compiled dataset
 yield_factors <- readRDS("yield_factors.rds")
+
 
 #check volatility vs yield
 yield_factors %>% mutate(year = year(date)) %>% 
   ggplot(aes(y = domestic_10y)) + 
   geom_point(aes(x = vix))+
+  facet_wrap(~year)
+
+#check exchange rate vs yield
+# strong and steady positive relationship between exchange rate and yield
+# Rupiah weakened yield goes up
+yield_factors %>% mutate(year = year(date)) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_point(aes(x = exchange_mid))+
   facet_wrap(~year)
 
 #check debt_gdp ratio vs yield
@@ -118,14 +129,14 @@ yield_factors %>% mutate(year = year(date)) %>%
 
 yield_factors %>% 
   mutate(year = year(date)) %>% 
-  group_by(year) %>% 
-  summarise(avg_10y = mean(domestic_10y), inflation) %>% 
-  ggplot(aes(x = inflation, y = avg_10y)) + 
-  geom_point()
+  filter(year == 2018) %>% 
+  # summarise(avg_10y = mean(domestic_10y), inflation) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_jitter(aes(x = inflation), alpha =0.5)
 
 #foreign changes
 #### negative relationship when foreign pct > 35%, < 35% positive relationship
-### due to quantitative easing of central bank 2020-2021, mandatory purchase for domestic banks
+### due to quantitative easing of central bank 2020-2021 and mandatory purchase of domestic banks boost domestic ownership
 
 yield_factors %>% 
   mutate(week_year = yearweek(date)) %>% 

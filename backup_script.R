@@ -381,3 +381,36 @@ yield_factors <- yield_factors %>%
 yield_factors <- yield_factors %>%
   select(-foreign_pct)
 
+cpi_inflation <- read_xlsx("data/inflation_bi.xlsx", col_names = T, skip = 4) %>% clean_names() %>% select(-no) %>% mutate(mon = case_when(str_extract(period, ".*[a-z]") == "Januari" ~ "Jan",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "Februari" ~ "Feb",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "Maret" ~ "Mar",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "April" ~ "Apr",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "Mei" ~ "May",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "Juni" ~ "Jun",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "Juli" ~ "Jul",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "Agustus" ~ "Aug",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "September" ~ "Jan",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "Oktober" ~ "Oct",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "November" ~ "Nov",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "Desember" ~ "Dec"),
+                                                                                                                           year = str_extract(period, "[0-9]+")
+)
+
+
+cpi_inflation <- cpi_inflation %>% 
+  mutate(yearmon = paste(year, mon)) %>% select(cpi_inflation, yearmon)
+
+yield_factors <- yield_factors %>% mutate(yearmon = as.character(yearmonth(date)))
+
+yield_factors$cpi_inflation <- cpi_inflation$cpi_inflation[match(yield_factors$yearmon, cpi_inflation$yearmon)]
+
+
+# read exchange rate (mid point JISDOR)
+exchange <- read_xlsx("data/exchange_rate.xlsx", skip = 4, col_names = TRUE) %>% clean_names() %>% mutate(date = AsDateTime(date), exchange_mid = (buy+sell)/2) %>% select(-no, -value, -sell, -buy)
+
+yield_factors <- left_join(yield_factors, exchange, by = "date")
+
+yield_factors <- yield_factors %>% 
+  fill(exchange_mid, .direction = "down")
+
+saveRDS(yield_factors, "yield_factors.rds")
