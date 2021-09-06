@@ -60,6 +60,165 @@ cek <- ownership_bonds %>%
 yield_factors <- left_join(yield_factor)
 
 
+#load bonds ownership
+ownership_bonds <- readRDS('ownership_bonds.rds') %>% 
+  mutate(value = as.double(value), type = factor(type), month = month(date), year = year(date), id = trimws(gsub(".*-", "", id)))
+
+ownership_bonds %>% 
+  filter(date == "2021-08-02", group %in% c("government (part of BI)", "government"))
+
+
+ownership_bonds <- ownership_bonds %>% 
+  mutate(id = case_when(id %in% c("insurance company", "insurance", "pension funds", "insurance and pension fund", "pension fund") ~ "insurance & pension fund", 
+                        id %in% c("mutual fund", "mutual funds") ~ "mutual fund",
+                        TRUE ~ id)) %>% 
+  group_by(id, date, group, type) %>% summarise(id, date, month, year, group, type, value = sum(value)) %>% 
+  distinct()
+
+unique(ownership_bonds$group)
+
+ownership_bonds %>% 
+  filter(group == "government", date == "2015-12-31")
+
+ownership_bonds %>%
+  filter(group %in% c("bank", "government", "non-bank"), year != 2015) %>% 
+  group_by(id, month, year, group) %>%
+  ggplot(aes(x = factor(month), y = value,  fill = id))+
+  geom_col(width = 5)+
+  facet_wrap(~ year, ncol = 2)
+# theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+by_id <- ownership_bonds %>% 
+  filter(type == "total") %>% 
+  summarise(id, date, value) 
+
+
+total_bonds <- by_id %>% 
+  group_by(date) %>% 
+  filter(group %in% c("government", "bank", "non-bank")) %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(tot_ownership = value)
+
+ownership_bonds %>% 
+  group_by(id) %>% 
+  filter(date == "2015-12-31", group != "non-bank (part of foreign holders)")
+
+#add total ownership
+yield_factors <- left_join(yield_factor, total_bonds, by = "date") %>% 
+  fill(tot_ownership, .direction = "down")
+
+foreign <-by_id %>% 
+  group_by(date) %>% 
+  filter(id == "foreign holders") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(foreign = value)
+
+yield_factors <- left_join(yield_factors, foreign, by = "date") %>% 
+  fill(foreign, .direction = "down")
+
+yield_factors <- yield_factors %>% 
+  select(-foreign_own, - ownership)
+
+central_bank <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "bank indonesia") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(central_bank = value)
+
+yield_factors <- left_join(yield_factors, central_bank, by = "date") %>% 
+  fill(central_bank, .direction = "down")
+
+individual <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "individual") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(individual = value)
+
+yield_factors <- left_join(yield_factors, individual, by = "date") %>% 
+  fill(individual, .direction = "down")
+
+ins_pension <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "insurance & pension fund") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(ins_pension = value)
+
+yield_factors <- left_join(yield_factors, ins_pension, by = "date") %>% 
+  fill(ins_pension, .direction = "down")
+
+
+mutual <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "mutual fund") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(mutual_fund = value)
+
+yield_factors <- left_join(yield_factors, mutual, by = "date") %>% 
+  fill(mutual_fund, .direction = "down")
+
+securities <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "securities company") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(securities_company = value)
+
+yield_factors <- left_join(yield_factors, securities, by = "date") %>% 
+  fill(securities_company, .direction = "down")
+
+unique(by_id$id)
+
+con_bank <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "conventional bank") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(con_bank = value)
+
+yield_factors <- left_join(yield_factors, con_bank, by = "date") %>% 
+  fill(con_bank, .direction = "down")
+
+islam_bank <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "islamic bank") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(islam_bank = value)
+
+yield_factors <- left_join(yield_factors, islam_bank, by = "date") %>% 
+  fill(islam_bank, .direction = "down")
+
+others <- by_id %>% 
+  group_by(date) %>% 
+  filter(id == "others") %>% 
+  summarize(date, value = sum(value)) %>% 
+  distinct() %>% 
+  rename(others = value)
+
+yield_factors <- left_join(yield_factors, others, by = "date") %>% 
+  fill(others, .direction = "down")
+
+yield_factors <- yield_factors %>% 
+  mutate(year = year(as.Date(date, tz = "UTC")))
+
+pol_rate <- read_xlsx("data/policy_rate.xlsx", skip = 4, col_names = T) %>% 
+  mutate(date = as.Date(Tanggal), rate = as.double(parse_number(`BI-7Day-RR`))) %>%
+  select(date, rate)
+
+yield_factors <- left_join(yield_factors, pol_rate, by = "date") %>% 
+  fill(rate, .direction = "down")
+
+
+
+
+
+
 
 #script for reading ownership 2015
 read_cleansheet <- function(filename, sheet = sheet){
@@ -347,6 +506,40 @@ auction_2016 <- date(c('2016/01/05', '2016/01/19', '2016/02/02', '2016/02/16', '
 
 auction_date <- rbind(auction_2016, auction_2017, auction_2018, auction_2019, auction_2020, auction_2021)
 
+### add auction days
+yield_factors <- yield_factors %>% 
+  mutate(auction_day = case_when(
+    date(date) %in% auction_date$value ~ 1,
+    TRUE ~ 0))
+
+# yield_factors <- yield_factors %>% 
+#   mutate(auction_day = case_when(auction_day == 2015 ~ NA, TRUE ~ auction_day))
+
+inds <- which(yield_factors$auction_day == 1)
+
+yield_factors[inds-3, "pre"] <- yield_factors[inds, "auction_day"]
+
+yield_factors[inds-2, "pre"] <- yield_factors[inds, "auction_day"]
+
+yield_factors[inds-1, "pre"] <- yield_factors[inds, "auction_day"]
+
+yield_factors[inds-0, "pre"] <- yield_factors[inds, "auction_day"]
+
+inds_yes <- which(yield_factors$pre == 1)
+
+yield_factors[inds_yes, "auction_day"] <- yield_factors[inds_yes, "pre"]
+
+auction_2015 <- yield_factors %>% filter(year == 2015) %>% mutate(auction_day = na_if(auction_day, 0))
+
+auction_beyond <- yield_factors %>% filter(year > 2015)
+
+yield_factors <- rbind(auction_2015, auction_beyond) %>% select(-pre)
+
+####save yield_factors with auction days
+saveRDS(yield_factors, "yield_factors.rds")
+
+# yield_factors <- readRDS("yield_factors.rds")
+
 
 # read vix
 vix <- read_excel("data/Data VIX_req Pega.xlsx") %>% 
@@ -389,7 +582,7 @@ cpi_inflation <- read_xlsx("data/inflation_bi.xlsx", col_names = T, skip = 4) %>
                                                                                                                                            str_extract(period, ".*[a-z]") == "Juni" ~ "Jun",
                                                                                                                                            str_extract(period, ".*[a-z]") == "Juli" ~ "Jul",
                                                                                                                                            str_extract(period, ".*[a-z]") == "Agustus" ~ "Aug",
-                                                                                                                                           str_extract(period, ".*[a-z]") == "September" ~ "Jan",
+                                                                                                                                           str_extract(period, ".*[a-z]") == "September" ~ "Sep",
                                                                                                                                            str_extract(period, ".*[a-z]") == "Oktober" ~ "Oct",
                                                                                                                                            str_extract(period, ".*[a-z]") == "November" ~ "Nov",
                                                                                                                                            str_extract(period, ".*[a-z]") == "Desember" ~ "Dec"),
