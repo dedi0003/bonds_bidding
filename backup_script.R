@@ -606,4 +606,9 @@ yield_factors <- left_join(yield_factors, exchange, by = "date")
 yield_factors <- yield_factors %>% 
   fill(exchange_mid, .direction = "down")
 
+yield_factors <- yield_factors %>% select(-inflation)
+
+yield_factors <- yield_factors %>% mutate(cpi_inflation = as.numeric(str_extract(cpi_inflation, ".*[0-9]"))) 
 saveRDS(yield_factors, "yield_factors.rds")
+
+

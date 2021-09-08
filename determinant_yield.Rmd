@@ -1,5 +1,5 @@
 ---
-title: "Analysis on Indonesian 10y Sovereign Bonds Yield"
+title: "Determinant Factors of Indonesia 10-year Sovereign Bonds Yield"
 author: "Dea Avega Editya"
 date: "8/5/2021"
 output: html_document
@@ -9,15 +9,37 @@ output: html_document
 
 1. Introduction:
 
+Indonesian government regularly issue sovereign bonds in primary market to finance deficit of national budget. In 2021, the issuance target for sovereign bonds is around 95% of total deficit financing. As per 2 September 2021, total outstanding of sovereign bonds is IDR5,810 Trillions or equivalent to USD406 Billions. 
+
+The government sell the sovereign bonds through auction which conducted on Tuesday every two weeks. During 3-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through Primary Dealers and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offer sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying mechanism may also be conducted by Primary Dealers to complement their competitive bidding purchase. The non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the competitive bidding.
+
+In 2021, there are 20 authorized Primary Dealers comprise of 16 Banks and 4 Securities Companies. This primary dealers system is really important for channeling bonds distributions as well as price discovery. 
+
+They are required to participate in every sovereign bonds auction and to bid for a minimum quantity of the total offering amount. They are allowed to bid both on behalf of their customers and for their own accounts. 
+
+Their competitive bidding also 
+Since 2021, yield of 10-year sovereign bonds become one of macroeconomic assumptions in national budget, replacing treasury bills 3-month tenor (Surat Perbendaharaan Negara).
+
+2. Literature Review
+
+Based on these literature review, this paper will review impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign ownership percentage, central bank's policy rate, exchange rate, volatility risk and auction days on 10-year sovereign bonds yield. For policy rate and exchange rate, we will use Bank Indonesia 7-day repo rate and Jakarta Interbank Spot Dollar Rate/JISDOR. For analyzing the impact of auction mechanism, we will use dummy variables of auction days and non-auction days.
+
+3. Motivation
+
+Previous researches are mixed on what determining bonds yields. 
+This paper provides two new values to existing literature related to the topic. First, it will use exploratory data analysis in the beginning to gain better understanding of each predictor variable. This preliminary step is quite important because different data characteristic, i.e. non-linearity, will need different handling method in confirmatory step/modeling. 
+Second, this is the first work which empirically study the impact of Primary Dealers behavior on 10-year Sovereign bonds yield in Indonesia.  
+
+
+
 a. Literature review:
 - Description of Local Currency Bonds 10y, its roles and yield,
 - Description of Determinant factors:
-US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), Issuance Mechanism in Primary Market (new policy of greenshoe auction in 2020)
+US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), Issuance Mechanism in Primary Market
 
 b. Motivation: 
-- Previous researches are mixed on what determining bonds yield and only few of them cover Indonesia,
+- 
 - Understanding factors that determining the 10y-bonds yield in Indonesia,
-
 
 c. Data sources + available links
 Definition and descriptive statistics of variables.
@@ -62,12 +84,15 @@ c. Foreign Ownership vs Yield
 d. Bank Indo Rate vs Yield
 
 e. Exchange rate (JISDOR) vs Yield
-Investors are exposed to gains and losses from exchange rate movements on their holdings of local currency sovereign bond. exchange rate risk can represent an important channel of transmission of market sentiment, uncertainty and default risk to local currency bond yield 
+Investors are exposed to gains and losses from exchange rate movements on their holdings of local currency sovereign bond. exchange rate risk can represent an important channel of transmission of market sentiment, uncertainty and default risk to local currency bond yield 
 Exchange rate risk tends to affect liquidity
 conditions in both foreign exchange and domestic bond markets, which tend to be relatively low in many EMEs even in tranquil times.
 The direction of the
 causality runs from exchange rate volatility to local currency sovereign bond yields. This is especially the case in Asia and eastern
-Europe. In these two regions, local currency sovereign bond markets are relatively liquid and foreign participation relatively large
+Europe. In these two regions, local currency sovereign bond markets are relatively liquid and foreign participation relatively large.
+
+The sensitivity of EME local currency sovereign bond yields to exchange rate volatility increases after
+the global financial crisis, and further after the taper tantrum in mid-2013
 @gadanecz
 
 
@@ -83,6 +108,8 @@ Intended to capture changes in investor sentiment which may be related to
 expected changes in U.S. monetary policy. It may also pick up the effects of other market-related events, such as the flight to quality effects during the Asian crisis.
 @arora
 
+As historical data demonstrates a strong negative correlation of volatility to the stock market returns – that is, when stock returns go down, volatility rises and vice versa.(investopedia)
+
 g. Auction day vs yield
 
 One important feature of the Treasury security market is that, immediately following the auction announcement, market partici-pants enter into bilateral contracts for the sale and purchase of the new security before it is auctioned. In this pre-sale market, known as the when-issued market, primary dealers are the major players. As mentioned by Nyborg and Strebulaev (2004), many primary dealers are often short in the when-issued market and are also the main participants in the auction. Furthermore, in a recent empirical study on Treasury securities, Mercer et al. (2013) conclude that traders in the when-issued market "discover" the ultimate auction price. We therefore believe that primary dealers' positions created in the when-issued market have an important impact on their strategic behavior in the auctions. 
@@ -95,11 +122,6 @@ It is an indicator of macroeconomic stability and shows how a country manages it
 its obligations with its domestic funds. A positive effect of the inflation rate on the sovereign yield spreads is therefore expected. @hajer
 
 3. Key Findings
-
-Unknown yet
-i.e.: 
-
-any changed patterns?
 
 factors that steadily affect the yield? (foreign and insurance/pension fund are steadily associated with yield movement. Foreign has strongly negative correlation until 2019, while insurance/pension has strongly positive correlation)
 
@@ -151,10 +173,8 @@ library(flipTime)
 library(caret)
 library(patchwork)
 
-
 #read compiled dataset
 yield_factors <- readRDS("yield_factors.rds")
-
 
 #check volatility vs yield
 yield_factors %>% mutate(year = year(date)) %>% 
@@ -170,8 +190,6 @@ yield_factors %>% mutate(year = year(date)) %>%
   geom_point(aes(x = exchange_mid))+
   facet_wrap(~year)
 
-
-
 #check debt_gdp ratio vs yield
 yield_factors %>% mutate(year = year(date)) %>% 
   ggplot(aes(y = domestic_10y)) + 
@@ -181,16 +199,22 @@ yield_factors %>% mutate(year = year(date)) %>%
 ```
 
 ```{r}
+# non linear relationship between yield vs inflation
+yield_factors %>%
+  mutate(yearmon = yearmonth(date), month = month(date), year = year(date)) %>%
+  group_by(yearmon) %>% 
+  summarise(avg_10y = mean(domestic_10y), avg_inflation = mean(cpi_inflation)) %>%
+  ggplot(aes(y = avg_10y, x = avg_inflation)) +
+  geom_point(alpha =0.5)+geom_smooth()
 
-# yield_factors %>% 
-#   mutate(year = year(date)) %>% 
-#   filter(year == 2018) %>% 
-#   # summarise(avg_10y = mean(domestic_10y), inflation) %>% 
-#   ggplot(aes(y = domestic_10y)) + 
-#   geom_jitter(aes(x = inflation), alpha =0.5)
+# yield_factors %>%
+#   mutate(yearmon = yearmonth(date), month = month(date), year = year(date)) %>% 
+#   group_by(yearmon) %>% 
+#   ggplot(aes(y = domestic_10y, x = cpi_inflation)) +
+#   geom_point(alpha =0.5)
 
 #foreign changes
-#### negative relationship when foreign pct > 35%, < 35% positive relationship
+## negative relationship when foreign pct > 35%, < 35% positive relationship
 ### due to quantitative easing of central bank 2020-2021 and mandatory purchase of domestic banks boost domestic ownership
 
 yield_factors %>% 
@@ -225,18 +249,18 @@ By just putting the number, we can not see any clear pattern from these variable
 #   geom_point(aes(x = bi_pct))+
 #   theme(legend.title = element_blank())+facet_wrap(~ year)
 
-## others steadily has strong positive correlation with yield
+## others has strong positive correlation with yield
 yield_factors %>% 
-mutate(year = year(date), con_pct = con_bank/tot_ownership, bi_pct = central_bank/tot_ownership, others_pct = others/tot_ownership) %>% 
-  ggplot(aes(x = vix, y = domestic_10y)) + 
+mutate(year = year(date), mon = month(date), con_pct = con_bank/tot_ownership, bi_pct = central_bank/tot_ownership, others_pct = others/tot_ownership) %>% 
+  ggplot(aes(x = others, y = domestic_10y)) + 
   geom_point() +
   facet_wrap(~ year)
 
 #check ownership in auction days
-# yield_factors %>% 
-# mutate(year = year(date), month = month(date), con_pct = scale(con_bank/tot_ownership), bi_pct = central_bank/tot_ownership, others_pct = scale(others/tot_ownership), ins_pct = scale(ins_pension/tot_ownership)) %>% 
-#   filter(year == 2019, month == 2) %>% 
-#   ggplot(aes(x = date)) + 
+# yield_factors %>%
+# mutate(year = year(date), month = month(date), con_pct = scale(con_bank/tot_ownership), bi_pct = central_bank/tot_ownership, others_pct = scale(others/tot_ownership), ins_pct = scale(ins_pension/tot_ownership)) %>%
+#   filter(year == 2019, month == 2) %>%
+#   ggplot(aes(x = date)) +
 #   geom_line(aes(y = ins_pct))+
 #   geom_line(aes(y = con_pct, color = "red"))+
 #   geom_point(aes(y = auction_day, color = factor(auction_day)))
@@ -420,9 +444,8 @@ yield_factors %>%
 yield_factors %>% 
   mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, ins_pct = ins_pension/tot_ownership, other_pct = others/tot_ownership, mutual_pct = mutual_fund/tot_ownership) %>% 
   ggplot(aes(y = domestic_10y)) + 
-  geom_point(aes(x = mutual_pct))+
+  geom_point(aes(x = mutual_fund))+
   facet_wrap(~ year)
-
 
 ## check ggscatmat
 # yield_factors %>% 
@@ -431,35 +454,58 @@ yield_factors %>%
 #     select(domestic_10y, cds_5y, ust_10y, central_bank, exchange_mid) %>%
 # GGally::ggscatmat()
 
-
 ### auction vs non_auc days
-# average_2017 <- yield_factors %>% filter(year == 2017) %>% 
-#   mutate(month = month(date)) %>% 
-#   group_by(month) %>%  summarise(mean = mean(domestic_10y))
-# 
-# average_2018 <- yield_factors %>% filter(year == 2018) %>% 
-#   mutate(month = month(date)) %>% 
-#   group_by(month) %>%  summarise(mean = mean(domestic_10y))
-# 
-# average_2019 <- yield_factors %>% filter(year == 2019) %>% 
-#   mutate(month = month(date)) %>% 
-#   group_by(month) %>%  summarise(mean = mean(domestic_10y))
-# 
-# average_2020 <- yield_factors %>% filter(year == 2020) %>% 
-#   mutate(month = month(date)) %>% 
-#   group_by(month) %>%  summarise(mean = mean(domestic_10y))
-# 
-# average_2021 <- yield_factors %>% filter(year == 2021) %>% 
-#   mutate(month = month(date)) %>% 
-#   group_by(month) %>%  summarise(mean = mean(domestic_10y))
+average_2016 <- yield_factors %>% mutate(year = year(date)) %>%  filter(year == 2016) %>%
+  mutate(month = month(date)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2017 <- yield_factors %>% filter(year == 2017) %>%
+  mutate(month = month(date)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2018 <- yield_factors %>% filter(year == 2018) %>%
+  mutate(month = month(date)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2019 <- yield_factors %>% filter(year == 2019) %>%
+  mutate(month = month(date)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2020 <- yield_factors %>% filter(year == 2020) %>%
+  mutate(month = month(date)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2021 <- yield_factors %>% filter(year == 2021) %>%
+  mutate(month = month(date)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
 #   
-# yield_factors %>% filter(year == 2017) %>% 
-#   mutate(month = month(date)) %>% 
-#   group_by(month) %>%   
-# ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
-#   geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
-#   geom_hline(data = average_2017, aes(yintercept = mean), alpha = 0.5)+
-#   facet_wrap(~month)
+yield_factors  %>%
+  mutate(month = month(date), year = year(date)) %>%
+  filter(year == 2018) %>% 
+  group_by(month) %>%
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
+  geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
+  geom_hline(data = average_2018, aes(yintercept = mean), alpha = 0.5, linetype = "dashed")+
+  facet_wrap(~month)+theme_bw()+xlab("Date")+ylab("Yield 10y")
+
+######comparing yield in auction day and non-auction day
+# slightly higher in Feb and Dec
+yield_factors  %>%
+  mutate(month = month(date, label = TRUE), year = year(date)) %>% 
+  select(domestic_10y, auction_day, month, year) %>% drop_na() %>% 
+  filter(year > 2015) %>% 
+ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
+  geom_boxplot()+
+  facet_wrap(~year)
+
+
+yield_factors  %>%
+  mutate(month = month(date, label = TRUE), year = year(date)) %>%
+  filter(year != 2015) %>% 
+ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
+  geom_boxplot()+
+  facet_wrap(~month)
+
 # 
 # yield_factors %>% filter(year == 2018) %>% 
 #   mutate(month = month(date)) %>% 
@@ -532,37 +578,68 @@ yield_factors %>%
 #                facet_wrap(~ month)
 
 ###prepare variable for model
-data_model <- yield_factors %>% mutate(year = year(date)) %>% 
-  mutate(date= date(date), year = factor(year), month =  factor(month(date)), spread_10 = domestic_10y - cds_10y/100, spread_5 = domestic_10y - cds_5y/100, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate,
-         bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, ins_pct = ins_pension/tot_ownership, other_pct = others/tot_ownership, mutual_pct = mutual_fund/tot_ownership, auction_day = factor(auction_day))
+data_model <- yield_factors %>% mutate(year = year(date), month = factor(month(date))) %>% 
+  mutate(foreign_pct = foreign/tot_ownership) %>% 
+  mutate(date= date(date), year = factor(year), month =  factor(month(date)),
+          auction_day = factor(auction_day)) %>% 
+  select(date,  year, month, domestic_10y, cds_5y, ust_10y, rate, foreign_pct, vix, exchange_mid, auction_day, cpi_inflation) %>% drop_na()
 
 
-model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate:year + foreign + ins_pension + foreign:year + ins_pension:year + auction_day:month,
+# model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate:year + foreign + ins_pension + foreign:year + ins_pension:year + auction_day:month,
+#  data = data_model)
+
+
+model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign_pct + I(vix^2) + exchange_mid + auction_day,
             data = data_model)
 
 summary(model)
-best <- drop1(model, test = "F")
-summary(best)
+tidy(model)
+
+summary(data_model)
+
+# highest vix in early pandemic 2020-03-16 
+# MArch 2 2020 is the first case of covid
+data_model %>% filter (vix == 82.69)
+
+
+# best <- drop1(model, test = "F")
+# summary(best)
 
 library(broom)
-aug <- augment(model)
+aug <- broom::augment(model, data = data_model %>% filter(year != 2015) %>% drop_na())
 
 aug %>% 
   ggplot(aes(x = .fitted, y = .resid))+
   geom_point()
 
-aug %>% 
+aug %>%
   ggplot(aes(x = .cooksd, y = .hat))+
   geom_point()
 
-aug %>% filter(.cooksd > 0.2)
+# aug %>% 
+#   ggplot(aes(x = .cooksd, y = .hat))+
+#   geom_point()
+
+outlier <- aug %>% filter(.cooksd > 0.05)
+
+#not in
+`%notin%` <- Negate(`%in%`)
+
+data_model %>% filter(date %in% outlier$date)
 
 ####remove extreme outliers
-model <- data_model %>% slice(-c(661, 1242)) %>% lm(formula = domestic_10y ~ cds_5y + ust_10y+ rate + foreign + ins_pension + 
-              +foreign:year + ins_pension:year)
+data_model2 <- data_model %>% filter(date %notin% outlier$date)
+
+# model <-  lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign:year + I(vix^2) + exchange_mid + auction_day:month, data = data_model2)
+
+
+# model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign:year + I(vix^2) + cpi_inflation + exchange_mid + auction_day:year,
+#             data = data_model)
 
 summary(model)
-aug <- augment(model)
+tidy(model)
+
+aug <- broom::augment(model, data = data_model2 %>% filter(year != 2015) %>% drop_na())
 
 aug %>% 
   ggplot(aes(x = .fitted, y = .resid))+
@@ -573,19 +650,14 @@ aug %>%
   geom_point()
 
 #check multicol
+#explain GVIF variable 
 car::vif(model)
-
-
-
-# model19 <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct, data = yield_factor %>% mutate(year = year(date)) %>%  filter(year == 2019))
-# 
-# model20 <- lm(domestic_10y ~ cds_5y + cds_10y + ust_10y + foreign_pct, data = yield_factor %>% mutate(year = year(date)) %>%  filter(year == 2020))
 
 # reduce to "best fit" model with
 
 summary(model)
-model_best <- step(model, trace = FALSE)
-summary(model_best)
+# model_best <- step(model, trace = FALSE)
+# summary(model_best)
 
 #diagnose model
 ggnostic(model_best)
@@ -609,18 +681,15 @@ We may assume that the anomaly in 2020 and 2021 are due to Covid19 pandemic that
 #   filter(year > 2019) %>% 
 # GGally::ggscatmat(columns = c(2,3,4,5))
 
-
 # yield_factors %>% 
 #   filter(year > 2019) %>% 
 #   mutate(bi_pct = central_bank/tot_ownership, indv_pct = individual/tot_ownership, insp_pct = ins_pension/tot_ownership, mut_pct = mutual_fund/tot_ownership, sec_pct = securities_company/tot_ownership, conv_pct = con_bank/tot_ownership, isl_pct = islam_bank/tot_ownership) %>% 
 #   select(domestic_10y, foreign_pct, bi_pct, indv_pct, insp_pct, mut_pct, sec_pct, conv_pct, isl_pct) %>% 
 # GGally::ggscatmat()
 
-
 # yield_factors %>% 
 #   filter(year > 2018) %>% 
 # GGally::ggscatmat(columns = c(5, 13, 14, 15, 16, 17, 18, 19))
-
 
 model <- lm(domestic_10y ~ cds_5y + ust_10y + foreign + rate + con_bank, data = yield_factors)
 
@@ -640,14 +709,14 @@ Another noticeable change is proportion of individual in the bonds ownership tha
 ## Policy Rate
 ```{r eval = FALSE}
 
-yield_factors %>% 
-  na.omit() %>% 
-  mutate(year = year(date)) %>% 
-   filter(year != 2015) %>% 
-  select(date, domestic_10y, rate, foreign, central_bank) %>%
-  gather(key = "variable", value = "value", -date) %>% 
-  ggplot(aes(x = date, y = log(value)))+
-  geom_smooth(aes(color = variable))+theme_minimal()
+# yield_factors %>% 
+#   na.omit() %>% 
+#   mutate(year = year(date)) %>% 
+#    filter(year != 2015) %>% 
+#   select(date, domestic_10y, rate, foreign, central_bank) %>%
+#   gather(key = "variable", value = "value", -date) %>% 
+#   ggplot(aes(x = date, y = log(value)))+
+#   geom_smooth(aes(color = variable))+theme_minimal()
 
 ## ownership pct
 yield_factors %>% 
