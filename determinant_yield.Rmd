@@ -1,5 +1,5 @@
 ---
-title: "Determinant Factors of Indonesia 10-year Local Currency Sovereign Bonds Yield"
+title: "Determinant Factors of 10-year Local Currency Sovereign Bonds Yield: Indonesia Case"
 author: "Dea Avega Editya"
 date: "8/5/2021"
 output:
@@ -51,9 +51,27 @@ The government sells the sovereign bonds through auction which conducted every T
   
 Since 2021, yield of 10-year sovereign bonds become one of macroeconomic assumptions in national budget, replacing Treasury Bills tenor 3-month (Surat Perbendaharaan Negara). This replacement is due to the fact that 10-year yield has larger and more significant share in nation's cost of borrowing compared to 3-month T-bills.
 
-2. Literature Review
+# 2. Literature Review
+
+Several studies have been conducted to analyze determinant factors of sovereign bonds yield using mixed of methodologies, scopes of research and conclusion. Dachroui et al [@Dachraoui2020] study role of capital flight as a driver of sovereign bond spreads in Latin American countries, Saenong et al [@Saenong2020] analyze symmetric and asymmetric effect of crude oil prices and exchange rate on bond yields in Indonesia. 
+
+Izadi et al [@Izadi2018] focus on local fundamental, global factors, volatility as determinant factors of yield spreads using empirical data of 24 developed countries in
+North America, Europe and Pacific Rim regions in period of January, 2010 until March, 2015. Their finding include significant and positively correlation between equity market volatility (VIX) and yield speads. Their study show strong relationship between the fixed income and the stock markets particularly in developed countries.
+
+Gadanecz et al [@Gadanecz2018] use exchange rate volatility and expected exchange rate as predictor variables of emerging market economies local currency sovereign bond yields. They conclude that exchange rate volatility is a key determinant. Moreover, they also found that foreign ownership in local currency sovereign bonds market plays important role as stabilizing force of exchange rate volatility.
+
+
+
+
 
 Based on these literature review, this paper will review impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign ownership percentage, central bank's policy rate, exchange rate, volatility risk and auction days on 10-year sovereign bonds yield. For policy rate and exchange rate, we will use Bank Indonesia 7-day repo rate and Jakarta Interbank Spot Dollar Rate/JISDOR. For analyzing the impact of auction mechanism, we will use dummy variables of auction days and non-auction days.  
+
+# 3. Motivation
+
+This paper provides two new values to existing literature related to the topic. First, it will use exploratory data analysis in the beginning of analysis to gain better understanding of each predictor variable. This preliminary step is quite important because particular data characteristic, i.e. non-linearity, will need different handling method before proceeding to confirmatory step/modeling. 
+Second, this is the first work which empirically study the impact of primary dealers behavior on 10-year Sovereign bonds yield in Indonesia.  
+
+# 4. Description of Predictor Variables
 
 ## 1). External Factors  
 
@@ -71,7 +89,7 @@ Based on these literature review, this paper will review impact of 10-year US Tr
 
 In 2021, there are 20 primary dealers of conventional bonds comprise of 16 conventional banks and 4 securities companies. For sharia bonds, there are also 20 primary dealers consist of 13 conventional banks, 3 Islamic banks and 4 securities companies. Primary dealers are required to participate in every auction and to bid for a minimum quantity of the total offering amount. They can bid both on behalf of their customers and for their own accounts. This primary dealers system is important for several reasons. First, primary dealers act as intermediary between debt managers and investors in primary market. Second, they play role as bookmakers and distributors by canvassing investor's interest and distributing bonds from auction announcement until the day of auction or commonly known as when-issued market [@Arnone2003]. In addition, primary dealers also has vital function in bridging liquidity between primary and secondary market, providing asset transformation and market making services, promoting continuous market and efficient price discovery [-@Arnone2003]. Last but not least, Arnone and Iden [-@Arnone2003] also mention that contribution of primary dealers include giving skillful advisory support related to instruments and market development.
 
-As primary dealers can participate in competitive bidding in primary market as well as trading in secondary market, they have direct and indirect contribution on forming yield of sovereign bonds.
+As primary dealers can participate in competitive bidding in primary market as well as trading in secondary market, they have direct contribution on forming yield of sovereign bonds.
 
 ```{r}
 ### auction vs non_auc days
@@ -104,9 +122,9 @@ yield_factors  %>%
   mutate(month = month(date, label = TRUE), year = year(date)) %>%
   filter(year == 2018) %>% 
 ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
-  geom_point(alpha = 1)+scale_x_discrete(breaks = seq(1, 31, 4))+
+  geom_point(alpha = 1, size = 1.5)+scale_x_discrete(breaks = seq(1, 31, 4))+
   geom_hline(data = average_2018, aes(yintercept = mean, linetype = "Monthly Average"), colour= 'black')+
-  facet_wrap(~month)+xlab("Date")+ylab("10-y Yield")+
+  facet_wrap(~month, ncol = 4)+xlab("Date")+ylab("10-y Yield")+
   scale_color_manual(name = "Auction Days", values= c("#BCBCBC", "#F55F5F"), labels = c("No", "Yes"))+
   scale_linetype_manual(name = "", values = "dashed")+theme(legend.position="bottom")
 
@@ -131,11 +149,6 @@ ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
 ```
 
 
-3. Motivation
-
-Previous researches are mixed on what determining bonds yields.  
-This paper provides two new values to existing literature related to the topic. First, it will use exploratory data analysis in the beginning to gain better understanding of each predictor variable. This preliminary step is quite important because different data characteristic, i.e. non-linearity, will need different handling method in confirmatory step/modeling. 
-Second, this is the first work which empirically study the impact of Primary Dealers behavior on 10-year Sovereign bonds yield in Indonesia.  
 
 
 
