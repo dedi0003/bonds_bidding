@@ -15,7 +15,7 @@ text-align: justify}
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 
 library(dplyr)
 library(ggplot2)
@@ -44,27 +44,30 @@ yield_factors <- readRDS("yield_factors.rds")
 
 # 1. Introduction
 
-Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in primary market to finance deficit of national budget. In 2021, issuance target for the sovereign bonds is around 80-85% of total deficit financing. As per 2 September 2021, total outstanding of local currency sovereign bonds is IDR4,539 Trillions or equivalent to USD318 Billions. 
+Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in primary market to finance deficit of national budget. In 2021, issuance target for the sovereign bonds is around 80-85% of total deficit financing which amount to IDR1,006 Trillions or equivalent to USD72 Billions ^[USD/IDR conversion rate = 14,284]. As per 2 September 2021, total outstanding of local currency sovereign bonds is IDR4,539 Trillions or equivalent to USD318 Billions ^[ibid]. 
 
-The government sells the sovereign bonds through auction which conducted every Tuesday. Announcement will be released three days before the auction day. During 2-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through primary dealers and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offer sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying may also be conducted by primary dealers to complement their competitive bidding purchase. Non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the winning competitive bidding.
+The government sells the sovereign bonds through auction which conducted every Tuesday. Announcement will be released three days before the auction day (T-3). During 2-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through primary dealers and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offer sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying may also be conducted by primary dealers to complement their competitive bidding purchase. Non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the winning competitive bidding.
 
+There are several benchmark series offered in the auction. These series represent various maturity time. For conventional bonds, tenors of benchmark series in 2021 are ranging from 5, 10, 15 and 20 year. Meanwhile, benchmark tenors of sharia bonds cover 2, 4, 13 and 25 year.  
   
-Since 2021, yield of 10-year sovereign bonds become one of macroeconomic assumptions in national budget, replacing Treasury Bills tenor 3-month (Surat Perbendaharaan Negara). This replacement is due to the fact that 10-year yield has larger and more significant share in nation's cost of borrowing compared to 3-month T-bills.
+Since 2021, yield of 10-year sovereign bonds become one of macroeconomic assumptions in national budget, replacing treasury bills of tenor 3-month (Surat Perbendaharaan Negara). This replacement is because the yield of 10-year sovereign bonds deemed as having larger and more significant portion in nation's cost of borrowing compared to the T-bills. Moreover, 10-year yield is also reflecting longterm economy condition and its movement is commonly used as a sign in predicting economic health of one country. The yield is also used by corporations as a reference when issuing their local currency bonds or lending money.
+
+During period of 2014-2018, Indonesia is said to have higher average of 10-year sovereign bonds yield compared to its ASEAN-5 peers (Thailand, Philliphines, Malaysia, Vietnam) as well as several other emerging countries with similar credit rating like Mexico, Columbia and India [@Muktiyanto2019]. This condition make Indonesia pays more expensive debt compared to these countries. As corporates use the yield as their benchmark rate, the impact of costly debt is also spilled over in the national economy.
+
+Considering important functions of the 10-year sovereign bonds yield in Indonesia's economy, this paper will study several variables that are assumed to have relationship and impact on the yield. The result of this work will be providing insights and policy recommendations for government in reducing sovereign bonds yield, particularly by aiming at significant determinant factors, which in turn help to optimize national's cost of borrowing.
 
 # 2. Literature Review
 
-Several studies have been conducted to analyze determinant factors of sovereign bonds yield using mixed of methodologies, scopes of research and conclusion. Dachroui et al [@Dachraoui2020] study role of capital flight as a driver of sovereign bond spreads in Latin American countries, Saenong et al [@Saenong2020] analyze symmetric and asymmetric effect of crude oil prices and exchange rate on bond yields in Indonesia. 
+Numerous researches have been conducted using various methodologies and scopes of study to find factors that affecting sovereign bonds yield. Dachroui et al [@Dachraoui2020] analyze role of capital flight as a driver of sovereign bond spreads in Latin American countries, Saenong et al [@Saenong2020] study symmetric and asymmetric effect of crude oil prices and exchange rate on bond yields in Indonesia. 
 
 Izadi et al [@Izadi2018] focus on local fundamental, global factors, volatility as determinant factors of yield spreads using empirical data of 24 developed countries in
-North America, Europe and Pacific Rim regions in period of January, 2010 until March, 2015. Their finding include significant and positively correlation between equity market volatility (VIX) and yield speads. Their study show strong relationship between the fixed income and the stock markets particularly in developed countries.
+North America, Europe and Pacific Rim regions in period of January, 2010 until March, 2015. Their finding include significant and positively correlation between equity market volatility (VIX) and yield speads in all observed regions. Their study also show strong relationship between fixed income and stock markets particularly in developed countries.
 
 Gadanecz et al [@Gadanecz2018] use exchange rate volatility and expected exchange rate as predictor variables of emerging market economies local currency sovereign bond yields. They conclude that exchange rate volatility is a key determinant. Moreover, they also found that foreign ownership in local currency sovereign bonds market plays important role as stabilizing force of exchange rate volatility.
 
 
+Based on these literature review, this paper will analyze relationship and impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), share of foreign ownership, central bank's policy rate (Bank Indonesia 7-day repo rate), USD/IDR exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), volatility risk (VIX) and primary dealers behavior (dummy variables of auction/non-auction days) in determining 10-year sovereign bonds yield. Dataset are from period of 2015 and 2021.
 
-
-
-Based on these literature review, this paper will review impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign ownership percentage, central bank's policy rate, exchange rate, volatility risk and auction days on 10-year sovereign bonds yield. For policy rate and exchange rate, we will use Bank Indonesia 7-day repo rate and Jakarta Interbank Spot Dollar Rate/JISDOR. For analyzing the impact of auction mechanism, we will use dummy variables of auction days and non-auction days.  
 
 # 3. Motivation
 
@@ -91,7 +94,7 @@ In 2021, there are 20 primary dealers of conventional bonds comprise of 16 conve
 
 As primary dealers can participate in competitive bidding in primary market as well as trading in secondary market, they have direct contribution on forming yield of sovereign bonds.
 
-```{r}
+```{r echo = FALSE}
 ### auction vs non_auc days
 average_2016 <- yield_factors %>% mutate(year = year(date)) %>%  filter(year == 2016) %>%
   mutate(month = month(date, label = TRUE)) %>%
@@ -149,14 +152,27 @@ ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
 ```
 
 
+# 5. Research Methodology and Data
+
+In selecting determinant factors of 10-year sovereign bonds, we are influenced by several variables used in study conducted by .........
+
+Regarding these studies and the result of exploratory data analysis conducted in previous section, we can write down relationship between variables as follow:
+
+$$
+yield\_10y = \alpha + \beta_1ust\_10y+\beta_2cds\_5y +\beta_3foreign\_pct + \beta_4policy\_rate +\beta_5exchange\_rate+ +\beta_6{vix}^2 + \beta_7auction\_days +\epsilon
+$$
+For the purpose of this study, we will use data of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), share of foreign ownership (%), central bank's policy rate (Bank Indonesia 7-day repo rate), USD/IDR exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), volatility risk (VIX) and primary dealers behavior (dummy variables of auction/non-auction days). As response variable, we will use 10-year sovereign bonds yield. 
+
+Dataset are from period of 2015 and 2021.
+
+
+# 6. Analysis
+
+
+# 7. Conclusion
 
 
 
-
-a. Literature review:
-- Description of Local Currency Bonds 10y, its roles and yield,
-- Description of Determinant factors:
-US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), Issuance Mechanism in Primary Market
 
 
 c. Data sources + available links
@@ -166,10 +182,8 @@ Stationarity test
 d. Scope and Limitation
 Cant see average bid from each group (i.e. conventional banks, foreign, insurance/pension, others)
 
-2. Methodology
 
-Many confounding factors, hence visualizing with plots maybe can explain  
-Understanding the Relationship through EDA
+
 
 
 In particular, the results suggest that
