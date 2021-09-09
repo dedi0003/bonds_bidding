@@ -1,34 +1,142 @@
 ---
-title: "Determinant Factors of Indonesia 10-year Sovereign Bonds Yield"
+title: "Determinant Factors of Indonesia 10-year Local Currency Sovereign Bonds Yield"
 author: "Dea Avega Editya"
 date: "8/5/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
+bibliography: baca.bib  
+
 ---
+<style>
+body {
+text-align: justify}
+</style>
 
-#Outlines:
 
-1. Introduction:
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 
-Indonesian government regularly issue sovereign bonds in primary market to finance deficit of national budget. In 2021, the issuance target for sovereign bonds is around 95% of total deficit financing. As per 2 September 2021, total outstanding of sovereign bonds is IDR5,810 Trillions or equivalent to USD406 Billions. 
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(readr)
+library(readxl)
+library(stringr)
+library(lubridate)
+library(janitor)
+library(cleaner)
+library(plotly)
+library(tsibble)
+library(openxlsx)
+library(zoo)
+library(purrr)
+library(sugrrants)
+library(GGally)
+library(scales)
+library(flipTime)
+library(caret)
+library(patchwork)
 
-The government sell the sovereign bonds through auction which conducted on Tuesday every two weeks. During 3-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through Primary Dealers and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offer sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying mechanism may also be conducted by Primary Dealers to complement their competitive bidding purchase. The non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the competitive bidding.
+#read compiled dataset
+yield_factors <- readRDS("yield_factors.rds")
+```
 
-In 2021, there are 20 authorized Primary Dealers comprise of 16 Banks and 4 Securities Companies. This primary dealers system is really important for channeling bonds distributions as well as price discovery. 
+# 1. Introduction
 
-They are required to participate in every sovereign bonds auction and to bid for a minimum quantity of the total offering amount. They are allowed to bid both on behalf of their customers and for their own accounts. 
+Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in primary market to finance deficit of national budget. In 2021, issuance target for the sovereign bonds is around 80-85% of total deficit financing. As per 2 September 2021, total outstanding of local currency sovereign bonds is IDR4,539 Trillions or equivalent to USD318 Billions. 
 
-Their competitive bidding also 
-Since 2021, yield of 10-year sovereign bonds become one of macroeconomic assumptions in national budget, replacing treasury bills 3-month tenor (Surat Perbendaharaan Negara).
+The government sells the sovereign bonds through auction which conducted every Tuesday. Announcement will be released three days before the auction day. During 2-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through primary dealers and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offer sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying may also be conducted by primary dealers to complement their competitive bidding purchase. Non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the winning competitive bidding.
+
+  
+Since 2021, yield of 10-year sovereign bonds become one of macroeconomic assumptions in national budget, replacing Treasury Bills tenor 3-month (Surat Perbendaharaan Negara). This replacement is due to the fact that 10-year yield has larger and more significant share in nation's cost of borrowing compared to 3-month T-bills.
 
 2. Literature Review
 
-Based on these literature review, this paper will review impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign ownership percentage, central bank's policy rate, exchange rate, volatility risk and auction days on 10-year sovereign bonds yield. For policy rate and exchange rate, we will use Bank Indonesia 7-day repo rate and Jakarta Interbank Spot Dollar Rate/JISDOR. For analyzing the impact of auction mechanism, we will use dummy variables of auction days and non-auction days.
+Based on these literature review, this paper will review impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign ownership percentage, central bank's policy rate, exchange rate, volatility risk and auction days on 10-year sovereign bonds yield. For policy rate and exchange rate, we will use Bank Indonesia 7-day repo rate and Jakarta Interbank Spot Dollar Rate/JISDOR. For analyzing the impact of auction mechanism, we will use dummy variables of auction days and non-auction days.  
+
+## 1). External Factors  
+
+### A. 10-year US Treasury
+
+### B. Foreign Ownership  
+
+## 2). Default Risk  
+
+## 3). Financial Market Indicator (Volatility Index)  
+
+## 4). Macroeconomic Indicator (Exchange Rate USD/IDR)  
+
+## 5). System Risk (Primary Dealers Behavior) 
+
+In 2021, there are 20 primary dealers of conventional bonds comprise of 16 conventional banks and 4 securities companies. For sharia bonds, there are also 20 primary dealers consist of 13 conventional banks, 3 Islamic banks and 4 securities companies. Primary dealers are required to participate in every auction and to bid for a minimum quantity of the total offering amount. They can bid both on behalf of their customers and for their own accounts. This primary dealers system is important for several reasons. First, primary dealers act as intermediary between debt managers and investors in primary market. Second, they play role as bookmakers and distributors by canvassing investor's interest and distributing bonds from auction announcement until the day of auction or commonly known as when-issued market [@Arnone2003]. In addition, primary dealers also has vital function in bridging liquidity between primary and secondary market, providing asset transformation and market making services, promoting continuous market and efficient price discovery [-@Arnone2003]. Last but not least, Arnone and Iden [-@Arnone2003] also mention that contribution of primary dealers include giving skillful advisory support related to instruments and market development.
+
+As primary dealers can participate in competitive bidding in primary market as well as trading in secondary market, they have direct and indirect contribution on forming yield of sovereign bonds.
+
+```{r}
+### auction vs non_auc days
+average_2016 <- yield_factors %>% mutate(year = year(date)) %>%  filter(year == 2016) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2017 <- yield_factors %>% mutate(year = year(date)) %>% filter(year == 2017) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2018 <- yield_factors %>% mutate(year = year(date)) %>% filter(year == 2018) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2019 <- yield_factors %>% mutate(year = year(date)) %>% filter(year == 2019) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2020 <- yield_factors %>% mutate(year = year(date)) %>% filter(year == 2020) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+average_2021 <- yield_factors %>% mutate(year = year(date)) %>% filter(year == 2021) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
+#   
+yield_factors  %>%
+  mutate(month = month(date, label = TRUE), year = year(date)) %>%
+  filter(year == 2018) %>% 
+ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
+  geom_point(alpha = 1)+scale_x_discrete(breaks = seq(1, 31, 4))+
+  geom_hline(data = average_2018, aes(yintercept = mean, linetype = "Monthly Average"), colour= 'black')+
+  facet_wrap(~month)+xlab("Date")+ylab("10-y Yield")+
+  scale_color_manual(name = "Auction Days", values= c("#BCBCBC", "#F55F5F"), labels = c("No", "Yes"))+
+  scale_linetype_manual(name = "", values = "dashed")+theme(legend.position="bottom")
+
+######comparing yield in auction day and non-auction day
+# slightly higher in Feb and Dec
+yield_factors  %>%
+  mutate(month = month(date, label = TRUE), year = year(date)) %>% 
+  select(domestic_10y, auction_day, month, year) %>% drop_na() %>% 
+  filter(year > 2015 & year < 2020) %>% 
+ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
+  geom_boxplot()+
+  facet_wrap(~ month)+ylab("10-year Yield")+
+  scale_color_discrete(name = "Auction Days", labels = c("No", "Yes"))
+
+
+yield_factors  %>%
+  mutate(month = month(date, label = TRUE), year = year(date)) %>%
+  filter(year > 2015) %>% 
+ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
+  geom_boxplot()+
+  facet_wrap(~month)
+```
+
 
 3. Motivation
 
-Previous researches are mixed on what determining bonds yields. 
+Previous researches are mixed on what determining bonds yields.  
 This paper provides two new values to existing literature related to the topic. First, it will use exploratory data analysis in the beginning to gain better understanding of each predictor variable. This preliminary step is quite important because different data characteristic, i.e. non-linearity, will need different handling method in confirmatory step/modeling. 
 Second, this is the first work which empirically study the impact of Primary Dealers behavior on 10-year Sovereign bonds yield in Indonesia.  
+
 
 
 
@@ -37,9 +145,6 @@ a. Literature review:
 - Description of Determinant factors:
 US Treasury 10y, Credit Default Swap 5y & 10y, foreign ownership, policy rate (Bank Indonesia 7-day repo rate), exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), Issuance Mechanism in Primary Market
 
-b. Motivation: 
-- 
-- Understanding factors that determining the 10y-bonds yield in Indonesia,
 
 c. Data sources + available links
 Definition and descriptive statistics of variables.
@@ -149,33 +254,9 @@ Chapter 3 26 Oct - 12 Nov 2021,
 Summary, Bibliography, cleaning Code, creating slides 13 - 19 Nov 2021
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 
-library(dplyr)
-library(ggplot2)
-library(tidyverse)
-library(readr)
-library(readxl)
-library(stringr)
-library(lubridate)
-library(janitor)
-library(cleaner)
-library(plotly)
-library(tsibble)
-library(openxlsx)
-library(zoo)
-library(purrr)
-library(sugrrants)
-library(GGally)
-library(scales)
-library(flipTime)
-library(caret)
-library(patchwork)
 
-#read compiled dataset
-yield_factors <- readRDS("yield_factors.rds")
-
+```{r }
 #check volatility vs yield
 yield_factors %>% mutate(year = year(date)) %>% 
   ggplot(aes(y = domestic_10y)) + 
@@ -454,57 +535,7 @@ yield_factors %>%
 #     select(domestic_10y, cds_5y, ust_10y, central_bank, exchange_mid) %>%
 # GGally::ggscatmat()
 
-### auction vs non_auc days
-average_2016 <- yield_factors %>% mutate(year = year(date)) %>%  filter(year == 2016) %>%
-  mutate(month = month(date)) %>%
-  group_by(month) %>%  summarise(mean = mean(domestic_10y))
 
-average_2017 <- yield_factors %>% filter(year == 2017) %>%
-  mutate(month = month(date)) %>%
-  group_by(month) %>%  summarise(mean = mean(domestic_10y))
-
-average_2018 <- yield_factors %>% filter(year == 2018) %>%
-  mutate(month = month(date)) %>%
-  group_by(month) %>%  summarise(mean = mean(domestic_10y))
-
-average_2019 <- yield_factors %>% filter(year == 2019) %>%
-  mutate(month = month(date)) %>%
-  group_by(month) %>%  summarise(mean = mean(domestic_10y))
-
-average_2020 <- yield_factors %>% filter(year == 2020) %>%
-  mutate(month = month(date)) %>%
-  group_by(month) %>%  summarise(mean = mean(domestic_10y))
-
-average_2021 <- yield_factors %>% filter(year == 2021) %>%
-  mutate(month = month(date)) %>%
-  group_by(month) %>%  summarise(mean = mean(domestic_10y))
-#   
-yield_factors  %>%
-  mutate(month = month(date), year = year(date)) %>%
-  filter(year == 2018) %>% 
-  group_by(month) %>%
-ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
-  geom_point()+scale_x_discrete(breaks = seq(1, 31, 4))+
-  geom_hline(data = average_2018, aes(yintercept = mean), alpha = 0.5, linetype = "dashed")+
-  facet_wrap(~month)+theme_bw()+xlab("Date")+ylab("Yield 10y")
-
-######comparing yield in auction day and non-auction day
-# slightly higher in Feb and Dec
-yield_factors  %>%
-  mutate(month = month(date, label = TRUE), year = year(date)) %>% 
-  select(domestic_10y, auction_day, month, year) %>% drop_na() %>% 
-  filter(year > 2015) %>% 
-ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
-  geom_boxplot()+
-  facet_wrap(~year)
-
-
-yield_factors  %>%
-  mutate(month = month(date, label = TRUE), year = year(date)) %>%
-  filter(year != 2015) %>% 
-ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
-  geom_boxplot()+
-  facet_wrap(~month)
 
 # 
 # yield_factors %>% filter(year == 2018) %>% 
@@ -749,5 +780,5 @@ yield_factors %>%
 
 From plot above, the movement of domestic 10y yield is parallel with movement of policy rate. The median spread in 2016 until 2018 is quite the same (around 2.5) while median spread of 2019 is the lowest. In 2020 and 2021, the differences between 10y yield and policy rate are increase with median spread is about 3. The range of spread in 2020 is also the widest compared to other observed years.
 
-
+#Bibliography
 
