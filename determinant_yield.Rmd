@@ -40,11 +40,12 @@ library(patchwork)
 
 #read compiled dataset
 yield_factors <- readRDS("yield_factors.rds")
+
 ```
 
 # 1. Introduction
 
-Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in primary market to finance deficit of national budget. In 2021, issuance target for the sovereign bonds is around 80-85% of total deficit financing which amount to IDR1,006 Trillions or equivalent to USD72 Billions ^[USD/IDR conversion rate = 14,284]. As per 2 September 2021, total outstanding of local currency sovereign bonds is IDR4,539 Trillions or equivalent to USD318 Billions ^[ibid]. 
+Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in primary market to finance deficit of national budget. In 2021, issuance target for the sovereign bonds is around 80-85% of total deficit financing which amount to IDR1,006 Trillions or equivalent to USD72 Billions ^[Assumed exchange rate for conversion (IDR/USD) = 14,284.00]. As per 2 September 2021, total outstanding of local currency sovereign bonds is IDR4,539 Trillions or equivalent to USD318 Billions ^[ibid]. 
 
 The government sells the sovereign bonds through auction which conducted every Tuesday. Announcement will be released three days before the auction day (T-3). During 2-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through primary dealers and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offer sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying may also be conducted by primary dealers to complement their competitive bidding purchase. Non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the winning competitive bidding.
 
@@ -54,45 +55,124 @@ Since 2021, yield of 10-year sovereign bonds become one of macroeconomic assumpt
 
 During period of 2014-2018, Indonesia is said to have higher average of 10-year sovereign bonds yield compared to its ASEAN-5 peers (Thailand, Philliphines, Malaysia, Vietnam) as well as several other emerging countries with similar credit rating like Mexico, Columbia and India [@Muktiyanto2019]. This condition make Indonesia pays more expensive debt compared to these countries. As corporates use the yield as their benchmark rate, the impact of costly debt is also spilled over in the national economy.
 
-Considering important functions of the 10-year sovereign bonds yield in Indonesia's economy, this paper will study several variables that are assumed to have relationship and impact on the yield. The result of this work will be providing insights and policy recommendations for government in reducing sovereign bonds yield, particularly by aiming at significant determinant factors, which in turn help to optimize national's cost of borrowing.
+Considering important functions of the 10-year sovereign bonds yield in Indonesia's economy, this paper will study several variables that are assumed to have relationship and impact on the yiel and will be delivered in several sections. First, we will explain our research motivation in Section 2. Section 3 will provide background knowledge from prior studies related to the topic. Section 4 will briefly explain variables of interest as well as conducting exploratory data analysis (EDA) by visualizing data to check any interesting patterns or characteristics. Section 5 and section 6 will cover research methodology and result of analysis consecutively. 
 
-# 2. Literature Review
+# 2. Motivation
 
-Numerous researches have been conducted using various methodologies and scopes of study to find factors that affecting sovereign bonds yield. Dachroui et al [@Dachraoui2020] analyze role of capital flight as a driver of sovereign bond spreads in Latin American countries, Saenong et al [@Saenong2020] study symmetric and asymmetric effect of crude oil prices and exchange rate on bond yields in Indonesia. 
+This paper provides two new values to existing literature. First, it employs exploratory data analysis (EDA) approach in the beginning of analysis to gain better intuition of each explanatory variables. This approach is quite important especially for capturing particular data characteristic, i.e. non-linearity, before we can proceed to a confirmatory step. Disregarding the data characteristic will result in inappropriate data modeling.
+Second, this is the first work which empirically study the impact of primary dealers' behavior on 10-year sovereign bonds yield in Indonesia.  
+The purpose of this work will be providing insights and policy recommendations for government in reducing sovereign bonds yield, particularly by aiming at significant determinant factors, which in turn help to optimize national's cost of borrowing. 
 
+# 3. Literature Review
+
+Numerous researches have been conducted using various methodologies and scopes of study to find factors that affecting sovereign bonds yield. Dachroui et al [@Dachraoui2020] analyze role of capital flight as a driver of sovereign bond spreads in Latin American countries. They found that spreads are positively correlated with capital flight, inflation, government final consumption expenditure, unemployment rate, VIX and crisis, while economic growth, trade openness and governance index appear to have a negative effect [-@Dachraoui2020]. 
+
+UST
+
+
+CDS
+Kim et al. [-@Kim2014] study role of default risk using credit default swaps as proxy in explaining spread of sovereign bonds yield. Their finding confirm that the variable contributes in determining the spread by 37%.
+
+EXCHANGE RATE
+Gadanecz et al [@Gadanecz2018] use exchange rate volatility and expected exchange rate as predictor variables of emerging market economies local currency sovereign bond yields. They conclude that the significant relationship between exchange rate and bonds yields. Permanasari et al. [-@Permanasari2021] see negative significant relationship between exchange rate and government bond yield in Indonesia, while Saenong et al [@Saenong2020] conclude that exchange rate has an effect on bond yields only in the short run. 
+
+FOREIGN
+[@Gadanecz2018] Moreover, they also found that foreign ownership in local currency sovereign bonds market plays important role as stabilizing force of exchange rate volatility. 
+
+Other studies such as,,,,also confirm this.
+
+VIX
 Izadi et al [@Izadi2018] focus on local fundamental, global factors, volatility as determinant factors of yield spreads using empirical data of 24 developed countries in
 North America, Europe and Pacific Rim regions in period of January, 2010 until March, 2015. Their finding include significant and positively correlation between equity market volatility (VIX) and yield speads in all observed regions. Their study also show strong relationship between fixed income and stock markets particularly in developed countries.
 
-Gadanecz et al [@Gadanecz2018] use exchange rate volatility and expected exchange rate as predictor variables of emerging market economies local currency sovereign bond yields. They conclude that exchange rate volatility is a key determinant. Moreover, they also found that foreign ownership in local currency sovereign bonds market plays important role as stabilizing force of exchange rate volatility.
+PRIMARY DEALERS
+Other researches took different angle by studying primary dealers system and its impact on bonds yield [@Tchuindjo2015], [@Endo2020], , , . Tchuindjo [-@Tchuindjo2015] hints about impact of primary dealers' behavior on increased bonds yields, particularly during when-issued period. 
+
+Based on these literature, this paper will study relationship and impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign share in sovereign bonds ownership (%), central bank's policy rate, exchange rate, volatility index (VIX) as well as primary dealers' behavior as determinant factors of 10-year sovereign bonds yield. 
 
 
-Based on these literature review, this paper will analyze relationship and impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), share of foreign ownership, central bank's policy rate (Bank Indonesia 7-day repo rate), USD/IDR exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), volatility risk (VIX) and primary dealers behavior (dummy variables of auction/non-auction days) in determining 10-year sovereign bonds yield. Dataset are from period of 2015 and 2021.
+# 4. Description of Explanatory Variables
 
+As yield is described as expected return in exchange of risks taken by investors, we will group the explanatory variables based on their related risk categories as follow:
 
-# 3. Motivation
-
-This paper provides two new values to existing literature related to the topic. First, it will use exploratory data analysis in the beginning of analysis to gain better understanding of each predictor variable. This preliminary step is quite important because particular data characteristic, i.e. non-linearity, will need different handling method before proceeding to confirmatory step/modeling. 
-Second, this is the first work which empirically study the impact of primary dealers behavior on 10-year Sovereign bonds yield in Indonesia.  
-
-# 4. Description of Predictor Variables
-
-## 1). External Factors  
+## 1). External Risk  
 
 ### A. 10-year US Treasury
+```{r}
+yield_factors %>% 
+  mutate(week_year = yearweek(date), year = year(date), foreign_chg = foreign/tot_ownership) %>% 
+  ggplot(aes(x = ust_10y, y = domestic_10y)) + 
+  geom_point()+facet_wrap(~ year)+theme_light()+ylab("10y Yield")+xlab("10y UST")
+```
+
 
 ### B. Foreign Ownership  
+```{r}
+#foreign changes
+## negative relationship when foreign pct > 35%, < 35% positive relationship
+### due to quantitative easing of central bank 2020-2021 and mandatory purchase of domestic banks boost domestic ownership
 
-## 2). Default Risk  
+yield_factors %>% 
+  mutate(week_year = yearweek(date), year = year(date), foreign_chg = foreign/tot_ownership) %>% 
+  ggplot(aes(x = foreign_chg, y = domestic_10y)) + 
+  geom_point()+facet_wrap(~ year)+theme_light()+ylab("10y Yield")+xlab("Foreign Ownership (%)")
+```
 
-## 3). Financial Market Indicator (Volatility Index)  
 
-## 4). Macroeconomic Indicator (Exchange Rate USD/IDR)  
+## 2). Default Risk (5-year Credit Default Swap) 
+
+A credit default swap (CDS) is a derivative contract that allows the investor to hedge against the default of a borrower. 
+This provides a market-based measure of the credit-risk premium. 
+CDS spreads indicate that the credit risk that investors
+perceive is significant. @codogno
+
+```{r}
+###cds vs yield 
+yield_factors %>%
+  mutate(year = year(date)) %>%
+  mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate, ust_bi = rate-ust_10y) %>%
+  filter(year > 2015) %>%
+  ggplot(aes(x = cds_5y, y = domestic_10y))+
+  geom_jitter()+
+  facet_wrap(~year)+theme_light()+ylab("5y CDS")+xlab("10y Yield")
+```
+
+
+## 3). Financial Market Risk (Volatility Index)  
+
+```{r}
+#check volatility vs yield
+yield_factors %>% mutate(year = year(date)) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_point(aes(x = vix))+
+  facet_wrap(~year)+theme_light()+ylab("10y Yield")+xlab("VIX")
+
+```
+
+
+## 4). Macroeconomic Risk (Exchange Rate USD/IDR)  
+
+```{r}
+#check exchange rate vs yield
+# strong and steady positive relationship between exchange rate and yield
+# Rupiah weakened yield goes up
+yield_factors %>% mutate(year = year(date)) %>% 
+  ggplot(aes(y = domestic_10y)) + 
+  geom_point(aes(x = exchange_mid))+
+  facet_wrap(~year)+theme_light()+ylab("10y Yield")+xlab("Exchange Rate (IDR/USD)")
+```
+
 
 ## 5). System Risk (Primary Dealers Behavior) 
 
-In 2021, there are 20 primary dealers of conventional bonds comprise of 16 conventional banks and 4 securities companies. For sharia bonds, there are also 20 primary dealers consist of 13 conventional banks, 3 Islamic banks and 4 securities companies. Primary dealers are required to participate in every auction and to bid for a minimum quantity of the total offering amount. They can bid both on behalf of their customers and for their own accounts. This primary dealers system is important for several reasons. First, primary dealers act as intermediary between debt managers and investors in primary market. Second, they play role as bookmakers and distributors by canvassing investor's interest and distributing bonds from auction announcement until the day of auction or commonly known as when-issued market [@Arnone2003]. In addition, primary dealers also has vital function in bridging liquidity between primary and secondary market, providing asset transformation and market making services, promoting continuous market and efficient price discovery [-@Arnone2003]. Last but not least, Arnone and Iden [-@Arnone2003] also mention that contribution of primary dealers include giving skillful advisory support related to instruments and market development.
+Primary dealers system has been introduced for the first time in.... The system has several functions. First, primary dealers are supposed to act as intermediary between debt managers and investors in primary market. Second, they play role as bookmakers and distributors by canvassing investor's interest and distributing bonds from auction announcement until the day of auction or commonly known as when-issued market [@Arnone2003]. In addition, primary dealers also has vital function in bridging liquidity between primary and secondary market, providing asset transformation and market making services, promoting continuous market and efficient price discovery [-@Arnone2003]. Last but not least, Arnone and Iden [-@Arnone2003] also mention that contribution of primary dealers include giving skillful advisory support related to instruments and market development. 
+
+In 2021, there are 20 primary dealers of conventional bonds comprise of 16 conventional banks and 4 securities companies. For sharia bonds, there are also 20 primary dealers consist of 13 conventional banks, 3 Islamic banks and 4 securities companies. Primary dealers are required to participate in every auction and to bid for a minimum quantity of the total offering amount. They can bid both on behalf of their customers and for their own accounts. 
 
 As primary dealers can participate in competitive bidding in primary market as well as trading in secondary market, they have direct contribution on forming yield of sovereign bonds.
+
+One important feature of the Treasury security market is that, immediately following the auction announcement, market partici-pants enter into bilateral contracts for the sale and purchase of the new security before it is auctioned. In this pre-sale market, known as the when-issued market, primary dealers are the major players. As mentioned by Nyborg and Strebulaev (2004), many primary dealers are often short in the when-issued market and are also the main participants in the auction. Furthermore, in a recent empirical study on Treasury securities, Mercer et al. (2013) conclude that traders in the when-issued market "discover" the ultimate auction price. We therefore believe that primary dealers' positions created in the when-issued market have an important impact on their strategic behavior in the auctions. 
+Primary dealers’ strategic behavior in the Treasury auctions can significantly increase the cost of government debt financing @tchuindjo
 
 ```{r echo = FALSE}
 ### auction vs non_auc days
@@ -123,13 +203,13 @@ average_2021 <- yield_factors %>% mutate(year = year(date)) %>% filter(year == 2
 #   
 yield_factors  %>%
   mutate(month = month(date, label = TRUE), year = year(date)) %>%
-  filter(year == 2018) %>% 
+  filter(year == 2021) %>% 
 ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
-  geom_point(alpha = 1, size = 1.5)+scale_x_discrete(breaks = seq(1, 31, 4))+
-  geom_hline(data = average_2018, aes(yintercept = mean, linetype = "Monthly Average"), colour= 'black')+
-  facet_wrap(~month, ncol = 4)+xlab("Date")+ylab("10-y Yield")+
+  geom_jitter(alpha = 0.6, size = 2)+scale_x_discrete(breaks = seq(1, 31, 9))+scale_y_continuous(minor_breaks = 1)+
+  geom_hline(data = average_2021, aes(yintercept = mean, linetype = "Monthly Average"), colour= 'black')+
+  facet_wrap(~month, ncol = 3)+xlab("Date")+ylab("10y Yield")+
   scale_color_manual(name = "Auction Days", values= c("#BCBCBC", "#F55F5F"), labels = c("No", "Yes"))+
-  scale_linetype_manual(name = "", values = "dashed")+theme(legend.position="bottom")
+  scale_linetype_manual(name = "", values = "dashed")+theme_light()+theme(legend.position="bottom")
 
 ######comparing yield in auction day and non-auction day
 # slightly higher in Feb and Dec
@@ -140,7 +220,7 @@ yield_factors  %>%
 ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
   geom_boxplot()+
   facet_wrap(~ month)+ylab("10-year Yield")+
-  scale_color_discrete(name = "Auction Days", labels = c("No", "Yes"))
+  scale_color_discrete(name = "Auction Days", labels = c("No", "Yes"))+theme_light()+theme(legend.position = "bottom")
 
 
 yield_factors  %>%
@@ -148,41 +228,118 @@ yield_factors  %>%
   filter(year > 2015) %>% 
 ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
   geom_boxplot()+
-  facet_wrap(~month)
+  facet_wrap(~month)+theme_light()+theme(legend.position = "bottom")
+
 ```
 
 
-# 5. Research Methodology and Data
+# 5. Research Methodology
 
-In selecting determinant factors of 10-year sovereign bonds, we are influenced by several variables used in study conducted by .........
+In selecting determinant factors of 10-year sovereign bonds, we are influenced by several variables used in studies conducted by .........
 
-Regarding these studies and the result of exploratory data analysis conducted in previous section, we can write down relationship between variables as follow:
+Regarding these researches and the result of exploratory data analysis conducted in previous section, we can write down relationship between variables as follow:
 
 $$
 yield\_10y = \alpha + \beta_1ust\_10y+\beta_2cds\_5y +\beta_3foreign\_pct + \beta_4policy\_rate +\beta_5exchange\_rate+ +\beta_6{vix}^2 + \beta_7auction\_days +\epsilon
 $$
-For the purpose of this study, we will use data of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), share of foreign ownership (%), central bank's policy rate (Bank Indonesia 7-day repo rate), USD/IDR exchange rate (Jakarta Interbank Spot Dollar Rate/JISDOR), volatility risk (VIX) and primary dealers behavior (dummy variables of auction/non-auction days). As response variable, we will use 10-year sovereign bonds yield. 
+Summary statistic of the data is shown below:
+```{r }
 
-Dataset are from period of 2015 and 2021.
+###prepare variable for model
+data_model <- yield_factors %>% mutate(year = year(date), month = factor(month(date))) %>% 
+  mutate(foreign_pct = foreign/tot_ownership) %>% 
+  mutate(date= date(date), year = factor(year), month =  factor(month(date)),
+          auction_day = factor(auction_day)) %>% 
+  select(date,  year, month, domestic_10y, cds_5y, ust_10y, rate, foreign_pct, vix, exchange_mid, auction_day, cpi_inflation) %>% drop_na()
+
+
+summary(data_model)
+```
+
+Dataset are covering period of January 2015-July 2021. Analysis is conducted using R programming and R-Studio software.
+
 
 
 # 6. Analysis
 
+```{r eval = FALSE}
+library(broom)
 
-# 7. Conclusion
+# model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate:year + foreign + ins_pension + foreign:year + ins_pension:year + auction_day:month,
+#  data = data_model)
+
+model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign_pct + I(vix^2) + exchange_mid + auction_day,
+            data = data_model)
+
+summary(model)
+tidy(model)
+
+# highest vix in early pandemic 2020-03-16 
+# MArch 2 2020 is the first case of covid
+data_model %>% filter (vix == 82.69)
 
 
+# best <- drop1(model, test = "F")
+# summary(best)
 
 
+aug <- broom::augment(model, data = data_model %>% filter(year != 2015) %>% drop_na())
 
-c. Data sources + available links
-Definition and descriptive statistics of variables.
-Stationarity test
+aug %>% 
+  ggplot(aes(x = .fitted, y = .resid))+
+  geom_point()
 
-d. Scope and Limitation
-Cant see average bid from each group (i.e. conventional banks, foreign, insurance/pension, others)
+aug %>%
+  ggplot(aes(x = .cooksd, y = .hat))+
+  geom_point()
+
+# aug %>% 
+#   ggplot(aes(x = .cooksd, y = .hat))+
+#   geom_point()
+
+outlier <- aug %>% filter(.cooksd > 0.05)
+
+#not in
+`%notin%` <- Negate(`%in%`)
+
+data_model %>% filter(date %in% outlier$date)
+
+####remove extreme outliers
+data_model2 <- data_model %>% filter(date %notin% outlier$date)
+
+# model <-  lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign:year + I(vix^2) + exchange_mid + auction_day:month, data = data_model2)
 
 
+# model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign:year + I(vix^2) + cpi_inflation + exchange_mid + auction_day:year,
+#             data = data_model)
+
+summary(model)
+tidy(model)
+
+aug <- broom::augment(model, data = data_model2 %>% filter(year != 2015) %>% drop_na())
+
+aug %>% 
+  ggplot(aes(x = .fitted, y = .resid))+
+  geom_point()
+
+aug %>% 
+  ggplot(aes(x = .cooksd, y = .hat))+
+  geom_point()
+
+#check multicol
+#explain GVIF variable 
+car::vif(model)
+
+# reduce to "best fit" model with
+
+summary(model)
+# model_best <- step(model, trace = FALSE)
+# summary(model_best)
+
+#diagnose model
+ggnostic(model_best)
+
+```
 
 
 
@@ -203,13 +360,9 @@ comparable maturities), which are a proxy for country risk, have tended to
 move in the same direction as the changes in U.S. interest rates @arora
 
 b. CDS vs Yield
-A credit default swap (CDS) is a derivative contract that allows the investor to hedge against the default of a borrower. 
-This provides a market-based measure of the credit-risk premium. 
-CDS spreads indicate that the credit risk that investors
-perceive is significant. @codogno
 
 Sovereign CDS spreads are used as an indicator of foreign currency sovereign
-creditworthiness.12 Lower sovereign CDS spreads are expected to lower local currency sovereign bond yields @gadanecz
+creditworthiness. Lower sovereign CDS spreads are expected to lower local currency sovereign bond yields @gadanecz
 
 c. Foreign Ownership vs Yield
 
@@ -242,18 +395,14 @@ expected changes in U.S. monetary policy. It may also pick up the effects of oth
 
 As historical data demonstrates a strong negative correlation of volatility to the stock market returns – that is, when stock returns go down, volatility rises and vice versa.(investopedia)
 
-g. Auction day vs yield
 
-One important feature of the Treasury security market is that, immediately following the auction announcement, market partici-pants enter into bilateral contracts for the sale and purchase of the new security before it is auctioned. In this pre-sale market, known as the when-issued market, primary dealers are the major players. As mentioned by Nyborg and Strebulaev (2004), many primary dealers are often short in the when-issued market and are also the main participants in the auction. Furthermore, in a recent empirical study on Treasury securities, Mercer et al. (2013) conclude that traders in the when-issued market "discover" the ultimate auction price. We therefore believe that primary dealers' positions created in the when-issued market have an important impact on their strategic behavior in the auctions. 
-Primary dealers’ strategic behavior in the Treasury auctions can significantly increase the cost of government debt financing @tchuindjo
 
-Greenshoe mechanism affect the decreased yield?
+# 7. Conclusion
 
-h. inflation vs yield
-It is an indicator of macroeconomic stability and shows how a country manages its monetary policy. Higher inflation reduces the government’s ability to repay
-its obligations with its domestic funds. A positive effect of the inflation rate on the sovereign yield spreads is therefore expected. @hajer
 
-3. Key Findings
+
+
+
 
 factors that steadily affect the yield? (foreign and insurance/pension fund are steadily associated with yield movement. Foreign has strongly negative correlation until 2019, while insurance/pension has strongly positive correlation)
 
@@ -262,81 +411,34 @@ pandemic effect? i.e. holding spending for investing in safe instrument? (need t
 shifting power (bonds ownership) foreign to domestic participant (Do central bank/domestic banks become more dominant)?
 (Quantitative easing of Bank Indonesia and mandatory purchase of domestic banks can push down the yield)
 
-suplementary auction (greenshoe) can reduce yield in 2020-2021?
 
-
-Summary
-
-Bibliography
-
-
-#Timeline
+# Timeline
 
 Chapter 1 + Data collection/conversion from excel tables 31 Aug 2021,
 
 Chapter 2 1 Sep - 25 Oct 2021,
 
-Chapter 3 26 Oct - 12 Nov 2021,
+Chapter 3 26 Oct - 1 Nov 2021,
 
-Summary, Bibliography, cleaning Code, creating slides 13 - 19 Nov 2021
-
+Conclusion, Bibliography, cleaning Code, creating slides 2 - 5 Nov 2021
 
 
 
 ```{r }
-#check volatility vs yield
-yield_factors %>% mutate(year = year(date)) %>% 
-  ggplot(aes(y = domestic_10y)) + 
-  geom_point(aes(x = vix))+
-  facet_wrap(~year)
 
-#check exchange rate vs yield
-# strong and steady positive relationship between exchange rate and yield
-# Rupiah weakened yield goes up
-yield_factors %>% mutate(year = year(date)) %>% 
-  ggplot(aes(y = domestic_10y)) + 
-  geom_point(aes(x = exchange_mid))+
-  facet_wrap(~year)
-
-#check debt_gdp ratio vs yield
-yield_factors %>% mutate(year = year(date)) %>% 
-  ggplot(aes(y = domestic_10y)) + 
-  geom_jitter(aes(x = debt_gdp))+
-  facet_wrap(~year)
+# 
+# 
+# #check debt_gdp ratio vs yield
+# yield_factors %>% mutate(year = year(date)) %>% 
+#   ggplot(aes(y = domestic_10y)) + 
+#   geom_jitter(aes(x = debt_gdp))+
+#   facet_wrap(~year)
 
 ```
 
-```{r}
-# non linear relationship between yield vs inflation
-yield_factors %>%
-  mutate(yearmon = yearmonth(date), month = month(date), year = year(date)) %>%
-  group_by(yearmon) %>% 
-  summarise(avg_10y = mean(domestic_10y), avg_inflation = mean(cpi_inflation)) %>%
-  ggplot(aes(y = avg_10y, x = avg_inflation)) +
-  geom_point(alpha =0.5)+geom_smooth()
-
-# yield_factors %>%
-#   mutate(yearmon = yearmonth(date), month = month(date), year = year(date)) %>% 
-#   group_by(yearmon) %>% 
-#   ggplot(aes(y = domestic_10y, x = cpi_inflation)) +
-#   geom_point(alpha =0.5)
-
-#foreign changes
-## negative relationship when foreign pct > 35%, < 35% positive relationship
-### due to quantitative easing of central bank 2020-2021 and mandatory purchase of domestic banks boost domestic ownership
-
-yield_factors %>% 
-  mutate(week_year = yearweek(date), foreign_chg = foreign/tot_ownership) %>% 
-  group_by(week_year) %>% 
-  summarise(avg_10y = mean(domestic_10y), avg_chg = mean(foreign_chg)) %>% 
-  ggplot(aes(x = avg_chg, y = avg_10y)) + 
-  geom_point()
-
-```
 
 Several studies indicates the relationship between bonds yield and foreign ownership (i.e......). We will observe the relationship between these two variables through visualization approach. 
 
-By just putting the number, we can not see any clear pattern from these variables. However, if we facet the plot by year, now obvious patterns of the relationship arises.
 
 ```{r foreign_yield, fig.cap = "Foreign Ownership and Domestic 10y Yield", eval=FALSE}
 
@@ -446,14 +548,7 @@ mutate(year = year(date), con_pct = con_bank/tot_ownership, bi_pct = central_ban
 #   geom_jitter()+
 #   facet_wrap(~year)
 
-###cds vs yield 
-# yield_factors %>% 
-#   mutate(year = year(date)) %>% 
-#   mutate(date= date(date), month =  month(date), spread_10 = cds_10y-domestic_10y, spread_5 = cds_5y-domestic_10y, spread_ust = domestic_10y-ust_10y, spread_bi = domestic_10y-rate, ust_bi = rate-ust_10y) %>%  
-#   filter(year > 2015) %>% 
-#   ggplot(aes(x = cds_5y, y = domestic_10y))+
-#   geom_jitter()+
-#   facet_wrap(~year)
+
 
 # yield_factors %>% 
 #   mutate(year = year(date)) %>% 
@@ -635,90 +730,6 @@ yield_factors %>%
 #   geom_density()+
 #                facet_wrap(~ month)
 
-###prepare variable for model
-data_model <- yield_factors %>% mutate(year = year(date), month = factor(month(date))) %>% 
-  mutate(foreign_pct = foreign/tot_ownership) %>% 
-  mutate(date= date(date), year = factor(year), month =  factor(month(date)),
-          auction_day = factor(auction_day)) %>% 
-  select(date,  year, month, domestic_10y, cds_5y, ust_10y, rate, foreign_pct, vix, exchange_mid, auction_day, cpi_inflation) %>% drop_na()
-
-
-# model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate:year + foreign + ins_pension + foreign:year + ins_pension:year + auction_day:month,
-#  data = data_model)
-
-
-model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign_pct + I(vix^2) + exchange_mid + auction_day,
-            data = data_model)
-
-summary(model)
-tidy(model)
-
-summary(data_model)
-
-# highest vix in early pandemic 2020-03-16 
-# MArch 2 2020 is the first case of covid
-data_model %>% filter (vix == 82.69)
-
-
-# best <- drop1(model, test = "F")
-# summary(best)
-
-library(broom)
-aug <- broom::augment(model, data = data_model %>% filter(year != 2015) %>% drop_na())
-
-aug %>% 
-  ggplot(aes(x = .fitted, y = .resid))+
-  geom_point()
-
-aug %>%
-  ggplot(aes(x = .cooksd, y = .hat))+
-  geom_point()
-
-# aug %>% 
-#   ggplot(aes(x = .cooksd, y = .hat))+
-#   geom_point()
-
-outlier <- aug %>% filter(.cooksd > 0.05)
-
-#not in
-`%notin%` <- Negate(`%in%`)
-
-data_model %>% filter(date %in% outlier$date)
-
-####remove extreme outliers
-data_model2 <- data_model %>% filter(date %notin% outlier$date)
-
-# model <-  lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign:year + I(vix^2) + exchange_mid + auction_day:month, data = data_model2)
-
-
-# model <- lm(formula = domestic_10y ~ cds_5y + ust_10y + rate + foreign:year + I(vix^2) + cpi_inflation + exchange_mid + auction_day:year,
-#             data = data_model)
-
-summary(model)
-tidy(model)
-
-aug <- broom::augment(model, data = data_model2 %>% filter(year != 2015) %>% drop_na())
-
-aug %>% 
-  ggplot(aes(x = .fitted, y = .resid))+
-  geom_point()
-
-aug %>% 
-  ggplot(aes(x = .cooksd, y = .hat))+
-  geom_point()
-
-#check multicol
-#explain GVIF variable 
-car::vif(model)
-
-# reduce to "best fit" model with
-
-summary(model)
-# model_best <- step(model, trace = FALSE)
-# summary(model_best)
-
-#diagnose model
-ggnostic(model_best)
 
 ```
 
@@ -807,5 +818,5 @@ yield_factors %>%
 
 From plot above, the movement of domestic 10y yield is parallel with movement of policy rate. The median spread in 2016 until 2018 is quite the same (around 2.5) while median spread of 2019 is the lowest. In 2020 and 2021, the differences between 10y yield and policy rate are increase with median spread is about 3. The range of spread in 2020 is also the widest compared to other observed years.
 
-#Bibliography
+# Bibliography
 
