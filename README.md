@@ -52,8 +52,8 @@ Bibliography
 
 Chapter 1 + Data collection/conversion from excel tables 31 Aug 2021,
 
-Chapter 2 1 Sep - 25 Oct 2021,
+Chapter 2 1 Sep - 15 Oct 2021,
 
-Chapter 3 26 Oct - 12 Nov 2021,
+Chapter 3 16 Oct - 1 Nov 2021,
 
-Summary, Bibliography, cleaning Code, creating slides 13 - 19 Nov 2021
+Summary, Bibliography, cleaning Code, creating slides 2-4 Nov 2021
