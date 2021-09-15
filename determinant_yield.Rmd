@@ -3,7 +3,8 @@ title: "Determining Factors for 10-year Local Currency Sovereign Bonds Yield: In
 author: "Dea Avega Editya"
 date: "8/5/2021"
 output:
-  bookdown::pdf_document2: default
+  bookdown::pdf_document2:
+    toc_depth: 4
   html_document: default
 bibliography: baca.bib  
 
@@ -63,7 +64,7 @@ Considering the important functions of the 10-year sovereign bonds yield in Indo
 # Motivation
 
 This paper provides two new values to existing literature. First, it employs an exploratory data analysis (EDA) approach at the beginning of analysis to gain better intuition of each explanatory variable. This approach is quite important especially for capturing particular data characteristics, i.e. non-linearity before we can proceed to a confirmatory step. Disregarding the data characteristic will result in inappropriate data modeling.
-Second, this is the first work that empirically studies the impact of primary dealers' behavior on 10-year sovereign bonds yield in Indonesia.  
+Second, this is the first work that empirically studies the impact of primary dealers' behavior on the 10-year local currency sovereign bonds yield in Indonesia.  
 The purpose of this work will be to provide insights and policy recommendations for the government in reducing sovereign bonds yield, particularly by aiming at significant determinant factors, which in turn help to optimize the national's cost of borrowing. 
 
 # Literature Review
@@ -93,9 +94,9 @@ Other researches took different angle by looking at primary dealers system and i
 
 # Data Description
 
-Based on these existing literature, this paper will study relationship and impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign share in sovereign bonds ownership (%), central bank's policy rate, exchange rate, volatility index (VIX) as well as primary dealers' behavior on the response variable of 10-year sovereign bonds yield. All variables of interest are collected as time-series data covering period of 2 January 2015 until 5 August 2021. 
+Based on these existing literature, this paper will study relationship and impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign share in sovereign bonds ownership (%), central bank's policy rate, exchange rate, volatility index (VIX) as well as primary dealers' behavior on a response variable of the 10-year local currency sovereign bonds yield. All variables are collected as time-series data covering period of 2 January 2015 until 5 August 2021. 
 
-## 10-year Sovereign Bonds Yield  
+## 10-year Local Currency Sovereign Bonds Yield  
 
 Yield can be described as expected return in exchange of risks taken by investors. The 10-year yield data used in this study is a generic yield retrieved from Bloomberg platform by using ticker "GRR" (Global summary of government bill, note, and benchmark bond rates for individual countries). 
 
@@ -261,7 +262,125 @@ ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
 
 In selecting determining factors for the 10-year sovereign bonds, we are mainly influenced by prior studies conducted by Gadanecz [-@Gadanecz2018], Tchuindjo [-@Tchuindjo2015], ......
 
+## Stationary Test
+
+To ensure that our model is not biased, we will conduct stationery test on the variables using Augmented Dicky Fuller (ADF) and KPSS.
+
+```{r}
+library(forecast)
+
+
+
+```
+
+
 ## Cointegration test
+
+### Visual Test
+
+```{r}
+# plot both interest series
+
+# spread_ust <- yield_factors$domestic_10y-yield_factors$ust_10y
+# yield_factors %>% 
+#   ggplot(aes(x = date))+
+#   geom_area(aes(y = domestic_10y), alpha = 0.4, fill = "steelblue")+
+#   geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.5)+
+#   geom_area(aes(y = ust_10y), alpha = 0.2, fill = "darkred")+
+#   geom_line(aes(y = ust_10y), color = "red", alpha = 0.5)+
+#   geom_line(aes(y= spread_ust), alpha = 0.6)+
+#   geom_hline(yintercept = mean(spread_ust), linetype = "dashed")
+
+yield_scale <- yield_factors %>% 
+  mutate(for_pct = foreign/tot_ownership) %>% 
+  select_if(is.numeric) %>% 
+  scale() %>% as_tibble()
+
+yield_scale <- cbind(yield_factors$date, yield_scale) %>% rename(date = `yield_factors$date`)
+
+spread_ust <- yield_scale$domestic_10y-yield_scale$ust_10y
+yield_scale %>% 
+  ggplot(aes(x = date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = ust_10y), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = ust_10y), color = "red", alpha = 0.1)+
+  geom_line(aes(y= spread_ust), alpha = 0.6)+
+  geom_hline(yintercept = mean(spread_ust), linetype = "dashed")+ggtitle("Diff with UST")
+
+#the spread between cds and yields looks whitenoise
+#The plot suggests that 10y domestic and 10y UST are cointegrated: 
+# both seem to have the same long-run behavior. They share a common stochastic trend. The spread, which is obtained by taking the difference between 2 variables, seems to be stationary. In fact, the expectations theory of the term structure suggests the cointegrating coefficient (theta) to be 1. This is consistent with the visual result.
+
+spread_cds <- yield_scale$domestic_10y-yield_scale$cds_5y
+yield_scale %>% 
+  ggplot(aes(x = date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = cds_5y), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = cds_5y), color = "red", alpha = 0.1)+
+  geom_line(aes(y= spread_cds), alpha = 0.6)+
+  geom_hline(yintercept = mean(spread_cds), linetype = "dashed")+ggtitle("Diff with CDS")
+
+#the diff between cds and yields looks stationer
+
+yield_scale <- yield_scale %>% 
+  mutate(dif_fx = domestic_10y-exchange_mid)
+
+yield_scale %>% 
+  ggplot(aes(x = date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = exchange_mid), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = exchange_mid), color = "red", alpha = 0.1)+
+  geom_line(aes(y= dif_fx), alpha = 0.6)+
+  geom_hline(yintercept = mean(yield_scale$dif_fx), linetype = "dashed")+ggtitle("Diff with FX")
+
+#the diff with FX is NON-stationer...
+
+tab <- cbind(yield_scale$domestic_10y, yield_scale$for_pct) %>% as.data.frame()
+tab <- tab %>% 
+  mutate(dif_for = V1-V2)
+
+yield_scale %>% 
+  ggplot(aes(x = date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = for_pct), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = for_pct), color = "red", alpha = 0.1)+
+  geom_line(aes(y= tab$dif_for), alpha = 0.6)+
+  geom_hline(yintercept = mean(tab$dif_for), linetype = "dashed")+ggtitle("Diff with Foreign pct")
+
+
+spread_rate <- yield_scale$domestic_10y-yield_scale$rate
+
+yield_scale %>% 
+  ggplot(aes(x = yield_factors$date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = rate), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = rate), color = "red", alpha = 0.1)+
+  geom_line(aes(y= spread_rate), alpha = 0.6)+
+  geom_hline(yintercept = mean(spread_rate), linetype = "dashed")
+
+#diff with policy rate looks stationer
+
+spread_vix <- yield_scale$domestic_10y-yield_scale$vix
+
+yield_scale %>% 
+  ggplot(aes(x = yield_factors$date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = vix), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = vix), color = "red", alpha = 0.1)+
+  geom_line(aes(y= spread_vix), alpha = 0.6)+
+  geom_hline(yintercept = mean(spread_vix), linetype = "dashed")
+
+# diff with vix looks stationer
+
+```
+
+### Formal Test
 
 
 Regarding the result from the exploratory data analysis conducted in previous section as well as the cointegration test, we can write down relationship between variables in OLS model as follow:
