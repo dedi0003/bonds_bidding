@@ -1,5 +1,5 @@
 ---
-title: "Determinant Factors of 10-year Local Currency Sovereign Bonds Yield: Indonesia Case"
+title: "Determining Factors for 10-year Local Currency Sovereign Bonds Yield: Indonesia Case"
 author: "Dea Avega Editya"
 date: "8/5/2021"
 output:
@@ -48,23 +48,23 @@ yield_factors <- readRDS("yield_factors.rds")
 
 # Introduction
 
-Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in primary market to finance deficit of national budget. In 2021, issuance target for the sovereign bonds is around 80-85% of total deficit financing which amount to IDR1,006 Trillions or equivalent to USD72 Billions ^[Assumed exchange rate for conversion (IDR/USD) = 14,284.00]. As per 2 September 2021, total outstanding of local currency sovereign bonds is IDR4,539 Trillions or equivalent to USD318 Billions ^[ibid]. 
+Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in the primary market to finance the deficit of the national budget. In 2021, the issuance target for the sovereign bonds is around 80-85% of total deficit financing which amounts to IDR1,006 Trillion or equivalent to USD72 Billion ^[Assumed exchange rate for conversion (IDR/USD) = 14,284.00]. As of 2 September 2021, the total outstanding of local currency sovereign bonds is IDR4,539 Trillion or equivalent to USD318 billion ^[ibid]. 
 
-The government sells the sovereign bonds through auction which conducted every Tuesday. Announcement will be released three days before the auction day (T-3). During 2-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through primary dealers and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offer sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying may also be conducted by primary dealers to complement their competitive bidding purchase. Non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the winning competitive bidding.
+The government sells the sovereign bonds through an auction which is conducted every Tuesday. The announcement will be released three days before the auction day (T-3). During a 2-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through primary dealers, and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offers sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying may also be conducted by primary dealers to complement their competitive bidding purchase. Non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the winning competitive bidding.
 
-There are several benchmark series offered in the auction. These series represent various maturity time. For conventional bonds, tenors of benchmark series in 2021 are ranging from 5, 10, 15 and 20 year. Meanwhile, benchmark tenors of sharia bonds cover 2, 4, 13 and 25 year.  
+There are several benchmark series offered in the auction. These series represent various maturity times. For conventional bonds, tenors of benchmark series in 2021 are ranging from 5, 10, 15, and 20 years. Meanwhile, benchmark tenors of sharia bonds cover 2, 4, 13, and 25 years.  
   
-Since 2021, yield of 10-year sovereign bonds become one of macroeconomic assumptions in national budget, replacing treasury bills of tenor 3-month (Surat Perbendaharaan Negara). This replacement is because the yield of 10-year sovereign bonds deemed as having larger and more significant portion in nation's cost of borrowing compared to the T-bills. Moreover, 10-year yield is also reflecting longterm economy condition and its movement is commonly used as a sign in predicting economic health of one country. The yield is also used by corporations as a reference when issuing their local currency bonds or lending money.
+Since 2021, the yield of 10-year sovereign bonds has become one of the macroeconomic assumptions in the national budget, replacing treasury bills of tenor 3-month (Surat Perbendaharaan Negara). This replacement is because the yield of 10-year sovereign bonds is deemed as having a larger and more significant portion in the nation's cost of borrowing compared to the T-bills. Moreover, the 10-year yield is also reflecting long-term economic development and its movement is commonly used as a sign for predicting country's economic health. 
 
-During period of 2014-2018, Indonesia is said to have higher average of 10-year sovereign bonds yield compared to its ASEAN-5 peers (Thailand, Philippines, Malaysia, Vietnam) as well as several other emerging countries with similar credit rating like Mexico, Columbia and India [@Muktiyanto2019]. This condition make Indonesia pays more expensive debt compared to these countries. As corporate use the yield as their benchmark rate, the impact of costly debt is also spilled over in the national economy.
+During a period of 2014-2018, Indonesia is said to have a higher average of 10-year sovereign bonds yield compared to its ASEAN-5 peers (Thailand, Philippines, Malaysia, Vietnam) as well as several other emerging countries with similar credit ratings like Mexico, Columbia, and India [@Muktiyanto2019]. This condition makes Indonesia pays more expensive debt compared to these countries. As corporate and business use the yield for benchmarking when issuing local currency bonds as well as lending money, the impact of costly debt is also spilled over in the national economy.
 
-Considering the important functions of the 10-year sovereign bonds yield in Indonesia's economy, this study will analyze several variables that determine the yield and quantify their impact using Ordinary Least Squared (OLS) model. This paper will be delivered in several sections. First, we will explain our research's purpose in Section 2. Section 3 will provide background knowledge from prior studies related to the topic. Section 4 will briefly explain variables of interest as well as conducting exploratory data analysis (EDA) by visualizing data to check any interesting patterns or characteristics. Section 5 and section 6 will cover research methodology and result of analysis consecutively. 
+Considering the important functions of the 10-year sovereign bonds yield in Indonesia's economy, this study will analyze several variables that determine the yield and quantify their impact using the Ordinary Least Squared (OLS) model. This paper will be delivered in several sections. First, we will explain our research's purpose in Section 2. Section 3 will provide background knowledge from prior studies related to the topic. Section 4 will briefly explain variables of interest as well as conducting exploratory data analysis (EDA) by visualizing data to check any interesting patterns or characteristics. Section 5 and section 6 will cover the research methodology and result of analysis consecutively. The appendix contains all detailed visualizations.
 
 # Motivation
 
-This paper provides two new values to existing literature. First, it employs exploratory data analysis (EDA) approach in the beginning of analysis to gain better intuition of each explanatory variables. This approach is quite important especially for capturing particular data characteristic, i.e. non-linearity, before we can proceed to a confirmatory step. Disregarding the data characteristic will result in inappropriate data modeling.
-Second, this is the first work which empirically study the impact of primary dealers' behavior on 10-year sovereign bonds yield in Indonesia.  
-The purpose of this work will be providing insights and policy recommendations for government in reducing sovereign bonds yield, particularly by aiming at significant determinant factors, which in turn help to optimize national's cost of borrowing. 
+This paper provides two new values to existing literature. First, it employs an exploratory data analysis (EDA) approach at the beginning of analysis to gain better intuition of each explanatory variable. This approach is quite important especially for capturing particular data characteristics, i.e. non-linearity before we can proceed to a confirmatory step. Disregarding the data characteristic will result in inappropriate data modeling.
+Second, this is the first work that empirically studies the impact of primary dealers' behavior on 10-year sovereign bonds yield in Indonesia.  
+The purpose of this work will be to provide insights and policy recommendations for the government in reducing sovereign bonds yield, particularly by aiming at significant determinant factors, which in turn help to optimize the national's cost of borrowing. 
 
 # Literature Review
 
@@ -88,14 +88,18 @@ VIX
 Izadi et al [@Izadi2018] focus on local fundamental, global factors, volatility as determinant factors of yield spreads using empirical data of 24 developed countries in
 North America, Europe and Pacific Rim regions in period of January, 2010 until March, 2015. Their finding include significant and positively correlation between equity market volatility (VIX) and yield speads in all observed regions. Their study also show strong relationship between fixed income and stock markets particularly in developed countries.
 
-Other researches took different angle by looking at primary dealers system and its impact on bonds yield [@Tchuindjo2015], [@Endo2020], [@Nyborg2004], [@Mercer2013]. Endo [-@Endo2020] study role of primary dealers in low income economies, while Nyborg et al. [-@Nyborg2004] and Mercer et al. [-@Mercer2013] and Tchuindjo [@Tchuindjo2015] concern on primary dealers trading strategic behavior in US Treasury auction. The last name also provide several mathematical models to estimate the impact of primary dealers' strategic behavior in the auction [-@Tchuindjo2015].
-
-Based on these existing literature, this paper will study relationship and impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign share in sovereign bonds ownership (%), central bank's policy rate, exchange rate, volatility index (VIX) as well as primary dealers' behavior on 10-year sovereign bonds yield. 
+Other researches took different angle by looking at primary dealers system and its impact on bonds yield Tchuindjo et al.[-@Tchuindjo2015], Endo [-@Endo2020], Nyborg et al. [-@Nyborg2004], Mercer et al. [-@Mercer2013], and Ferrari et al. [-@Ferrari2018]. Endo [-@Endo2020] study role of primary dealers in low income economies, while Ferrari et al. [-@Ferrari2018] focus on primary dealers' funding constraints on sovereign bonds yield. Nyborg et al. [-@Nyborg2004], Mercer et al. [-@Mercer2013] and Tchuindjo [-@Tchuindjo2015] concern on primary dealers trading behavior in US Treasury auction. The last name also provide several mathematical models to estimate the impact of primary dealers' strategic behavior in the auction [-@Tchuindjo2015].
 
 
-# Description of Explanatory Variables
+# Data Description
 
-As yield is described as expected return in exchange of risks taken by investors, we will group the explanatory variables based on their related risk categories as follow:
+Based on these existing literature, this paper will study relationship and impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign share in sovereign bonds ownership (%), central bank's policy rate, exchange rate, volatility index (VIX) as well as primary dealers' behavior on the response variable of 10-year sovereign bonds yield. All variables of interest are collected as time-series data covering period of 2 January 2015 until 5 August 2021. 
+
+## 10-year Sovereign Bonds Yield  
+
+Yield can be described as expected return in exchange of risks taken by investors. The 10-year yield data used in this study is a generic yield retrieved from Bloomberg platform by using ticker "GRR" (Global summary of government bill, note, and benchmark bond rates for individual countries). 
+
+Furthermore, as yield's definition is associated with risks, we can group the explanatory variables based on their related risk categories as follow:
 
 ## External Risk  
 
@@ -104,9 +108,8 @@ As yield is described as expected return in exchange of risks taken by investors
 yield_factors %>% 
   mutate(week_year = yearweek(date), year = year(date), foreign_chg = foreign/tot_ownership) %>% 
   ggplot(aes(x = ust_10y, y = domestic_10y)) + 
-  geom_point(alpha = 0.3)+facet_wrap(~ year)+theme_light()+ylab("10y Yield")+xlab("10y UST")
+  geom_point(alpha = 0.3)+facet_wrap(~ year, scale = "free")+theme_light()+ylab("10y Yield")+xlab("10y UST")
 ```
-
 
 ### Foreign Ownership  
 ```{r}
@@ -117,7 +120,7 @@ yield_factors %>%
 yield_factors %>% 
   mutate(week_year = yearweek(date), year = year(date), foreign_chg = foreign/tot_ownership) %>% 
   ggplot(aes(x = foreign_chg, y = domestic_10y)) + 
-  geom_point(alpha = 0.3)+facet_wrap(~ year)+theme_light()+ylab("10y Yield")+xlab("Foreign Ownership (%)")
+  geom_point(alpha = 0.3)+facet_wrap(~ year, scale = "free")+theme_light()+ylab("10y Yield")+xlab("Foreign Ownership (%)")
 ```
 
 
@@ -136,7 +139,7 @@ yield_factors %>%
   filter(year > 2015) %>%
   ggplot(aes(x = cds_5y, y = domestic_10y))+
   geom_jitter(alpha = 0.3)+
-  facet_wrap(~year)+theme_light()+ylab("5y CDS")+xlab("10y Yield")
+  facet_wrap(~year,  scale = "free")+theme_light()+ylab("5y CDS")+xlab("10y Yield")
 ```
 
 
@@ -147,7 +150,7 @@ yield_factors %>%
 yield_factors %>% mutate(year = year(date)) %>% 
   ggplot(aes(y = domestic_10y)) + 
   geom_point(aes(x = vix), alpha = 0.5) +
-  facet_wrap(~year)+theme_light()+ylab("10y Yield") + xlab("VIX")
+  facet_wrap(~year, scale = "free")+theme_light()+ylab("10y Yield") + xlab("VIX")
 
 ```
 
@@ -161,24 +164,28 @@ yield_factors %>% mutate(year = year(date)) %>%
 yield_factors %>% mutate(year = year(date)) %>% 
   ggplot(aes(y = domestic_10y)) + 
   geom_point(aes(x = exchange_mid)) +
-  facet_wrap(~year)+theme_light()+ylab("10y Yield") + xlab("Exchange Rate (IDR/USD)")
+  facet_wrap(~year, scale = "free")+theme_light()+ylab("10y Yield") + xlab("Exchange Rate (IDR/USD)")
 ```
 
 
 ## System Risk (Primary Dealers Behavior) 
 
-Primary dealers system in Indonesia has been established since 2007. The system is expected to run several functions, such as intermediary between debt managers and investors in primary market, bookmakers and bonds distributors, liquidity provider between primary and secondary market, promoter of continuous market and efficient price discovery, and adviser to government [@Arnone2003].
+Primary dealers system in Indonesia has been established since 2007. The system is expected to run several functions as shown in more developed economies. Arnone and Arden [-@Arnone2003] describe role of primary dealers as intermediary between debt managers and investors in primary market, bookmakers and bonds distributors, liquidity provider between primary and secondary market, promoter of continuous market and efficient price discovery, and adviser to government.
 
 In 2021, there are 20 primary dealers of conventional bonds comprise of 16 conventional banks and 4 securities companies. For sharia bonds, there are also 20 primary dealers consist of 13 conventional banks, 3 Islamic banks and 4 securities companies. Primary dealers are required to participate in every auction and to bid for a minimum quantity of the total offering amount. They can bid both on behalf of their customers and for their own accounts. As primary dealers can participate in competitive bidding in primary market as well as buy and sell in secondary market, they have direct contribution on forming yield of sovereign bonds.
 
-Tchuindjo [-@Tchuindjo2015] writes that primary dealers will make bilateral contracts for the offered securities as soon as auction announced, known as pre-sale or when-issued market. Mercer et al. [-@Mercer2013] argue that traders in the when-issued market can "discover" the ultimate auction price. In addition, many primary dealers are believed to often short in the when-issued market [@Nyborg2004]. This condition makes primary dealers to assign lower prices to the auctioned securities [@Tchuindjo2015], which also means higher demanded yields.
+Tchuindjo [-@Tchuindjo2015] writes that primary dealers will make bilateral contracts for the offered securities as soon as auction announced, known as pre-sale or when-issued market. Mercer et al. [-@Mercer2013] argue that they will be able to "discover" the ultimate auction price since in pre-sale period. Many primary dealers are also believed to often short in the when-issued market [@Nyborg2004], which encourages them to bid aggressively and assign lower prices to the auctioned securities [@Tchuindjo2015], meaning higher demanded yields.
 
-Thus, our analysis will be based on an assumption that primary dealers’ strategic behavior in the auctions can affect sovereign bonds yield. We will use dummy variables of "auction days" and "non-auction days" to observe if there is any different pattern in yields movement from these time categories. Auction days is described as days started from auction announcement (T-3) until day of auction (T).
+Thus, our analysis will be based on an assumption that primary dealers’ strategic behavior in the auctions can affect sovereign bonds yield. To check this assumption, we use dummy variables of "auction days" that representing the pre-sale/when-issued period and "non-auction days" that representing regular workdays. Referring to Nyborg et al. [-@Nyborg2004] pre-sale period is described as days started from the day of auction announcement (T-3) until a moment before bonds is distributed on the day of settlement (T+2). For simplicity, we define auction days as days started from T-3 until T+1. Here, we exclude the day of settlement (T+2) since bonds is usually distributed by the Central Bank in the morning of the settlement day. In addition, we only include auction days that offer benchmark series of the 10-year sovereign bonds in the auction day (T). Before 2019, the 10-year series is not regularly offered in the auction.
 
-In the graph below, we will check the pattern of 10-year yield movement and the dummy categories.
+In the graph below, we will observe the pattern of 10-year yield movement and the dummy categories.
 
 ```{r echo = FALSE}
 ### auction vs non_auc days
+average_2015 <- yield_factors %>% mutate(year = year(date)) %>%  filter(year == 2015) %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%  summarise(mean = mean(domestic_10y))
+
 average_2016 <- yield_factors %>% mutate(year = year(date)) %>%  filter(year == 2016) %>%
   mutate(month = month(date, label = TRUE)) %>%
   group_by(month) %>%  summarise(mean = mean(domestic_10y))
@@ -238,10 +245,9 @@ ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
   scale_color_discrete(name = "Auction Days", labels = c("No", "Yes"))+theme_light()+theme(legend.position = "bottom")
 ```
 
-```{r fig.cap="10-year Yield's Movement during Auction Days from 2016-2021", out.width= "80%"}
+```{r fig.cap="10-year Yield's Movement during Auction Days from 2016-2021"}
 yield_factors  %>%
   mutate(month = month(date, label = TRUE), year = year(date)) %>%
-  filter(year > 2015) %>% 
 ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
   geom_boxplot()+
   facet_wrap(~month)+
@@ -253,9 +259,12 @@ ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
 
 # Research Methodology
 
-In selecting determinant factors of 10-year sovereign bonds, we are mainly influenced by prior studies conducted by Gadanecz [-@Gadanecz2018], Tchuindjo [-@Tchuindjo2015], 
+In selecting determining factors for the 10-year sovereign bonds, we are mainly influenced by prior studies conducted by Gadanecz [-@Gadanecz2018], Tchuindjo [-@Tchuindjo2015], ......
 
-Regarding these researches and the result of exploratory data analysis conducted in previous section, we can write down relationship between variables in OLS model as follow:
+## Cointegration test
+
+
+Regarding the result from the exploratory data analysis conducted in previous section as well as the cointegration test, we can write down relationship between variables in OLS model as follow:
 
 $$
 \begin{aligned}
@@ -281,8 +290,6 @@ data_model <- yield_factors %>% mutate(year = year(date), month = factor(month(d
 stargazer(as.data.frame(data_model), type = "latex", header = FALSE,
           covariate.labels=c("10y Yield","5y CDS", "10y UST", "Policy Rate", "Foreign Pct", "VIX", "Exchange Rate"), label = "tab:table1")
 ```
-
-Dataset are covering period of 2 January 2015 until 5 August 2021. Analysis is conducted using R programming and R-Studio software.
 
 
 
@@ -366,7 +373,6 @@ summary(model)
 ggnostic(model_best)
 
 ```
-
 
 
 In particular, the results suggest that

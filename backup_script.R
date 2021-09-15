@@ -490,21 +490,25 @@ auction_2019 <- date(c('2019/01/03', '2019/01/15', '2019/01/29', '2019/02/12', '
                        '2019/08/13', '2019/08/27', '2019/09/10', '2019/09/24', '2019/10/08', '2019/10/22',
                        '2019/11/05', '2019/11/19', '2019/12/03')) %>% as_tibble()
 
-auction_2018 <- date(c('2018/01/03', '2018/01/16', '2018/01/30', '2018/02/13', '2018/02/27', '2018/03/13',
-                       '2018/03/27', '2018/04/10', '2018/04/24', '2018/05/08', '2018/05/22', '2018/06/05',
-                       '2018/07/03', '2018/07/17', '2018/07/31', '2018/08/14', '2018/08/28', '2018/09/12', '2018/09/25',
+auction_2018 <- date(c('2018/01/03', '2018/01/16', '2018/01/30', '2018/02/13', '2018/03/13',
+                       '2018/03/27', '2018/04/10', '2018/04/24', '2018/05/22', '2018/06/05',
+                        '2018/07/17', '2018/07/31', '2018/08/28', '2018/09/12', '2018/09/25',
                        '2018/10/09', '2018/10/23', '2018/11/06', '2018/11/21', '2018/12/04', '2018/12/18')) %>% as_tibble()
 
-auction_2017 <- date(c('2017/01/03', '2017/01/17', '2017/01/31', '2017/02/14', '2017/02/28', '2017/03/14', '2017/03/27', 
-                       '2017/04/11', '2017/04/25', '2017/05/09', '2017/05/23', '2017/06/06', '2017/06/20', 
-                       '2017/07/11', '2017/07/25', '2017/08/08', '2017/08/22', '2017/09/05', '2017/09/19',
-                       '2017/10/03', '2017/10/17', '2017/10/31', '2017/11/14', '2017/12/05')) %>% as_tibble()
+auction_2017 <- date(c('2017/01/03', '2017/01/17', '2017/01/31', '2017/02/14', '2017/02/28', '2017/03/27', 
+                       '2017/04/11', '2017/04/25', '2017/05/23', '2017/06/06',
+                       '2017/07/11', '2017/07/25', '2017/08/22', '2017/09/05', '2017/09/19',
+                       '2017/10/17', '2017/10/31', '2017/11/14', '2017/12/05')) %>% as_tibble()
 
-auction_2016 <- date(c('2016/01/05', '2016/01/19', '2016/02/02', '2016/02/16', '2016/03/01', '2016/03/15', '2016/03/29',
-                       '2016/04/12', '2016/04/26', '2016/05/10', '2016/05/24', '2016/06/07', '2016/06/21', '2016/07/19', '2016/08/02', '2016/08/16', '2016/08/30',
-                       '2016/09/13', '2016/09/27', '2016/10/11', '2016/10/25', '2016/11/08')) %>% as_tibble()
+auction_2016 <- date(c('2016/01/05', '2016/01/19', '2016/02/02', '2016/02/16', '2016/03/01', '2016/03/29',
+                       '2016/04/12', '2016/04/26', '2016/05/24', '2016/06/07', '2016/07/19', '2016/08/02', '2016/08/30',
+                       '2016/09/13', '2016/09/27', '2016/10/25', '2016/11/08')) %>% as_tibble()
 
-auction_date <- rbind(auction_2016, auction_2017, auction_2018, auction_2019, auction_2020, auction_2021)
+auction_2015 <- date(c(
+  '2015/01/06', '2015/01/20', '2015/02/16', '2015/03/03', '2015/03/31', '2015/05/11', '2015/05/26', '2015/06/23', '2015/07/07', '2015/09/01', '2015/10/13', '2015/11/10' 
+)) %>% as_tibble()
+
+auction_date <- rbind(auction_2015, auction_2016, auction_2017, auction_2018, auction_2019, auction_2020, auction_2021)
 
 ### add auction days
 yield_factors <- yield_factors %>% 
@@ -516,24 +520,46 @@ yield_factors <- yield_factors %>%
 #   mutate(auction_day = case_when(auction_day == 2015 ~ NA, TRUE ~ auction_day))
 
 inds <- which(yield_factors$auction_day == 1)
+inds_non3 <- inds[-1]
 
-yield_factors[inds-3, "pre"] <- yield_factors[inds, "auction_day"]
+# auction_2015 <- yield_factors %>% filter(as_date(date) > '2015-01-09'
+# ) %>% mutate(auction_day = na_if(auction_day, 0))
 
-yield_factors[inds-2, "pre"] <- yield_factors[inds, "auction_day"]
+cek <- yield_factors
 
-yield_factors[inds-1, "pre"] <- yield_factors[inds, "auction_day"]
+cek[inds_non3-3, "pre"] <- cek[inds_non3, "auction_day"]
 
-yield_factors[inds-0, "pre"] <- yield_factors[inds, "auction_day"]
+cek[inds_non3-2, "pre"] <- cek[inds_non3, "auction_day"]
+
+cek[inds_non3-1, "pre"] <- cek[inds_non3, "auction_day"]
+
+cek[inds_non3-0, "pre"] <- cek[inds_non3, "auction_day"]
+
+cek[inds_non3+1, "pre"] <- cek[inds_non3, "auction_day"]
+
+inds_cek <- which(cek$pre == 1)
+
+cek[inds_cek, "auction_day"] <- cek[inds_cek, "pre"]
+
+
+yield_factors[inds_non3-3, "pre"] <- yield_factors[inds_non3, "auction_day"]
+
+yield_factors[inds_non3-2, "pre"] <- yield_factors[inds_non3, "auction_day"]
+
+yield_factors[inds_non3-1, "pre"] <- yield_factors[inds_non3, "auction_day"]
+
+yield_factors[inds_non3-0, "pre"] <- yield_factors[inds_non3, "auction_day"]
+
+yield_factors[inds_non3+1, "pre"] <- yield_factors[inds_non3, "auction_day"]
 
 inds_yes <- which(yield_factors$pre == 1)
 
 yield_factors[inds_yes, "auction_day"] <- yield_factors[inds_yes, "pre"]
 
-auction_2015 <- yield_factors %>% filter(year == 2015) %>% mutate(auction_day = na_if(auction_day, 0))
 
-auction_beyond <- yield_factors %>% filter(year > 2015)
+# auction_beyond <- yield_factors %>% filter(year > 2015)
 
-yield_factors <- rbind(auction_2015, auction_beyond) %>% select(-pre)
+yield_factors <- yield_factors %>% select(-pre)
 
 ####save yield_factors with auction days
 saveRDS(yield_factors, "yield_factors.rds")
