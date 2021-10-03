@@ -1,5 +1,5 @@
 ---
-title: "Determining Factors for 10-year Local Currency Sovereign Bonds Yield: Indonesia Case"
+title: "Determining Factors for 10-year Local Currency Sovereign Bonds (LCB) Yield: Indonesia Case"
 author: "Dea Avega Editya"
 date: "8/5/2021"
 output:
@@ -21,6 +21,8 @@ knitr::opts_chunk$set(echo = FALSE)
 library(dplyr)
 library(ggplot2)
 library(tidyverse)
+library(tsibbletalk)
+library(gravitas)
 library(readr)
 library(readxl)
 library(stringr)
@@ -49,62 +51,73 @@ yield_factors <- readRDS("yield_factors.rds")
 
 # Introduction
 
-Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in the primary market to finance the deficit of the national budget. In 2021, the issuance target for the sovereign bonds is around 80-85% of total deficit financing which amounts to IDR1,006 Trillion or equivalent to USD72 Billion ^[Assumed exchange rate for conversion (IDR/USD) = 14,284.00]. As of 2 September 2021, the total outstanding of local currency sovereign bonds is IDR4,539 Trillion or equivalent to USD318 billion ^[ibid]. 
+Indonesian government regularly issue Rupiah-denominated sovereign bonds (conventional and sharia bonds) in the primary market to finance the deficit of the national budget. In 2021, the issuance target for the sovereign bonds is around 80-85% of total deficit financing which amounts to IDR1,006 Trillion or equivalent to USD72 Billion ^[Assumed exchange rate for conversion (IDR/USD) = 14,284.00]. As of 2 September 2021, the total outstanding of local currency sovereign bonds (LCB) is IDR4,539 Trillion or equivalent to USD318 billion ^[ibid]. 
 
-The government sells the sovereign bonds through an auction which is conducted every Tuesday. The announcement will be released three days before the auction day (T-3). During a 2-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through primary dealers, and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offers sovereign bonds to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying may also be conducted by primary dealers to complement their competitive bidding purchase. Non-competitive buyers will pay their bonds based on weighted average yield (WAY) from the winning competitive bidding.
+The government sells the sovereign bonds through an auction which is conducted every Tuesday. The announcement will be released three days before the auction day (T-3). During a 2-hour auction, investors (both individuals and institutions) can put their bidding in multiple prices through primary dealers, and auction winners will pay their bonds based on their proposed volumes and yields. In addition to the multiple price (competitive) mechanism, the government also offers LCB to several non-competitive participants such as Indonesia Central Bank (Bank Indonesia) and Indonesia Deposit Insurance Corporation (Lembaga Penjamin Simpanan). This non-competitive buying may also be conducted by primary dealers to complement their competitive bidding purchase. Non-competitive buyers will pay their LCB based on weighted average yield (WAY) from the winning competitive bidding.
 
-There are several benchmark series offered in the auction. These series represent various maturity times. For conventional bonds, tenors of benchmark series in 2021 are ranging from 5, 10, 15, and 20 years. Meanwhile, benchmark tenors of sharia bonds cover 2, 4, 13, and 25 years.  
+There are several benchmark series of LCB offered in the auction. These series represent various maturity times. For conventional bonds, tenors of benchmark series in 2021 are ranging from 5, 10, 15, and 20 years. Meanwhile, benchmark tenors of sharia bonds cover 2, 4, 13, and 25 years.  
   
-Since 2021, the yield of 10-year sovereign bonds has become one of the macroeconomic assumptions in the national budget, replacing treasury bills of tenor 3-month (Surat Perbendaharaan Negara). This replacement is because the yield of 10-year sovereign bonds is deemed as having a larger and more significant portion in the nation's cost of borrowing compared to the T-bills. Moreover, the 10-year yield is also reflecting long-term economic development and its movement is commonly used as a sign for predicting country's economic health. 
+Since 2021, the yield of 10-year LCB has become one of the macroeconomic assumptions in the national budget, replacing treasury bills of tenor 3-month (Surat Perbendaharaan Negara). This replacement is because the yield of 10-year LCB is deemed as having a larger and more significant portion in the nation's cost of borrowing compared to the T-bills. Moreover, the 10-year yield is also reflecting long-term economic development and its movement is commonly used as a sign for predicting country's economic health. 
 
-During a period of 2014-2018, Indonesia is said to have a higher average of 10-year sovereign bonds yield compared to its ASEAN-5 peers (Thailand, Philippines, Malaysia, Vietnam) as well as several other emerging countries with similar credit ratings like Mexico, Columbia, and India [@Muktiyanto2019]. This condition makes Indonesia pays more expensive debt compared to these countries. As corporate and business use the yield for benchmarking when issuing local currency bonds as well as lending money, the impact of costly debt is also spilled over in the national economy.
+During a period of 2014-2018, Indonesia is said to have a higher average of 10-year sovereign bonds yield compared to its ASEAN-5 peers (Thailand, Philippines, Malaysia, Vietnam) as well as several other emerging countries with similar credit ratings like Mexico, Columbia, and India [@Muktiyanto2019]. This condition makes Indonesia pays more expensive debt compared to these countries. As corporate and business use the yield for benchmarking when issuing their LCB as well as lending money, the impact of costly debt is also spilled over in the national economy.
 
-Considering the important functions of the 10-year sovereign bonds yield in Indonesia's economy, this study will analyze several variables that determine the yield and quantify their impact using the Ordinary Least Squared (OLS) model. This paper will be delivered in several sections. First, we will explain our research's purpose in Section 2. Section 3 will provide background knowledge from prior studies related to the topic. Section 4 will briefly explain variables of interest as well as conducting exploratory data analysis (EDA) by visualizing data to check any interesting patterns or characteristics. Section 5 and section 6 will cover the research methodology and result of analysis consecutively. The appendix contains all detailed visualizations.
+Considering the important functions of the 10-year LCB yield in Indonesia's economy, this study will analyze several variables that determine the yield and quantify their impact using the Ordinary Least Squared (OLS) model. This paper will be delivered in several sections. First, we will explain our research's purpose in Section 2. Section 3 will provide background knowledge from prior studies and explanation of the collected data. Section 4 will focus on exploratory data analysis (EDA) by visualizing data to check any interesting features of the variables. Section 5 and section 6 will cover the research methodology and result of analysis subsequently. The Appendix contains additional information.
 
 # Motivation
 
 This paper provides two new values to existing literature. First, it employs an exploratory data analysis (EDA) approach at the beginning of analysis to gain better intuition of each explanatory variable. This approach is quite important especially for capturing particular data characteristics, i.e. non-linearity before we can proceed to a confirmatory step. Disregarding the data characteristic will result in inappropriate data modeling.
-Second, this is the first work that empirically studies the impact of primary dealers' behavior on the 10-year local currency sovereign bonds yield in Indonesia.  
-The purpose of this work will be to provide insights and policy recommendations for the government in reducing sovereign bonds yield, particularly by aiming at significant determinant factors, which in turn help to optimize the national's cost of borrowing. 
-
-# Literature Review
-
-Numerous researches have been conducted using various methodologies and scopes of study to find factors that affecting sovereign bonds yield. Dachroui et al [@Dachraoui2020] analyze role of capital flight as a driver of sovereign bond spreads in Latin American countries. They found that spreads are positively correlated with capital flight, inflation, government final consumption expenditure, unemployment rate, VIX and crisis, while economic growth, trade openness and governance index appear to have a negative effect [-@Dachraoui2020]. 
-
-UST
+Second, this is the first work that empirically studies the impact of primary dealers' behavior on the 10-year LCB yield in Indonesia.  
+The purpose of this work will be to provide insights and policy recommendations for the government in reducing LCB yield, particularly by aiming at significant determinant factors, which in turn help to optimize the national's cost of borrowing. 
 
 
-CDS
-Kim et al. [-@Kim2014] study role of default risk using credit default swaps as proxy in explaining spread of sovereign bonds yield. Their finding confirm that the variable contributes in determining the spread by 37%.
+# Explanation of Collected Data
 
-EXCHANGE RATE
-Gadanecz et al [@Gadanecz2018] use exchange rate volatility and expected exchange rate as predictor variables of emerging market economies local currency sovereign bond yields. They conclude that the significant relationship between exchange rate and bonds yields. Permanasari et al. [-@Permanasari2021] see negative significant relationship between exchange rate and government bond yield in Indonesia, while Saenong et al [@Saenong2020] conclude that exchange rate has an effect on bond yields only in the short run. 
+There are 7 variables used in this paper as explanatory variables to the Indonesia's LCB yield; US Treasury (UST) yield, Credit Default Swap (CDS), foreign ownership (%), central bank's policy rate (policy rate), exchange rate, volatility index (VIX) and a dummy variable of auction/non-auction days as a proxy to primary dealers' trading behavior. The use of these explanatory variables are following numerous studies that have been conducted previously by various authors.  
 
-FOREIGN
-[@Gadanecz2018] Moreover, they also found that foreign ownership in local currency sovereign bonds market plays important role as stabilizing force of exchange rate volatility. 
+The UST yield is said by [@Miyajima2015] and [@Muktiyanto2019] to be significantly affecting bonds yield. Miyajima et al. [-@Miyajima2015] conclude that the UST yield, while not a main contributor to the LCB yield in the emerging economies, is to some extent affecting the yield. Muktiyanto et al. whose focus of study is on Indonesia's bonds gives more emphasize on the predictor variable suggesting that the UST yield is not only significant but also has the biggest role in determining the LCB yield of the country. On the contrary, Permanasari et al. [-@Permanasari2021] who also study the same country suggest that the UST yield has no significant effect in determining the LCB yield.
 
-Other studies such as,,,,also confirm this.
+Furthermore, Kim et. al [-@Kim2014] and Muktiyanto et al. [-@Muktiyanto2019] find that Credit Default Swap (CDS) is a significant factor that affecting the yield. The first name, using yield spread decomposition approach, suggest that the CDS as a proxy to default risk has 37% contribution to the spread. Muktiyanto et al. [@Muktiyanto2019] support this finding by suggesting the significant effect of the CDS on the Indonesia's LCB yield.
 
-VIX
-Izadi et al [@Izadi2018] focus on local fundamental, global factors, volatility as determinant factors of yield spreads using empirical data of 24 developed countries in
-North America, Europe and Pacific Rim regions in period of January, 2010 until March, 2015. Their finding include significant and positively correlation between equity market volatility (VIX) and yield speads in all observed regions. Their study also show strong relationship between fixed income and stock markets particularly in developed countries.
+The effect of foreign ownership on the bonds yield is studied by researchers like Gadanecz et al. [-@Gadanecz2018] who confirm the significance of the variable in LCB market. Another study with similar tone by Dachroui et al. [@Dachraoui2020] who analyze role of capital flight as a driver of sovereign bonds spreads in Latin American countries, conclude that the spreads are positively correlated with the capital flight [-@Dachraoui2020]. 
 
-Other researches took different angle by looking at primary dealers system and its impact on bonds yield Tchuindjo et al.[-@Tchuindjo2015], Endo [-@Endo2020], Nyborg et al. [-@Nyborg2004], Mercer et al. [-@Mercer2013], and Ferrari et al. [-@Ferrari2018]. Endo [-@Endo2020] study role of primary dealers in low income economies, while Ferrari et al. [-@Ferrari2018] focus on primary dealers' funding constraints on sovereign bonds yield. Nyborg et al. [-@Nyborg2004], Mercer et al. [-@Mercer2013] and Tchuindjo [-@Tchuindjo2015] concern on primary dealers trading behavior in US Treasury auction. The last name also provide several mathematical models to estimate the impact of primary dealers' strategic behavior in the auction [-@Tchuindjo2015].
+Our fourth predictor variables used in this study, the policy rate, is inspired by findings from several works in Indonesia conducted by Muktiyanto et al. [-@Muktiyanto2019] and Kurniasih et al. [-@Kurniasih2015] These authors analyze relationship between the predictor with Indonesia's bonds yield. Both studies agree that the policy rate significantly affect the yield in a positive direction.     
 
+Moreover, some works highlight the effect of exchange rate on the bonds yield [@Miyajima2015], [@Gadanecz2018], [@Saenong2020] and [@Permanasari2021]. Miyajima et al. [-@Miyajima2015] suggest crucial effect of the exchange rate on the yield in emerging economies, while Gadanecz et al [@Gadanecz2018] using exchange rate volatility and expected exchange rate as predictor variables also confirm the significant relationship. These two studies are inline with a work by Permanasari et al. [-@Permanasari2021] who study the effect on Indonesia's bonds yield, suggesting significant negative-relationship between the exchange rate and the yield. A slight different conclusion is provided by Saenong et al [@Saenong2020] who argue that the effect on the Indonesia's bonds yield only significant in the short run but find to be insignificant in the long run.
 
-# Data Description
+Meanwhile, relationship between our sixth predictor-the VIX and the bonds yield is said to be significant by several researchers like [@Miyajima2015], [@Izadi2018], and [@Dachraoui2020]. Miyajima find the significant relationship in several emerging market being observed, while Izadi et al. [@Izadi2018] also find the similar effect in all 24 developed countries in
+North America, Europe and Pacific Rim regions. In addition, Dachraoui [-@Dachraoui2020] confirm the significant effect in Latin America.
 
-Based on these existing literature, this paper will study relationship and impact of 10-year US Treasury (UST) yield, 5-year Credit Default Swap (CDS), foreign share in sovereign bonds ownership (%), central bank's policy rate, exchange rate, volatility index (VIX) as well as primary dealers' behavior on a response variable of the 10-year local currency sovereign bonds yield. All variables are collected as time-series data covering period of 2 January 2015 until 5 August 2021. 
+Other researches like Tchuindjo et al.[-@Tchuindjo2015], Endo [-@Endo2020], Nyborg et al. [-@Nyborg2004], Mercer et al. [-@Mercer2013], and Ferrari et al. [-@Ferrari2018] took different angle by looking at primary dealers system and its impact on bonds yield. Endo [-@Endo2020] study role of primary dealers in low income economies, while Ferrari et al. [-@Ferrari2018] focus on primary dealers' funding constraints on sovereign bonds yield. Nyborg et al. [-@Nyborg2004], Mercer et al. [-@Mercer2013] and Tchuindjo [-@Tchuindjo2015] concern on primary dealers trading behavior in US Treasury auction. The last name also provide several mathematical models to estimate the impact of primary dealers' strategic behavior in the auction [-@Tchuindjo2015].
 
-## 10-year Local Currency Sovereign Bonds Yield  
+For the purpose of our study, we will use 10-year US Treasury (UST) yield, 5-year Indonesia's Credit Default Swap (CDS), foreign ownership in Indonesia's 10-year bonds(%), Bank Indonesia's policy rate, exchange rate (IDR/USD), Indonesia's volatility index (VIX) as well as a dummy variable of Indonesian government auction days as a proxy of Indonesia's primary dealers' behavior. Our response variable is the 10-year Indonesia's LCB yield. All variables are collected as time-series data covering period from 2 January 2015 up to 5 August 2021 and can be described as follow: 
 
-Yield can be described as expected return in exchange of risks taken by investors. The 10-year yield data used in this study is a generic yield retrieved from Bloomberg platform by using ticker "GRR" (Global summary of government bill, note, and benchmark bond rates for individual countries). 
+<!-- Gadanecz et al. [-@Gadanecz2018] plays important role as stabilizing force of exchange rate volatility.  -->
 
-Furthermore, as yield's definition is associated with risks, we can group the explanatory variables based on their related risk categories as follow:
+## 10-year LCB Yield  
+
+Yield is expected return demanded by investors as exchange of risks being borne. The 10-year yield data used in this study is a Indonesia's generic yield retrieved from Bloomberg platform using ticker code "GRR" (global summary of government bill, note, and benchmark bond rates for individual countries). 
+
+Furthermore, as yield is associated with risks, we will group our explanatory variables based on several relevant risk categories.
 
 ## External Risk  
 
-### 10-year US Treasury
+### 10-year US Treasury Yield
+
+The United States of America government's bonds (UST bonds) is generally used as a benchmark for other countries' sovereign bonds. The bonds is considered as the safest instrument hence issuers from other countries will give extra premium over the UST bonds yield in order to compensate additional risks taken by investors for purchasing non-UST bonds.
+The UST yield data used in this study is sourced from Bloomberg with the same ticker code "GRR" for the 10-year maturity government bonds of the United State of America.  
+
+```{r}
+yield_ts <- yield_factors %>% 
+  mutate(date = ymd(date)) %>% 
+  as_tsibble(key = domestic_10y, index = date)
+
+ yield_ts %>%
+  mutate(foreign_prop = foreign/tot_ownership) %>%
+  mutate(cum_foreign = cumsum(foreign_prop)) %>%
+  ggplot(aes(x = date, y = ust_10y))+geom_line()
+```
+
+
 ```{r}
 yield_factors %>% 
   mutate(week_year = yearweek(date), year = year(date), foreign_chg = foreign/tot_ownership) %>% 
@@ -113,6 +126,46 @@ yield_factors %>%
 ```
 
 ### Foreign Ownership  
+
+As per 29 July 2021, foreign investors are holding IDR965 Trillions or 22.5% of total bonds ownership.
+
+```{r}
+# saveRDS(yield_ts_fix, file = "yield_ts.rds")
+yield_ts <- readRDS("yield_ts.rds") %>% arrange(date)
+
+yield_ts %>% 
+  mutate(foreign_prop = foreign/tot_ownership) %>%
+  mutate(cum_foreign = cumsum(foreign_prop)) %>%
+  ggplot(aes(x = date, y = foreign))+geom_line()
+
+
+
+```
+
+The foreign share in the government bonds has been reduced dramatically since 2020 as shown in figure \@ref(fig:ownprop). The figure shows changes in ownership share by several industries from 2018 until 2021 (data less than 2018 is not shown since it has different classification of the industries).  
+
+```{r ownprop, fig.cap="Bonds Ownership Proportion "}
+## ownership pct
+yield_ts %>% as_tibble() %>% 
+  na.omit() %>% 
+  mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, other_pct = others/tot_ownership, mutual_pct = mutual_fund/tot_ownership, ins_pct = ins_pension/tot_ownership, foreign_pct = foreign/tot_ownership) %>% 
+   # filter(year != 2015) %>% 
+  select(date, foreign_pct, bi_pct, con_pct, islam_pct, ind_pct, other_pct, mutual_pct, ins_pct) %>%
+  gather(key = "variable", value = "value", -date) %>% 
+  ggplot(aes(x = date, y = value))+
+  geom_area(aes(fill = variable), alpha = 0.7)+
+  theme_classic()
+```
+
+
+
+```{r}
+
+
+# yield_factors %>% ggplot()+geom_line
+```
+
+
 ```{r}
 #foreign changes
 ## negative relationship when foreign pct > 35%, < 35% positive relationship
@@ -211,6 +264,46 @@ average_2021 <- yield_factors %>% mutate(year = year(date)) %>% filter(year == 2
   mutate(month = month(date, label = TRUE)) %>%
   group_by(month) %>%  summarise(mean = mean(domestic_10y))
 
+
+
+cek <- yield_factors %>% 
+  select(date, domestic_10y, auction_day) %>% 
+  mutate(date = date(date))
+
+
+yielddif_auction <- cek %>% 
+  ungroup %>%
+  arrange(date) %>% 
+  mutate(
+    auction_lag = lag(auction_day, default = 0),
+    id = cumsum(auction_day != auction_lag)
+  ) %>% 
+  select(-auction_lag) %>% 
+  group_by(id) %>% 
+  mutate(
+    edge = case_when(
+      date == min(date) ~ "from",
+      date == max(date) ~ "to",
+      T ~ NA_character_
+      )
+  ) %>% 
+  ungroup %>% 
+  filter(!is.na(edge)) %>% 
+  pivot_wider(
+    names_from = edge, 
+    values_from = c(date, domestic_10y),
+  ) %>% 
+  select(-id) %>% 
+  mutate(
+    difference = domestic_10y_to - domestic_10y_from
+  )
+
+yielddif_auction %>% mutate(auction_day = factor(auction_day), month = month(date_to), year = year(date_to)) %>% filter(year == 2015) %>% 
+  ggplot(aes(y = difference, group = auction_day, color = auction_day))+
+  geom_boxplot()+facet_wrap(~ month)
+
+
+
 ```
 
 
@@ -219,7 +312,7 @@ From figure \@ref(fig:yieldmove), volatility in non auction days (post auction) 
 ```{r yieldmove, fig.cap="10-year Yield's Movement during Auction Days during January-August 2021^[Full period of observation can be seen in the Appendix]"}
 #   
 yield_factors  %>%
-  mutate(month = month(date, label = TRUE), year = year(date)) %>%
+  mutate(month = lubridate::month(date, label = TRUE), year = year(date)) %>%
   filter(year == 2021) %>% 
 ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day), alpha = 0.1))+
   geom_jitter(alpha = 0.6, size = 2)+scale_x_discrete(breaks = seq(1, 31, 9))+scale_y_continuous(minor_breaks = 1)+
@@ -230,7 +323,19 @@ ggplot(aes(x = factor(day(date)), y = domestic_10y, color = factor(auction_day),
 
 ```
 
+```{r}
+yielddif_auction %>% mutate(auction_day = factor(auction_day), month = month(date_to), year = year(date_to)) %>%  na.omit() %>% 
+  ggplot(aes(y = difference, group = auction_day, color = auction_day))+
+  geom_boxplot()+
+  facet_wrap(~ year, scales = "free", nrow = 2)+theme_light()+theme(legend.position="bottom")
+```
 
+We tried to look further the difference of yield's movement between auction days and non auction days. The difference is calculated by subtracting yield of the last and first days in each period. The summary table of the yield difference (showing first 10 rows) can be seen in table \@ref(tab:yielddiftable).
+
+```{r yielddiftable, fig.cap= "The Yield's Difference between Auction and Non-Auction Days"}
+library(kableExtra)
+yielddif_auction %>% slice(1:10) %>% knitr::kable() %>% kable_styling(latex_options = "HOLD_position")
+```
 
 
 ```{r fig.cap= "Boxplot of 10-year Yield's Movement during Auction Days during January-August 2021^[ibid]"}
@@ -381,6 +486,11 @@ yield_scale %>%
 ```
 
 ### Formal Test
+```{r}
+
+# The requirement when using ols regression is that the residuals , the response conditional on the predictors, shows no remaining temporal pattern. So I would start with ols and regress the response on the predictors but not include time. Then plot the residuals against time to see if there is a pattern, the plot may even suggest an important missing variable. more formally you could do a runs test or a durbin-Watson test, but your series is not very long.
+
+```
 
 
 Regarding the result from the exploratory data analysis conducted in previous section as well as the cointegration test, we can write down relationship between variables in OLS model as follow:

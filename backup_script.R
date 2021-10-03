@@ -638,3 +638,53 @@ yield_factors <- yield_factors %>% mutate(cpi_inflation = as.numeric(str_extract
 saveRDS(yield_factors, "yield_factors.rds")
 
 
+##### calculate difference first and last yield
+#first solution
+cek_df <- cek %>%
+  group_by(discountgrp = cumsum(discount != lag(discount, default = discount[1]))) %>%
+  summarize(change = price[which.max(date)] - price[which.min(date)])
+
+#second solution
+#add grouping
+cek["grp"]=cumsum(cek["discount"]!=rbind(-1,head(cek["discount"],-1)))
+
+#calculate aggregate
+aggregate(
+  price~grp,
+  cek,
+  function(x){head(x,1)-tail(x,1)}
+)
+
+#third solution
+library(data.table)
+
+#fourth solution
+setDT(cek)[, grp := rleid(discount) 
+][order(grp, date), .(priceDiff = head(price, 1) - tail(price, 1)), by = grp ]
+
+cek %>% 
+  ungroup %>%
+  arrange(date) %>% 
+  mutate(
+    discount_lag = lag(discount, default = 0),
+    id = cumsum(discount != discount_lag)
+  ) %>% 
+  select(-discount_lag) %>% 
+  group_by(id) %>% 
+  mutate(
+    edge = case_when(
+      date == min(date) ~ "from",
+      date == max(date) ~ "to",
+      T ~ NA_character_
+    )
+  ) %>% 
+  ungroup %>% 
+  filter(!is.na(edge)) %>% 
+  pivot_wider(
+    names_from = edge, 
+    values_from = c(date, price),
+  ) %>% 
+  select(-id) %>% 
+  mutate(
+    difference = price_to - price_from
+  )
