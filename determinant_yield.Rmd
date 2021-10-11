@@ -15,7 +15,7 @@ text-align: justify}
 </style>
 
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
 library(dplyr)
@@ -42,6 +42,8 @@ library(flipTime)
 library(caret)
 library(patchwork)
 library(stargazer)
+library(forecast)
+library(lvplot)
 
 #read compiled dataset
 yield_factors <- readRDS("yield_factors.rds")
@@ -98,97 +100,20 @@ For the purpose of our study, we will use 10-year US Treasury (UST) yield, 5-yea
 
 Yield is expected return demanded by investors as exchange of risks being borne. The 10-year yield data used in this study is a Indonesia's generic yield retrieved from Bloomberg platform using ticker code "GRR" (global summary of government bill, note, and benchmark bond rates for individual countries). 
 
-Furthermore, as yield is associated with risks, we will group our explanatory variables based on several relevant risk categories.
-
-## External Risk  
-
-### 10-year US Treasury Yield
-
-The United States of America government's bonds (UST bonds) is generally used as a benchmark for other countries' sovereign bonds. The bonds is considered as the safest instrument hence issuers from other countries will give extra premium over the UST bonds yield in order to compensate additional risks taken by investors for purchasing non-UST bonds.
-The UST yield data used in this study is sourced from Bloomberg with the same ticker code "GRR" for the 10-year maturity government bonds of the United State of America.  
-
-```{r}
-yield_ts <- yield_factors %>% 
-  mutate(date = ymd(date)) %>% 
-  as_tsibble(key = domestic_10y, index = date)
-
- yield_ts %>%
-  mutate(foreign_prop = foreign/tot_ownership) %>%
-  mutate(cum_foreign = cumsum(foreign_prop)) %>%
-  ggplot(aes(x = date, y = ust_10y))+geom_line()
-```
-
-
-```{r}
-yield_factors %>% 
-  mutate(week_year = yearweek(date), year = year(date), foreign_chg = foreign/tot_ownership) %>% 
-  ggplot(aes(x = ust_10y, y = domestic_10y)) + 
-  geom_point(alpha = 0.3)+facet_wrap(~ year, scale = "free")+theme_light()+ylab("10y Yield")+xlab("10y UST")
-```
-
-### Foreign Ownership  
-
-As per 29 July 2021, foreign investors are holding IDR965 Trillions or 22.5% of total bonds ownership.
-
 ```{r}
 # saveRDS(yield_ts_fix, file = "yield_ts.rds")
 yield_ts <- readRDS("yield_ts.rds") %>% arrange(date)
 
-yield_ts %>% 
-  mutate(foreign_prop = foreign/tot_ownership) %>%
-  mutate(cum_foreign = cumsum(foreign_prop)) %>%
-  ggplot(aes(x = date, y = foreign))+geom_line()
+####scaling variables
+yieldts_scale <- yield_ts %>% as_tibble() %>% 
+  mutate(for_pct = foreign/tot_ownership) %>% 
+  select_if(is.numeric) %>% 
+  scale()
+yieldts_scale <- cbind(as_tibble(yield_ts$date), yieldts_scale) %>% rename(date = value)
 
+```
 
-library(feasts)
-
-tourism_shared <- tourism %>%
-  as_shared_tsibble(spec = (State / Region) * Purpose)
-
-yield_shared <- yield_ts %>% mutate(auction_day = factor(auction_day)) %>% 
-  as_shared_tsibble(spec = domestic_10y)
-
-p0 <- plotly_key_tree(tourism_shared, height = 900, width = 600)
-p0 <- plotly_key_tree(yield_shared, height = 900, width = 600)
-
-
-tourism_feat <- tourism_shared %>%
-  features(Trips, feat_stl)
-
-yield_feat <- yield_shared %>%
-  features(domestic_10y, feat_stl)
-
-
-p1 <- tourism_shared %>%
-  ggplot(aes(x = Quarter, y = Trips)) +
-  geom_line(aes(group = Region), alpha = 0.5) +
-  facet_wrap(~ Purpose, scales = "free_y")
-
-p1 <- yield_shared %>% 
-  ggplot(aes(x = date, y = domestic_10y))+
-  geom_line(alpha = 0.5) +
-  facet_wrap(~ auction_day, scales = "free_y", nrow = 2)
-
-yield_ts %>% 
-  ggplot(aes(x = date))+
-  geom_line(aes(y = domestic_10y), alpha = 0.5) +
-  geom_line(aes(y = ust_10y), alpha = 0.5) +
-  facet_wrap(~ year(date), scales = "free", nrow = 7)
-
-p2 <- tourism_feat %>%
-  ggplot(aes(x = trend_strength, y = seasonal_strength_year)) +
-  geom_point(aes(group = Region))
-
-library(plotly)
-subplot(p0,
-  subplot(
-    ggplotly(p1, tooltip = "Region", width = 900),
-    ggplotly(p2, tooltip = "Region", width = 900),
-    nrows = 2),
-  widths = c(.4, .6)) %>%
-  highlight(dynamic = TRUE)
-
-library(lvplot)
+```{r warning = FALSE, message=FALSE}
 
 ## search harmony
 harmony <- harmony(yield_ts)
@@ -274,450 +199,54 @@ dom2015+dom2016+dom2017+dom2018+dom2019+dom2020+dom2021+
 ## Result:
 ## Yield volatility is intense (shown by long interquartile) in semester 2, distinct to other years (exc 2019, 2020).
 #2017 and 2019 have higher median in semester 1, others have higher median in sem 2.
-
 ```
 
-
-```{r}
-# semester ust 10y
-# 2015
-dom2015 <- yield_ts %>% 
-  select(date, ust_10y, auction_day) %>% 
-  filter(year(date) == 2015) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "domestic_10y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2015")
-# 2016
-dom2016 <- yield_ts %>% 
-  select(date, ust_10y, auction_day) %>% 
-  filter(year(date) == 2016) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "ust_10y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
-# 2017
-dom2017 <- yield_ts %>% 
-  select(date, ust_10y, auction_day) %>% 
-  filter(year(date) == 2017) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "ust_10y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
-# 2018
-dom2018 <- yield_ts %>% 
-  select(date, ust_10y, auction_day) %>% 
-  filter(year(date) == 2018) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "ust_10y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2018")
-
-# 2019
-dom2019 <- yield_ts %>% 
-  select(date, ust_10y, auction_day) %>% 
-  filter(year(date) == 2019) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "ust_10y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
-
-# 2020
-dom2020 <- yield_ts %>% 
-  select(date, ust_10y, auction_day) %>% 
-  filter(year(date) == 2020) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "ust_10y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
-
-# 2021
-dom2021 <- yield_ts %>% 
-  select(date, ust_10y, auction_day) %>% 
-  filter(year(date) == 2021) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "ust_10y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
-
-dom2015+dom2016+dom2017+dom2018+dom2019+dom2020+dom2021+
-  plot_annotation(title = "UST 10y yield by Semester")
-```
-
-
-```{r}
-# semester cds 5y
-# 2015
-cds2015 <- yield_ts %>% 
-  select(date, cds_5y, auction_day) %>% 
-  filter(year(date) == 2015) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "cds_5y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2015")
-# 2016
-cds2016 <- yield_ts %>% 
-  select(date, cds_5y, auction_day) %>% 
-  filter(year(date) == 2016) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "cds_5y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
-# 2017
-cds2017 <- yield_ts %>% 
-  select(date, cds_5y, auction_day) %>% 
-  filter(year(date) == 2017) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "cds_5y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
-# 2018
-cds2018 <- yield_ts %>% 
-  select(date, cds_5y, auction_day) %>% 
-  filter(year(date) == 2018) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "cds_5y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2018")
-
-# 2019
-cds2019 <- yield_ts %>% 
-  select(date, cds_5y, auction_day) %>% 
-  filter(year(date) == 2019) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "cds_5y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
-
-# 2020
-cds2020 <- yield_ts %>% 
-  select(date, cds_5y, auction_day) %>% 
-  filter(year(date) == 2020) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "cds_5y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
-
-# 2021
-cds2021 <- yield_ts %>% 
-  select(date, cds_5y, auction_day) %>% 
-  filter(year(date) == 2021) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "cds_5y",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
-
-cds2015+cds2016+cds2017+cds2018+cds2019+cds2020+cds2021+
-  plot_annotation(title = "UST 10y yield Year/Semester")
-```
-
-```{r}
-# semester 
-# 2015
-for2015 <- yield_ts %>% 
-  mutate(foreign_pct = foreign/tot_ownership) %>% 
-  select(date, foreign_pct, auction_day) %>% 
-  filter(year(date) == 2015) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "foreign_pct",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2015")
-# 2016
-for2016 <- yield_ts %>% 
-  mutate(foreign_pct = foreign/tot_ownership) %>% 
-  select(date, foreign_pct, auction_day) %>% 
-  filter(year(date) == 2016) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "foreign_pct",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
-# 2017
-for2017 <- yield_ts %>% 
- mutate(foreign_pct = foreign/tot_ownership) %>% 
-  select(date, foreign_pct, auction_day) %>%  
-  filter(year(date) == 2017) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "foreign_pct",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
-# 2018
-for2018 <- yield_ts %>% 
-  mutate(foreign_pct = foreign/tot_ownership) %>% 
-  select(date, foreign_pct, auction_day) %>% 
-  filter(year(date) == 2018) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "foreign_pct",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2018")
-
-# 2019
-for2019 <- yield_ts %>% 
- mutate(foreign_pct = foreign/tot_ownership) %>% 
-  select(date, foreign_pct, auction_day) %>% 
-  filter(year(date) == 2019) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "foreign_pct",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
-
-# 2020
-for2020 <- yield_ts %>% 
-  mutate(foreign_pct = foreign/tot_ownership) %>% 
-  select(date, foreign_pct, auction_day) %>% 
-  filter(year(date) == 2020) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "foreign_pct",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
-
-# 2021
-for2021 <- yield_ts %>% 
- mutate(foreign_pct = foreign/tot_ownership) %>% 
-  select(date, foreign_pct, auction_day) %>% 
-  filter(year(date) == 2021) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "foreign_pct",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
-
-for2015+for2016+for2017+for2018+for2019+for2020+for2021+
-  plot_annotation(title = "Foreign Percentage Year/Semester")
-```
-
-
-```{r}
-##VIX
-# semester 
-# 2015
-vix2015 <- yield_ts %>% 
-  select(date, vix, auction_day) %>% 
-  filter(year(date) == 2015) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "vix",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3)) + ggtitle("2015")
-# 2016
-vix2016 <- yield_ts %>% 
-  select(date, vix, auction_day) %>% 
-  filter(year(date) == 2016) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "vix",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
-# 2017
-vix2017 <- yield_ts %>% 
-  select(date, vix, auction_day) %>% 
-  filter(year(date) == 2017) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "vix",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
-# 2018
-vix2018 <- yield_ts %>% 
-  select(date, vix, auction_day) %>% 
-  filter(year(date) == 2018) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "vix",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3)) + ggtitle("2018")
-
-# 2019
-vix2019 <- yield_ts %>% 
-  select(date, vix, auction_day) %>% 
-  filter(year(date) == 2019) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "vix",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
-
-# 2020
-vix2020 <- yield_ts %>% 
-  select(date, vix, auction_day) %>% 
-  filter(year(date) == 2020) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "vix",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
-
-# 2021
-vix2021 <- yield_ts %>% 
-  select(date, vix, auction_day) %>% 
-  filter(year(date) == 2021) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "vix",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
-
-vix2015+vix2016+vix2017+vix2018+vix2019+vix2020+vix2021+
-  plot_annotation(title = "VIX Year/Semester")
-
-```
-
-
-
-```{r}
-## Exchange rate
-# semester 
-# 2015
-fx2015 <- yield_ts %>% 
-  select(date, exchange_mid, auction_day) %>% 
-  filter(year(date) == 2015) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "exchange_mid",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3)) + ggtitle("2015")
-# 2016
-fx2016 <- yield_ts %>% 
-  select(date, exchange_mid, auction_day) %>% 
-  filter(year(date) == 2016) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "exchange_mid",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
-# 2017
-fx2017 <- yield_ts %>% 
-  select(date, exchange_mid, auction_day) %>% 
-  filter(year(date) == 2017) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "exchange_mid",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
-# 2018
-fx2018 <- yield_ts %>% 
-  select(date, exchange_mid, auction_day) %>% 
-  filter(year(date) == 2018) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "exchange_mid",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3)) + ggtitle("2018")
-
-# 2019
-fx2019 <- yield_ts %>% 
-  select(date, exchange_mid, auction_day) %>% 
-  filter(year(date) == 2019) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "exchange_mid",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
-
-# 2020
-fx2020 <- yield_ts %>% 
-  select(date, exchange_mid, auction_day) %>% 
-  filter(year(date) == 2020) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "exchange_mid",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
-
-# 2021
-fx2021 <- yield_ts %>% 
-  select(date, exchange_mid, auction_day) %>% 
-  filter(year(date) == 2021) %>% 
-  prob_plot(
-     gran1 = "quarter_semester",
-     gran2 = "week_month",
-     response = "exchange_mid",
-     plot_type = "boxplot") +
-   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
-
-fx2015+fx2016+fx2017+fx2018+fx2019+fx2020+fx2021+
-  plot_annotation(title = "Exchange Rate (USD/IDR) Year/Semester")
-
-```
-
-
-```{r}
-####scaling
-yieldts_scale <- yield_ts %>% as_tibble() %>% 
-  mutate(for_pct = foreign/tot_ownership) %>% 
-  select_if(is.numeric) %>% 
-  scale()
-yieldts_scale <- cbind(as_tibble(yield_ts$date), yieldts_scale) %>% rename(date = value)
+```{r warning = FALSE, message = FALSE}
 
 # create multivariate lines of timeseries
-gatherscale <- yieldts_scale %>% 
-  select(date, domestic_10y, ust_10y, cds_5y, vix, exchange_mid, for_pct, rate) %>% 
-  gather(key = "variable", value = "value", -date)
+# gatherscale <- yieldts_scale %>% 
+#   select(date, domestic_10y, ust_10y, cds_5y, vix, exchange_mid, for_pct, rate) %>% 
+#   gather(key = "variable", value = "value", -date)
+# 
+# gatherscale$variable <- factor(gatherscale$variable, levels = c("domestic_10y", "ust_10y", "cds_5y", "vix", "for_pct", "exchange_mid", "rate"))
+# 
+# gatherscale %>% 
+#   ggplot(aes(x = date, y = value))+
+#   geom_line(aes(color = variable))+
+#   facet_wrap(~ year(date), scale = "free")+
+#   ggtitle("Timeseries of Response and Predictor Variables")+
+#   theme(legend.position = "bottom") 
+# 
+# ggplotly()
 
-gatherscale$variable <- factor(gatherscale$variable, levels = c("domestic_10y", "ust_10y", "cds_5y", "vix", "for_pct", "exchange_mid", "rate"))
+```
 
-gatherscale %>% 
-  ggplot(aes(x = date, y = value))+
-  geom_line(aes(color = variable))+
-  facet_wrap(~ year(date), scale = "free")+
-  ggtitle("Timeseries of Response and Predictor Variables")+
-  theme(legend.position = "bottom") 
+```{r out.width= "50%"}
+knitr::include_graphics("picture/lcb_ust.png")
+```
 
-ggplotly()
+```{r out.width= "50%"}
+knitr::include_graphics("picture/lcb_cds.png")
+```
 
+```{r out.width= "50%"}
+knitr::include_graphics("picture/lcb_fx.png")
+```
+
+```{r out.width= "50%"}
+knitr::include_graphics("picture/lcb_vix.png")
+```
+
+```{r out.width= "50%"}
+knitr::include_graphics("picture/lcb_foreign.png")
+```
+
+```{r out.width= "50%"}
+knitr::include_graphics("picture/lcb_rate.png")
+```
+
+
+```{r message = FALSE, warning = FALSE}
 
 ### scaled with lag 1
 # yieldts_scalelag <- yieldts_scale %>% 
@@ -728,8 +257,6 @@ ggplotly()
 #   slice(1:nrow(yieldts_scale)-1)
 # 
 # yieldts_scalelag <- cbind(yield_lag, yieldts_scalelag)
-
-library(forecast)
 # gatherscale %>% 
 #   ggplot(aes(x = date, y = lag(value)))+
 #   geom_line(aes(color = variable))+
@@ -1059,7 +586,267 @@ ratelag7 <- yieldts_scale %>%
 
 (ratelag1+ratelag2+ratelag3 + ratelag4+ratelag5 + ratelag6+ ratelag7) + plot_annotation(title = "Timeseries Lagged-LCB Yield and Policy Rate")
 
+```
 
+Furthermore, as yield is associated with risks, we will group our explanatory variables based on several relevant risk categories.
+
+## External Risk  
+
+### 10-year US Treasury Yield
+
+The United States of America government's bonds (UST bonds) is generally used as a benchmark for other countries' sovereign bonds. The bonds is considered as the safest instrument hence issuers from other countries will give extra premium over the UST bonds yield in order to compensate additional risks taken by investors for purchasing non-UST bonds.
+The UST yield data used in this study is sourced from Bloomberg with the same ticker code "GRR" for the 10-year maturity government bonds of the United State of America.  
+
+```{r}
+yield_ts <- yield_factors %>% 
+  mutate(date = ymd(date)) %>% 
+  as_tsibble(key = domestic_10y, index = date)
+
+ yield_ts %>%
+  mutate(foreign_prop = foreign/tot_ownership) %>%
+  mutate(cum_foreign = cumsum(foreign_prop)) %>%
+  ggplot(aes(x = date, y = ust_10y))+geom_line()
+```
+
+```{r message = FALSE, warning = FALSE}
+# gravitas window probs
+# semester ust 10y
+# 2015
+ust2015 <- yield_ts %>% 
+  select(date, ust_10y, auction_day) %>% 
+  filter(year(date) == 2015) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "domestic_10y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2015")
+# 2016
+ust2016 <- yield_ts %>% 
+  select(date, ust_10y, auction_day) %>% 
+  filter(year(date) == 2016) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "ust_10y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
+# 2017
+ust2017 <- yield_ts %>% 
+  select(date, ust_10y, auction_day) %>% 
+  filter(year(date) == 2017) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "ust_10y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
+# 2018
+ust2018 <- yield_ts %>% 
+  select(date, ust_10y, auction_day) %>% 
+  filter(year(date) == 2018) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "ust_10y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2018")
+
+# 2019
+ust2019 <- yield_ts %>% 
+  select(date, ust_10y, auction_day) %>% 
+  filter(year(date) == 2019) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "ust_10y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
+
+# 2020
+ust2020 <- yield_ts %>% 
+  select(date, ust_10y, auction_day) %>% 
+  filter(year(date) == 2020) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "ust_10y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
+
+# 2021
+ust2021 <- yield_ts %>% 
+  select(date, ust_10y, auction_day) %>% 
+  filter(year(date) == 2021) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "ust_10y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
+
+ust2015+ust2016+ust2017+ust2018+ust2019+ust2020+ust2021+
+  plot_annotation(title = "UST 10y yield by Semester")
+```
+
+
+```{r}
+yield_factors %>% 
+  mutate(week_year = yearweek(date), year = year(date), foreign_chg = foreign/tot_ownership) %>% 
+  ggplot(aes(x = ust_10y, y = domestic_10y)) + 
+  geom_point(alpha = 0.3)+facet_wrap(~ year, scale = "free")+theme_light()+ylab("10y Yield")+xlab("10y UST")
+```
+
+### Foreign Ownership
+
+As per 29 July 2021, foreign investors are holding IDR965 Trillions or 22.5% of total bonds ownership.
+
+```{r}
+
+yield_foreign <- yield_ts %>% 
+  mutate(foreign_prop = foreign/tot_ownership) %>%
+  mutate(cum_foreign = cumsum(foreign_prop))
+yield_foreign %>% 
+  ggplot(aes(x = date, y = foreign))+geom_line()
+
+# library(feasts)
+# 
+# tourism_shared <- tourism %>%
+#   as_shared_tsibble(spec = (State / Region) * Purpose)
+# 
+# yield_shared <- yield_ts %>% mutate(auction_day = factor(auction_day)) %>% 
+#   as_shared_tsibble(spec = domestic_10y)
+# 
+# p0 <- plotly_key_tree(tourism_shared, height = 900, width = 600)
+# p0 <- plotly_key_tree(yield_shared, height = 900, width = 600)
+
+
+# tourism_feat <- tourism_shared %>%
+#   features(Trips, feat_stl)
+# 
+# yield_feat <- yield_shared %>%
+#   features(domestic_10y, feat_stl)
+# 
+# 
+# p1 <- tourism_shared %>%
+#   ggplot(aes(x = Quarter, y = Trips)) +
+#   geom_line(aes(group = Region), alpha = 0.5) +
+#   facet_wrap(~ Purpose, scales = "free_y")
+# 
+# p1 <- yield_shared %>% 
+#   ggplot(aes(x = date, y = domestic_10y))+
+#   geom_line(alpha = 0.5) +
+#   facet_wrap(~ auction_day, scales = "free_y", nrow = 2)
+
+# yield_ts %>% 
+#   ggplot(aes(x = date))+
+#   geom_line(aes(y = domestic_10y), alpha = 0.5) +
+#   geom_line(aes(y = ust_10y), alpha = 0.5) +
+#   facet_wrap(~ year(date), scales = "free", nrow = 7)
+# 
+# p2 <- tourism_feat %>%
+#   ggplot(aes(x = trend_strength, y = seasonal_strength_year)) +
+#   geom_point(aes(group = Region))
+# 
+# library(plotly)
+# subplot(p0,
+#   subplot(
+#     ggplotly(p1, tooltip = "Region", width = 900),
+#     ggplotly(p2, tooltip = "Region", width = 900),
+#     nrows = 2),
+#   widths = c(.4, .6)) %>%
+#   highlight(dynamic = TRUE)
+
+
+
+```
+
+
+```{r message = FALSE, warning = FALSE}
+# semester 
+# 2015
+for2015 <- yield_ts %>% 
+  mutate(foreign_pct = foreign/tot_ownership) %>% 
+  select(date, foreign_pct, auction_day) %>% 
+  filter(year(date) == 2015) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "foreign_pct",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2015")
+# 2016
+for2016 <- yield_ts %>% 
+  mutate(foreign_pct = foreign/tot_ownership) %>% 
+  select(date, foreign_pct, auction_day) %>% 
+  filter(year(date) == 2016) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "foreign_pct",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
+# 2017
+for2017 <- yield_ts %>% 
+ mutate(foreign_pct = foreign/tot_ownership) %>% 
+  select(date, foreign_pct, auction_day) %>%  
+  filter(year(date) == 2017) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "foreign_pct",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
+# 2018
+for2018 <- yield_ts %>% 
+  mutate(foreign_pct = foreign/tot_ownership) %>% 
+  select(date, foreign_pct, auction_day) %>% 
+  filter(year(date) == 2018) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "foreign_pct",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2018")
+
+# 2019
+for2019 <- yield_ts %>% 
+ mutate(foreign_pct = foreign/tot_ownership) %>% 
+  select(date, foreign_pct, auction_day) %>% 
+  filter(year(date) == 2019) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "foreign_pct",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
+
+# 2020
+for2020 <- yield_ts %>% 
+  mutate(foreign_pct = foreign/tot_ownership) %>% 
+  select(date, foreign_pct, auction_day) %>% 
+  filter(year(date) == 2020) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "foreign_pct",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
+
+# 2021
+for2021 <- yield_ts %>% 
+ mutate(foreign_pct = foreign/tot_ownership) %>% 
+  select(date, foreign_pct, auction_day) %>% 
+  filter(year(date) == 2021) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "foreign_pct",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
+
+for2015+for2016+for2017+for2018+for2019+for2020+for2021+
+  plot_annotation(title = "Foreign Percentage Year/Semester")
 ```
 
 
@@ -1084,7 +871,7 @@ yield_ts %>% as_tibble() %>%
 ```
 
 
-```{r}
+```{r message = FALSE, warning = FALSE}
 #foreign changes
 ## negative relationship when foreign pct > 35%, < 35% positive relationship
 ### due to quantitative easing of central bank 2020-2021 and mandatory purchase of domestic banks boost domestic ownership
@@ -1103,7 +890,88 @@ This provides a market-based measure of the credit-risk premium.
 CDS spreads indicate that the credit risk that investors
 perceive is significant. @codogno
 
-```{r}
+```{r warning = FALSE, message = FALSE}
+# semester cds 5y
+# 2015
+cds2015 <- yield_ts %>% 
+  select(date, cds_5y, auction_day) %>% 
+  filter(year(date) == 2015) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "cds_5y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2015")
+# 2016
+cds2016 <- yield_ts %>% 
+  select(date, cds_5y, auction_day) %>% 
+  filter(year(date) == 2016) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "cds_5y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
+# 2017
+cds2017 <- yield_ts %>% 
+  select(date, cds_5y, auction_day) %>% 
+  filter(year(date) == 2017) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "cds_5y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
+# 2018
+cds2018 <- yield_ts %>% 
+  select(date, cds_5y, auction_day) %>% 
+  filter(year(date) == 2018) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "cds_5y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2018")
+
+# 2019
+cds2019 <- yield_ts %>% 
+  select(date, cds_5y, auction_day) %>% 
+  filter(year(date) == 2019) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "cds_5y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
+
+# 2020
+cds2020 <- yield_ts %>% 
+  select(date, cds_5y, auction_day) %>% 
+  filter(year(date) == 2020) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "cds_5y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
+
+# 2021
+cds2021 <- yield_ts %>% 
+  select(date, cds_5y, auction_day) %>% 
+  filter(year(date) == 2021) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "cds_5y",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
+
+cds2015+cds2016+cds2017+cds2018+cds2019+cds2020+cds2021+
+  plot_annotation(title = "5y-CDS Year/Semester")
+```
+
+
+```{r warning = FALSE, message = FALSE}
 ###cds vs yield 
 yield_ts %>%
   mutate(year = year(date)) %>%
@@ -1121,7 +989,91 @@ Volatility Index which is a shorter term for Chicago Board Options Exchange's (C
 
 Outside the USA, the VIX Index is also commonly used in other countries to quantify the volatility of stock markets. Data of Indonesia's VIX Index used in this study is generated from Bloomberg platform using ticker code "VIX".
 
+
 ```{r}
+##VIX
+# semester 
+# 2015
+vix2015 <- yield_ts %>% 
+  select(date, vix, auction_day) %>% 
+  filter(year(date) == 2015) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "vix",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3)) + ggtitle("2015")
+# 2016
+vix2016 <- yield_ts %>% 
+  select(date, vix, auction_day) %>% 
+  filter(year(date) == 2016) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "vix",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
+# 2017
+vix2017 <- yield_ts %>% 
+  select(date, vix, auction_day) %>% 
+  filter(year(date) == 2017) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "vix",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
+# 2018
+vix2018 <- yield_ts %>% 
+  select(date, vix, auction_day) %>% 
+  filter(year(date) == 2018) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "vix",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3)) + ggtitle("2018")
+
+# 2019
+vix2019 <- yield_ts %>% 
+  select(date, vix, auction_day) %>% 
+  filter(year(date) == 2019) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "vix",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
+
+# 2020
+vix2020 <- yield_ts %>% 
+  select(date, vix, auction_day) %>% 
+  filter(year(date) == 2020) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "vix",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
+
+# 2021
+vix2021 <- yield_ts %>% 
+  select(date, vix, auction_day) %>% 
+  filter(year(date) == 2021) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "vix",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
+
+vix2015+vix2016+vix2017+vix2018+vix2019+vix2020+vix2021+
+  plot_annotation(title = "VIX Year/Semester")
+
+```
+
+
+```{r warning = FALSE, message = FALSE}
 #check volatility vs yield
 yield_ts %>% mutate(year = year(date)) %>% 
   ggplot(aes(y = domestic_10y)) + 
@@ -1134,6 +1086,88 @@ yield_ts %>% mutate(year = year(date)) %>%
 ## Macroeconomic Risk (Exchange Rate USD/IDR)  
 
 The data for foreign exchange (fx) rate of USD against Rupiah is using middle rate, calculated from Bank Indonesia's buy and sell fx rates of each working day. For non-working days, data is imputed from the rate of a previous working day.
+
+```{r warning = FALSE, message = FALSE}
+## Exchange rate
+# semester 
+# 2015
+fx2015 <- yield_ts %>% 
+  select(date, exchange_mid, auction_day) %>% 
+  filter(year(date) == 2015) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "exchange_mid",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3)) + ggtitle("2015")
+# 2016
+fx2016 <- yield_ts %>% 
+  select(date, exchange_mid, auction_day) %>% 
+  filter(year(date) == 2016) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "exchange_mid",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2016")
+# 2017
+fx2017 <- yield_ts %>% 
+  select(date, exchange_mid, auction_day) %>% 
+  filter(year(date) == 2017) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "exchange_mid",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2017")
+# 2018
+fx2018 <- yield_ts %>% 
+  select(date, exchange_mid, auction_day) %>% 
+  filter(year(date) == 2018) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "exchange_mid",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3)) + ggtitle("2018")
+
+# 2019
+fx2019 <- yield_ts %>% 
+  select(date, exchange_mid, auction_day) %>% 
+  filter(year(date) == 2019) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "exchange_mid",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2019")
+
+# 2020
+fx2020 <- yield_ts %>% 
+  select(date, exchange_mid, auction_day) %>% 
+  filter(year(date) == 2020) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "exchange_mid",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2020")
+
+# 2021
+fx2021 <- yield_ts %>% 
+  select(date, exchange_mid, auction_day) %>% 
+  filter(year(date) == 2021) %>% 
+  prob_plot(
+     gran1 = "quarter_semester",
+     gran2 = "week_month",
+     response = "exchange_mid",
+     plot_type = "boxplot") +
+   scale_y_sqrt() + scale_x_discrete(breaks = seq(0, 23, 3))+ggtitle("2021")
+
+fx2015+fx2016+fx2017+fx2018+fx2019+fx2020+fx2021+
+  plot_annotation(title = "Exchange Rate (USD/IDR) Year/Semester")
+
+```
 
 ```{r}
 #check exchange rate vs yield
@@ -1189,11 +1223,11 @@ average_2021 <- yield_ts %>% as_tibble() %>% mutate(year = year(date)) %>% filte
   mutate(month = month(date, label = TRUE)) %>%
   group_by(month) %>%  summarise(mean = mean(domestic_10y))
 
-cek <- yield_ts %>% 
+cek5 <- yield_ts %>% as_tibble %>% 
   select(date, domestic_10y, auction_day) %>% 
   mutate(date = date(date))
 
-yielddif_auction <- cek %>% 
+yielddif_auction <- cek5 %>% 
   ungroup %>%
   arrange(date) %>% 
   mutate(
@@ -1220,6 +1254,10 @@ yielddif_auction <- cek %>%
     difference = domestic_10y_to - domestic_10y_from
   )
 
+
+```
+
+```{r }
 ### Difference of auction day vs non
 # 2015
 yielddif_auction %>% mutate(auction_day = factor(auction_day), month = month(date_to, label = TRUE), year = year(date_to)) %>% drop_na() %>% 
