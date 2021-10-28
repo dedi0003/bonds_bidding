@@ -1,15 +1,11 @@
 ---
 title: "Determining Factors for 10-year Local Currency Sovereign Bonds (LCB) Yield: Indonesia Case"
-author: 
-  - Dea Avega Editya
-  - Dianne Cook
+author: "Dea Avega Editya"
 date: "8/5/2021"
 output:
   bookdown::pdf_document2:
     toc_depth: 4
   html_document: default
-header-includes:
-      - \usepackage[bottom]{footmisc}
 bibliography: baca.bib  
 nocite: |
   @dplyr, @ggplot2, @tidyverse, @tsibble, @tsibbletalk, @gravitas, @readr, @readxl, @stringr, @lubridate, @janitor, @cleaner, @openxlsx, @zoo, @purrr, @sugrrants, @GGally, @scales, @flipTime, @caret, @stargazer, @kableExtra, @lvplot, @ggh4x, @fpp3
@@ -77,12 +73,14 @@ Considering the important functions of the 10-year LCB yield in Indonesia's econ
 
 # Motivation
 
-This paper provides three new values to existing literature. First, it employs exploratory data analysis (EDA) approach in each discussion and analysis. This approach will help us in gaining better intuition of each variable as well as eye-proofing some evidence complementing result from any formal statistic test conducted in this study. Some relationship may also be revealed through visualizations even before taking inference from model. Second, this is the first work that empirically studies the impact of primary dealers' behavior on the 10-year LCB yield in Indonesia. Third, this study also provide evaluation on the model's performance by making prediction of the LCB yield based on information from the model and comparing the prediction with the real yield.  
+This paper provides two new values to existing literature. First, it employs an exploratory data analysis (EDA) approach at the beginning of analysis to gain better intuition of each explanatory variable. This approach is quite important especially for capturing particular data characteristics, i.e. non-linearity before we can proceed to a confirmatory step. Disregarding the data characteristic will result in inappropriate data modeling.
+Second, this is the first work that empirically studies the impact of primary dealers' behavior on the 10-year LCB yield in Indonesia.  
 The purpose of this work will be to provide insights and policy recommendations for the government in reducing LCB yield, particularly by aiming at significant determinant factors, which in turn help to optimize the national's cost of borrowing. 
+
 
 # Explanation of Collected Data
 
-There are 7 variables used in this paper as explanatory variables to the Indonesia's LCB yield; US Treasury (UST) yield, Credit Default Swap (CDS), foreign ownership, central bank's policy rate (policy rate), exchange rate, volatility index (VIX) and a dummy variable of auction/non-auction days as a proxy to primary dealers' trading behavior. The use of these explanatory variables are following numerous studies that have been conducted previously by various authors.  
+There are 7 variables used in this paper as explanatory variables to the Indonesia's LCB yield; US Treasury (UST) yield, Credit Default Swap (CDS), foreign ownership (%), central bank's policy rate (policy rate), exchange rate, volatility index (VIX) and a dummy variable of auction/non-auction days as a proxy to primary dealers' trading behavior. The use of these explanatory variables are following numerous studies that have been conducted previously by various authors.  
 
 The UST yield is said by [@Miyajima2015] and [@Muktiyanto2019] to be significantly affecting bonds yield. Miyajima et al. [-@Miyajima2015] conclude that the UST yield, while not a main contributor to the LCB yield in the emerging economies, is to some extent affecting the yield. Muktiyanto et al. whose focus of study is on Indonesia's bonds gives more emphasize on the predictor variable suggesting that the UST yield is not only significant but also has the biggest role in determining the LCB yield of the country. On the contrary, Permanasari et al. [-@Permanasari2021] who also study the same country suggest that the UST yield has no significant effect in determining the LCB yield.
 
@@ -99,8 +97,9 @@ North America, Europe and Pacific Rim regions. In addition, Dachraoui [-@Dachrao
 
 Other researches like Tchuindjo et al.[-@Tchuindjo2015], Endo [-@Endo2020], Nyborg et al. [-@Nyborg2004], Mercer et al. [-@Mercer2013], and Ferrari et al. [-@Ferrari2018] took different angle by looking at primary dealers system and its impact on bonds yield. Endo [-@Endo2020] study role of primary dealers in low income economies, while Ferrari et al. [-@Ferrari2018] focus on primary dealers' funding constraints on sovereign bonds yield. Nyborg et al. [-@Nyborg2004], Mercer et al. [-@Mercer2013] and Tchuindjo [-@Tchuindjo2015] concern on primary dealers trading behavior in US Treasury auction. The last name also provide several mathematical models to estimate the impact of primary dealers' strategic behavior in the auction [-@Tchuindjo2015].
 
-For the purpose of our study, we will use 10-year US Treasury (UST) yield, 5-year Indonesia's Credit Default Swap (CDS), foreign ownership in Indonesia's 10-year bonds, Bank Indonesia's policy rate, exchange rate (IDR/USD), Indonesia's volatility index (VIX) as well as a dummy variable of Indonesian government auction days as a proxy of Indonesia's primary dealers' behavior. Our response variable is the 10-year Indonesia's LCB yield. All variables (except for Bank Indonesia's policy rate ^[The Bank Indonesia's policy rate is only available from 21 April 2016]) are collected as time-series data covering period from 2 January 2015 up to 5 August 2021 and can be described as follow: 
+For the purpose of our study, we will use 10-year US Treasury (UST) yield, 5-year Indonesia's Credit Default Swap (CDS), foreign ownership in Indonesia's 10-year bonds (%), Bank Indonesia's policy rate, exchange rate (IDR/USD), Indonesia's volatility index (VIX) as well as a dummy variable of Indonesian government auction days as a proxy of Indonesia's primary dealers' behavior. Our response variable is the 10-year Indonesia's LCB yield. All variables (except for Bank Indonesia's policy rate ^[The Bank Indonesia's policy rate is only available from 21 April 2016]) are collected as time-series data covering period from 2 January 2015 up to 5 August 2021 and can be described as follow: 
 
+<!-- Gadanecz et al. [-@Gadanecz2018] plays important role as stabilizing force of exchange rate volatility.  -->
 
 ## 10-year LCB Yield  
 
@@ -127,7 +126,7 @@ yieldts_scale <- cbind(as_tibble(yield_ts$date), yieldts_scale) %>% rename(date 
 
 Timeseries visualization of the LCB yield can be seen in figure \@ref(fig:lcb). As shown in the plot, the general trend of the yield is decreasing over the period of observations.
 
-```{r lcb, out.width= "70%", fig.cap = "10y-LCB Yield Movement from Jan 2015 until Aug 2021", fig.align='center', fig.pos="H"}
+```{r lcb, out.width= "70%", fig.cap = "10y-LCB Yield Movement from Jan 2015 until Aug 2021", fig.align='center'}
 ##yield movement
  yield_ts %>%
   ggplot(aes(x = date, y = domestic_10y))+
@@ -135,9 +134,9 @@ Timeseries visualization of the LCB yield can be seen in figure \@ref(fig:lcb). 
    ylab("10y-LCB yield")
 ```
 
-If we look at the annual seasonal plot of the LCB yield in figure \@ref(fig:lcbseason), we see that 2015 and 2018 have a quite similar increasing trend, while 2017 and 2019 have a similar decreasing trend. 
+If we look at the annual seasonal plot of the LCB yield at figure \@ref(fig:lcbseason), we see that 2015 and 2018 have a quite similar increasing trend, while 2017 and 2019 have a similar decreasing trend. 
 
-```{r lcbseason, fig.cap = "Seasonal Plot of 10y-LCB Yield", fig.align='center', fig.pos="H"}
+```{r lcbseason, fig.cap = "Seasonal Plot of 10y-LCB Yield", fig.align='center'}
 
 ## seasonal plot
 ## yield_fc use full date in a year, while yield_ts use original date from dataset
@@ -153,7 +152,7 @@ gg_season(domestic_10y, size=1)+
 Looking further to the probability distribution of the yield-divided by year, semester and week in month as shown in figure \@ref(fig:lcbprob), we can see that the yield is generally more volatile in the first semester (as indicated by longer interquartile ranges) than the second semester with exception for 2020. 
 
 
-```{r lcbprob, fig.cap = "Probability Distribution of 10y-LCB Yield yield by Semester-Week in Month", warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r lcbprob, fig.cap = "Probability Distribution of 10y-LCB Yield yield by Semester-Week in Month", warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8, fig.align='center'}
 # semester yield 10y
 yield_ts %>%
   select(date, domestic_10y, auction_day) %>% 
@@ -182,7 +181,7 @@ The United States of America government's bonds (UST bonds) is generally used as
 The UST yield data used in this study is sourced from Bloomberg with the same ticker code "GRR" for the 10-year maturity government bonds of the United State of America. Timeseries visualization of the predictor variable is shown in figure \@ref(fig:usts). The general trend of the UST yield is decreasing.
 
 
-```{r usts, out.width= "70%", fig.cap = "10y-UST Yield Movement from Jan 2015 until Aug 2021", fig.align='center', fig.pos="H"}
+```{r usts, out.width= "70%", fig.cap = "10y-UST Yield Movement from Jan 2015 until Aug 2021", fig.align='center'}
 ##UST yield movement
  yield_ts %>%
   mutate(foreign_prop = foreign/tot_ownership) %>%
@@ -194,7 +193,7 @@ The UST yield data used in this study is sourced from Bloomberg with the same ti
 
 Moreover, timeseries of the predictor and the 10y-LCB yield with adjusted scale can be seen in figure \@ref(fig:lcbust). From the figure, we may conclude that these two variables seem to move toward the same direction, except for 2020 in which both variables were obviously moving in the opposite way.
 
-```{r lcbust, fig.cap = "Timeseries of 10y-LCB Yield and 10y-UST yield (Adjusted Scale)", warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r lcbust, fig.cap = "Timeseries of 10y-LCB Yield and 10y-UST yield (Adjusted Scale)", warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8, fig.align='center'}
 
 # create multivariate lines of timeseries
 # gatherscale <- yieldts_scale %>%
@@ -223,9 +222,9 @@ yieldts_scale %>%
 ```
 
 
-Looking at the annual seasonal plot of the UST yield in figure \@ref(fig:ustseason), we see that all years before 2019 have a relatively stable trend. 
+Looking at the annual seasonal plot of the UST yield at figure \@ref(fig:ustseason), we see that all years before 2019 have a relatively stable trend. 
 
-```{r ustseason, fig.cap = "Seasonal Plot of 10y-UST Yield", fig.align='center', fig.pos="H"}
+```{r ustseason, fig.cap = "Seasonal Plot of 10y-UST Yield", fig.align='center'}
 
 ## seasonal plot
 ## yield_fc use full date in a year, while yield_ts use original date from dataset
@@ -239,7 +238,7 @@ gg_season(ust_10y, size=1)+
 
 Probability distribution of 10y-UST yield for all years in observation is illustrated in figure \@ref(fig:ustprob). In most years, the distribution is equal between first and second semester. Particularly for 2018, the UST yield looks more volative in the first semester than the second one. The opposite case is occurred in 2020, where the volatility is higher in the second semester than the first one. 
 
-```{r ustprob, fig.cap= "Probability Distribution of 10y-UST yield by Semester-Week in Month", message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r ustprob, fig.cap= "Probability Distribution of 10y-UST yield by Semester-Week in Month", message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8, fig.align='center'}
 # semester ust 10y
 yield_ts %>%
   select(date, ust_10y, auction_day) %>% 
@@ -253,7 +252,7 @@ yield_ts %>%
 
 The yearly correlation between the 10y-UST yield and the 10y- lCB yield is shown in figure \@ref(fig:lcbustcor). The plot indicates a positive linear correlation between the two variables in all observed years, except for 2020 that suggests a negative correlation.
 
-```{r lcbustcor, fig.cap= "Correlation between 10y-UST Yield and 10y-LCB Yield", fig.align='center', fig.pos="H"}
+```{r lcbustcor, fig.cap= "Correlation between 10y-UST Yield and 10y-LCB Yield", fig.align='center'}
 yield_factors %>% 
   mutate(week_year = yearweek(date), year = year(date), foreign_chg = foreign/tot_ownership) %>% 
   ggplot(aes(x = ust_10y, y = domestic_10y)) + 
@@ -270,7 +269,7 @@ yield_foreign <- yield_ts %>%
   mutate(cum_foreign = cumsum(foreign_prop))
 ```
   
-```{r forts, out.width= "70%", fig.cap = "Changes in Foreign Ownership from Jan 2015-Aug 2021", fig.align='center', fig.pos="H"}
+```{r forts, out.width= "70%", fig.cap = "Changes in Foreign Ownership from Jan 2015-Aug 2021", fig.align='center'}
 yield_foreign %>% 
   ggplot(aes(x = date, y = foreign))+
   geom_line(size = 1, color = "darkgreen")+theme_light()+ylab("foreign ownership (Trillion Rupiah)")
@@ -278,22 +277,22 @@ yield_foreign %>%
 ```
   
 
-If we look at the annual seasonal plot of the foreign ownership in figure \@ref(fig:forseason), we see that all years have a relatively stable upwards trend, with exception for 2020 and 2021 in which the ownership were slightly declining.  
+If we look at the annual seasonal plot of the foreign ownership (%) at figure \@ref(fig:forseason), we see that all years have a relatively stable trend, with exception for 2020 and 2021 in which the proportion of foreigners were declining.  
 
-```{r forseason, fig.cap = "Seasonal Plot of Foreign Ownership Portion", fig.align='center', fig.pos="H"}
+```{r forseason, fig.cap = "Seasonal Plot of Foreign Ownership Portion", fig.align='center'}
 
 ## seasonal plot
 ## yield_fc use full date in a year, while yield_ts use original date from dataset
 
 yield_fc %>% mutate(quarter = yearquarter(date), for_pct = foreign/tot_ownership) %>% 
-gg_season(foreign, size=1)+
-  ylab("Trillion IDR")+theme_light()
+gg_season(for_pct, size=1)+
+  ylab("Foreign ownership (%)")+theme_light()
 
 ```  
   
 Probability distribution of the ownership for all years of observation is shown in figure \@ref(fig:forprob). In general, the changes in ownership is more volatile in first semester than the second one. It may be related to the timing of investment decision that usually more active in the early phase of year.  
 
-```{r forprob, fig.cap="Probability Distribution of Foreign Ownership", message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r forprob, fig.cap="Probability Distribution of Foreign Ownership", message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8, fig.align='center'}
 # semester 
 yield_ts %>% as_tsibble() %>% 
  mutate(foreign_pct = foreign/tot_ownership) %>% 
@@ -310,43 +309,55 @@ yield_ts %>% as_tsibble() %>%
 The foreign investor's share in the government bonds (including the 10y-LCB) has been reduced dramatically since 2020 due to an increase in both central bank and conventional bank's holdings in the LCB, as shown in figure \@ref(fig:ownprop). The figure shows daily changes in the LCB ownership, grouped by several industries from Jan 2018 until early August of 2021 (data before 2018 is not shown in the plot since it has different classification names for the industries).  
 
 
-```{r ownprop, out.width= "70%", fig.cap="Total Proportion of Bonds Ownership by Industry from Jan 2015-Aug 2021", fig.align='center', fig.pos="H"}
+```{r ownprop, out.width= "70%", fig.cap="Total Proportion of Bonds Ownership by Industry from Jan 2015-Aug 2021", fig.align='center'}
+## total ownership in Indo LCB bonds
+# yield_ts %>% as_tibble() %>% 
+#   na.omit() %>% 
+#   mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, other_pct = others/tot_ownership, mutual_pct = mutual_fund/tot_ownership, ins_pct = ins_pension/tot_ownership, foreign_pct = foreign/tot_ownership) %>% 
+#    # filter(year != 2015) %>% 
+#   select(date, foreign_pct, bi_pct, con_pct, islam_pct, ind_pct, other_pct, mutual_pct, ins_pct) %>%
+#   gather(key = "variable", value = "value", -date) %>% 
+#   ggplot(aes(x = date, y = value))+
+#   geom_line(aes(fill = variable), size = 1, alpha = 1)+facet_wrap(~ variable)+
+#   theme_bw()
 
 yield_ts %>% as_tibble() %>% 
   na.omit() %>% 
   mutate(date= date(date), year = year(date), bi_pct = central_bank/tot_ownership, con_pct = con_bank/tot_ownership, islam_pct = islam_bank/tot_ownership, ind_pct = individual/tot_ownership, other_pct = others/tot_ownership, mutual_pct = mutual_fund/tot_ownership, ins_pct = ins_pension/tot_ownership, foreign_pct = foreign/tot_ownership) %>% 
+   # filter(year != 2015) %>% 
   select(date, foreign, central_bank, con_bank, islam_bank, ins_pension, individual, others, mutual_fund) %>%
   rename(conventional_bank = con_bank, islamic_bank = islam_bank, insurance_pension = ins_pension) %>% 
-  gather(key = "industry", value = "value", -date) %>% 
+  gather(key = "variable", value = "value", -date) %>% 
   ggplot(aes(x = date, y = value))+
-  geom_line(aes(fill = industry, color = industry), size = 1, alpha = 1)+
+  geom_line(aes(fill = variable, color = variable), size = 1, alpha = 1)+
   ylab("Trillion IDR")+
+  # facet_wrap(~ variable)+
   theme_light()
 ```
   
-Starting from mid of 2020, the Central Bank (Bank Indonesia) seems to move aggressively in purchasing the government bonds through Quantitative Easing (QE) program in order to absorb larger issuance of the bonds which aimed to support large financing for covid19 pandemic. The monetary authority also introduced mandatory purchase regulation for the conventional banks that requires them to buy some minimum amount of the bonds and hold it as their liquidity assets, thus the bank's ownership were also growing big and even exceeding the ownership amount of foreign investors. Another interesting pattern from the plot is that the banks and the central bank always move in the opposite direction although in the long run both have similar upward trends. This is because of the central bank's function as "a stopper" responsible for backing up issuance of the LCB, to maintain stability of the yield's movement.
+Starting from mid of 2020, the Central Bank (Bank Indonesia) seems to move aggressively in purchasing the government bonds through Quantitative Easing (QE) program in order to absorb larger issuance of the bonds which aimed to support large financing for covid19 pandemic. The monetary authority also introduced mandatory purchase regulation for the conventional banks that requires them to buy some minimum amount of the bonds and hold it as their liquidity assets, thus the bank's ownership were also growing big and even exceed the foreign ownership.
 
-Timeseries of the foreign ownership and the yield is visualized in figure \@ref(fig:lcbfor). From this figure we can see that most of the time these two variables are moving in opposite direction, except for 2020.  
+Timeseries of the foreign ownership and the yield is visualized in figure \@ref(fig:lcbfor). From the figure we can see that most of the time these two variables are moving in opposite direction, except for 2020.  
 
 
-```{r lcbfor, fig.cap="Timeseries of 10y-LCB Yield and Foreign Percentage (Adjusted Scale)", fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r lcbfor, fig.cap="Timeseries of 10y-LCB Yield and Foreign Percentage (Adjusted Scale)", fig.width = 12, fig.height = 8, fig.align='center'}
 # LCB and Foreign
 yieldts_scale %>%
   ggplot(aes(x = date))+
   geom_line(aes(y = domestic_10y, color = "red") , size = 1)+
   geom_line(aes(y = foreign, color = "darkgreen"), size = 1)+
   facet_wrap(~ year(date), scale = "free")+
-   scale_color_discrete(name = "Variable", labels = c("Foreign Ownership", "10y-LCB Yield"))+
+   scale_color_discrete(name = "Variable", labels = c("Foreign Pct", "10y-LCB Yield"))+
   ylab("value")+
   theme_light()+theme(legend.position = "bottom")+scale_x_date(labels = date_format("%b"))
 ```
   
   
 
-The yearly correlation between the foreign ownership and the 10y-LCB yield can be seen in figure \@ref(fig:corfor). In general, the plot shows negative correlation between these two variables, except for 2015.
+The yearly correlation between the foreign ownership and the 10y-LCB yield can be seen in figure \@ref(fig:corfor). In general, the plot shows negative correlation between these two variables, except for 2020 in which foreigner's dominant holding of the LCB was mainly reduced by the increase of conventional banks and the central bank's holdings. Thus, despite a decrease in the foreigner's portion, the yield was kept lowered since the banks and the central bank increased their holdings.  
 
 
-```{r corfor, fig.cap= "Correlation between Foreign Ownership and 10y-LCB Yield", message = FALSE, warning = FALSE, fig.align='center', fig.pos="H"}
+```{r corfor, fig.cap= "Correlation between Foreign Ownership and 10y-LCB Yield", message = FALSE, warning = FALSE, fig.align='center'}
 #foreign changes
 ## negative relationship when foreign pct > 35%, < 35% positive relationship
 ### due to quantitative easing of central bank 2020-2021 and mandatory purchase of domestic banks boost domestic ownership
@@ -367,15 +378,15 @@ A credit default swap (CDS) is a derivative contract that allows investors to he
 
 Timeseries of the CDS can be seen in figure \@ref(fig:cdsts). The general trend of the CDS is declining, with the highest jump occurred in early 2020 due to announcement of early cases of covid19 in March 2020.
 
-```{r cdsts, out.width= "70%", fig.cap="Indonesia's 5y-CDS from Jan 2015-Aug 2021",fig.pos="H", fig.align='center'}
+```{r cdsts, out.width= "70%", fig.cap="Indonesia's 5y-CDS from Jan 2015-Aug 2021", fig.align='center'}
 yield_ts %>% 
   ggplot(aes(x = date, y = cds_5y))+
   geom_line(size = 1, color = "darkgreen")+theme_light()+ylab("5y-CDS")
 ```
 
-Checking at the annual seasonal plot of the 5y-CDS in figure \@ref(fig:cdsseason), we see that the observed trends are quite the same with the trend of the LCB yield, in which 2015 and 2018 have an increasing trend, whereas 2017 and 2019 have a decreasing trend. 
+Checking at the annual seasonal plot of the 5y-CDS at figure \@ref(fig:cdsseason), we see that the observed trends are quite the same with the trend of the LCB yield, in which 2015 and 2018 have an increasing trend, whereas 2017 and 2019 have a decreasing trend. 
 
-```{r cdsseason, fig.cap = "Seasonal Plot of 5y-CDS", fig.align='center', fig.pos="H"}
+```{r cdsseason, fig.cap = "Seasonal Plot of 5y-CDS", fig.align='center'}
 
 ## seasonal plot
 ## yield_fc use full date in a year, while yield_ts use original date from dataset
@@ -388,7 +399,7 @@ gg_season(cds_5y, size=1)+
 
 Probability distribution of the CDS is shown in figure \@ref(fig:cdsprob). There is no obvious different between first and second semester for each year of observation, except for 2020 in which the CDS looks more highly volatile in the second semester than the first one. In addition, the first semester of 2020 has some noticeable outliers, with the highest value is about 300.
 
-```{r cdsprob, fig.cap = "Probability Distribution of 5y-CDS by Semester-Week in Month", warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r cdsprob, fig.cap = "Probability Distribution of 5y-CDS by Semester-Week in Month", warning = FALSE, message = FALSE, fig.width = 12, fig.height = 8, fig.align='center'}
 # semester cds 5y
 yield_ts %>% 
  mutate(foreign_pct = foreign/tot_ownership) %>% 
@@ -404,7 +415,7 @@ yield_ts %>%
 
 Timeseries of the CDS and the yield can be seen in figure \@ref(fig:lcbcds). From the visualization we can see that the pattern of these two variables are really similar, and both are moving towards the same direction.
 
-```{r lcbcds, fig.cap = "Timeseries of 10y-LCB Yield and 5y-CDS (Adjusted Scale)", fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r lcbcds, fig.cap = "Timeseries of 10y-LCB Yield and 5y-CDS (Adjusted Scale)", fig.width = 12, fig.height = 8, fig.align='center'}
 # LCB and CDS
 yieldts_scale %>% 
   ggplot(aes(x = date))+
@@ -420,7 +431,7 @@ yieldts_scale %>%
 
 The yearly correlation between the CDS and the yield is shown in figure \@ref(fig:corcds). The plot shows strong relationship between the two variables in all observed years.
 
-```{r corcds, fig.cap= "Correlation between 5y-CDS and 10y-LCB Yield", warning = FALSE, message = FALSE, fig.align='center', fig.pos="H"}
+```{r corcds, fig.cap= "Correlation between 5y-CDS and 10y-LCB Yield", warning = FALSE, message = FALSE, fig.align='center'}
 ###cds vs yield 
 yield_ts %>%
   mutate(year = year(date)) %>%
@@ -441,15 +452,15 @@ After successful implementation in the USA, the index is now used globally to qu
 
 Historical VIX of the country can be seen in figure \@ref(fig:vixts). During years of observation, the highest jump in the VIX was happened in early 2020 where Indonesia reported its covid19 cases for the first time. 
 
-```{r vixts,out.width= "70%", fig.cap="Volatility Index of Indonesia from Jan 2015-Aug 2021", fig.align='center', fig.pos="H"}
+```{r vixts,out.width= "70%", fig.cap="Volatility Index of Indonesia from Jan 2015-Aug 2021", fig.align='center'}
 yield_ts %>% 
   ggplot(aes(x = date, y = vix))+
   geom_line(size = 1, color = "darkgreen")+theme_bw()+ylab("VIX")
 ```
 
-Reviewing the annual seasonal plot of the VIX in figure \@ref(fig:vixseason), we see that the most years show a relatively stable trend with maximum value is around 40. The exceptional pattern observed is in 2020 that showing a huge leap in March.
+Reviewing the annual seasonal plot of the VIX at figure \@ref(fig:vixseason), we see that the all years show a relatively stable trend with exception for 2020 that showing a huge leap in March.
 
-```{r vixseason, fig.cap = "Seasonal Plot of VIX", fig.align='center',fig.pos="H"}
+```{r vixseason, fig.cap = "Seasonal Plot of VIX", fig.align='center'}
 
 ## seasonal plot
 ## yield_fc use full date in a year, while yield_ts use original date from dataset
@@ -462,7 +473,7 @@ gg_season(vix, size=1)+
 
 The probability distribution of VIX as visualized in figure \@ref(fig:vixprob) shows no significant different between VIX in first and second semester of each year of observation, except for 2016 in which the volatility of VIX in first semester is much higher than the second semester.
 
-```{r vixprob, fig.cap= "Probability Distribution of VIX by Semester-Week in Month", message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r vixprob, fig.cap= "Probability Distribution of VIX by Semester-Week in Month", message = FALSE, warning = FALSE, fig.width = 12, fig.height = 8, fig.align='center'}
 ##VIX
 # semester 
 yield_ts %>% 
@@ -477,9 +488,9 @@ yield_ts %>%
 
 ```
 
-From figure \@ref(fig:lcbvix), the two variables seem to move towards the same direction in all years of observation. One noticeable difference is that the VIX looks much more volatile than the yield.
+From figure \@ref(fig:lcbvix), the two variables seem to move towards the same direction in all years of observation. One noticeable difference is that the VIX looks more volatile than the yield.
 
-```{r lcbvix, fig.cap = "Timeseries of 10y-LCB Yield and VIX (Adjusted Scale)",fig.width = 12, fig.height = 8, fig.align='center', fig.pos="H"}
+```{r lcbvix, fig.cap = "Timeseries of 10y-LCB Yield and VIX (Adjusted Scale)",fig.width = 12, fig.height = 8, fig.align='center'}
 # LCB and VIX yield
 yieldts_scale %>% 
   ggplot(aes(x = date))+
@@ -493,9 +504,9 @@ yieldts_scale %>%
 
 
 
-The yearly correlation between the VIX and the yield is shown in figure \@ref(fig:corvix). In general, the plot shows a positive linear correlation between the two variables in most observed years. Particularly in 2015 and 2018, the relationship looks non-linear, while in 2021 the VIX looks negatively correlated with the yield.
+The yearly correlation between the VIX and the yield is shown in figure \@ref(fig:corvix). The plot shows a **non-linear relationship** between the two variables in all observed years. Thus, we will introduce a quadratic term to the VIX variable to handle this issue in our linear model.
 
-```{r corvix, fig.cap= "Correlation between VIX and 10y-LCB Yield", warning = FALSE, message = FALSE, fig.align='center', fig.pos="H"}
+```{r corvix, fig.cap= "Correlation between VIX and 10y-LCB Yield", warning = FALSE, message = FALSE, fig.align='center'}
 #check volatility vs yield
 yield_ts %>% mutate(year = year(date)) %>% 
   ggplot(aes(y = domestic_10y)) + 
@@ -507,13 +518,13 @@ yield_ts %>% mutate(year = year(date)) %>%
   
 ### Policy Rate
 
-Policy rate is a product of monetary authority used as a tool to manage liquidity in money market. The ultimate aim of the policy rate is helping the authority to achieve their inflation target. In Indonesia, the rate is periodically announce to public by Bank Indonesia (BI) as an output of monthly BI Board of Governors' meeting. As explained by Muktiyanto [-@Muktiyanto2019], the rate is expected to be transmissioned in money market, which in turn can affect deposit and loan rate, and finally influence asset valuation including stocks and bonds. Before 19 August 2016, the rate used 12-month BI certificate as a reference rate, and after the date it uses 7-day Reverse Repo Rate (7d-RRR) as a new reference rate.  
+Policy rate is a product of monetary authority that used as a tool to manage liquidity in money market. The ultimate aim of the policy rate is helping the authority to achieve their inflation target. In Indonesia, the rate is periodically announce to public by Bank Indonesia (BI) as an output of monthly BI Board of Governors' meeting. As explained by Muktiyanto [-@Muktiyanto2019], the rate is expected to be transmissioned in money market, which in turn can affect deposit and loan rate, and finally influence asset valuation including stocks and bonds. Before 19 August 2016, the rate used 12-month BI certificate as a reference rate, and after the date it uses 7-day Reverse Repo Rate (7d-RRR) as a new reference rate.  
 
 Since historical data of the 12-month BI certificate is no longer available in the BI's website, this study is only collecting data of the 7d-RRR which has been officially existed since 21 April 2016. Thus, the data of the policy rate^[The data is downloaded from Bank Indonesia's website at https://www.bi.go.id/id/statistik/indikator/bi-7day-rr.aspx.] used in this study will be ranging from that date until 5 August 2021. 
 
 Historical data of the rate is visualized in figure \@ref(fig:rate). The general trend of the rate is declining.
 
-```{r rate,out.width= "70%", fig.cap="Changes in Policy Rate from Jan 2015-Aug 2021", fig.align='center', fig.pos="H"}
+```{r rate,out.width= "70%", fig.cap="Changes in Policy Rate from Jan 2015-Aug 2021", fig.align='center', fig.keep='high'}
 yield_ts %>% 
   ggplot(aes(x = date, y = rate))+
   geom_line(size = 1, color = "darkgreen")+theme_light()+ylab("rate (%)")
@@ -522,7 +533,7 @@ yield_ts %>%
 
 Figure \@ref(fig:corrate) indicates that the correlation between the policy rate and the yield are mostly positive and linear, with exception for 2020 in which the correlation looks non-linear, and for 2021 the correlation looks linear but negative.  
 
-```{r corrate, fig.cap= "Correlation between Policy Rate and 10y-LCB Yield", warning = FALSE, message = FALSE, fig.align='center', fig.pos="H"}
+```{r corrate, fig.cap= "Correlation between Policy Rate and 10y-LCB Yield", warning = FALSE, message = FALSE, fig.align='center'}
 #check rate vs yield
 yield_ts %>% 
   mutate(year = year(date)) %>% 
@@ -534,9 +545,9 @@ yield_ts %>%
 ```
 
 
-Timeseries of the rate and the yield for each year of observation can be seen in figure \@ref(fig:lcbrate). The visualization indicates that these two variables are mostly moving towards the same direction, with the most obvious parallel patterns are seen in 2018, 2019 and 2020.
+Timeseries of the rate and the yield for each year of observation can be seen in figure \@ref(fig:lcbrate). The visualization indicates that these two variables are mostly moving towards the same direction, with the most obvious parallel patterns are as shown in 2018 and 2019.
 
-```{r lcbrate, fig.cap="Timeseries of 10y-LCB Yield and Policy Rate (Adjusted Scale)",fig.pos="H", fig.align='center'}
+```{r lcbrate, fig.cap="Timeseries of 10y-LCB Yield and Policy Rate (Adjusted Scale)", fig.align='center'}
 # LCB and Rate yield
 yieldts_scale %>% 
   filter(year(date) > 2015) %>% 
@@ -549,27 +560,31 @@ yieldts_scale %>%
   theme_light()+theme(legend.position = "bottom")+scale_x_date(labels = date_format("%b"))
 ```
 
+
 ## Macroeconomic Risk (Exchange Rate USD/IDR)  
 
-The data for foreign exchange (fx) rate of USD against Rupiah is using middle rate, calculated from Bank Indonesia's buy and sell fx rates of each working day ^[The foreign exchange data is downloaded from https://www.bi.go.id/en/statistik/informasi-kurs/transaksi-bi/Default.aspx]. For non-working days, data is imputed from the rate of a previous working day.
+The data for foreign exchange (fx) rate of USD against Rupiah is using middle rate, calculated from Bank Indonesia's buy and sell fx rates of each working day ^[The foreign exchange data can be downloaded at https://www.bi.go.id/en/statistik/informasi-kurs/transaksi-bi/Default.aspx]. For non-working days, data is imputed from the rate of a previous working day.
 
 Historical data of the exchange rate is visualized in figure \@ref(fig:fxts). The general trend of the exchange rate is increasing.
 
 ```{r fxts, fig.cap="Foreign Exchange Rate USD/IDR from Jan 2015 until Aug 2021", out.width="70%", fig.keep='high', fig.align='center'}
 yield_ts %>% 
-  ggplot(aes(x = date, y = exchange_mid)) +
-  geom_line(size = 1, color = "darkgreen") + theme_light() + ylab("FX rate")
+  # mutate(year = year(date)) %>% 
+  # filter(year > 2015) %>% 
+  ggplot(aes(x = date, y = exchange_mid))+
+  geom_line(size = 1, color = "darkgreen")+theme_light()+ylab("FX rate")
 ```
 
-Looking at the annual seasonal plot of the exchange rate in figure \@ref(fig:fxseason), we see that 2015 and 2018 have an increasing trend. Furthermore, 2020 has the lumpiest trend with a big jump around March-April. The rest of years seems to have a relatively stable pattern 
+Looking at the annual seasonal plot of the exchange rate at figure \@ref(fig:fxseason), we see that 2015 and 2018 have an increasing trend. On the other hand, 2020 has the lumpiest trend with a big jump around March-April. The rest of years seems to have a relatively stable trend. 
 
 ```{r fxseason, fig.cap = "Seasonal Plot of Exchange Rate USD/IDR", fig.align='center'}
 
 ## seasonal plot
 ## yield_fc use full date in a year, while yield_ts use original date from dataset
+
 yield_fc %>% mutate(quarter = yearquarter(date)) %>% 
 gg_season(exchange_mid, size=1)+
-  ylab("USD/IDR")+theme_light()
+  ylab("FX rate")+theme_light()
 
 ```  
 
@@ -605,7 +620,7 @@ yieldts_scale %>%
 
 The yearly correlation between the exchange rate and the yield is shown in figure \@ref(fig:corfx). The plot shows a strong positive relationship between the two variables in all observed years, except for 2017 which has a quite different pattern. For 2018, the relationship between these two indeed looks perfectly linear.
 
-```{r corfx, fig.cap= "Relationship between Exchange Rate and 10y-LCB Yield", fig.align='center', fig.pos="H"}
+```{r corfx, fig.cap= "Relationship between Exchange Rate and 10y-LCB Yield", fig.align='center'}
 #check exchange rate vs yield
 # strong and steady positive relationship between exchange rate and yield
 # Rupiah weakened yield goes up
@@ -664,7 +679,7 @@ yielddif_auction <- cek5 %>%
 
 ```
 
-In order to check if the yield difference of these two periods is really significant or not, we create new variable "difference" that is calculated by subtracting yield of the last with the first day for each period. The summary table of the yield difference (showing only first 10 rows) can be seen in table^[Full table can be seen in the Apendix.] \@ref(tab:yielddiftable).
+In order to check if the yield difference of these two periods is really significant or not, we create new variable "difference" that is calculated by subtracting yield of the last with the first day for each period. The summary table of the yield difference (showing only first 10 rows) can be seen in table \@ref(tab:yielddiftable).
 
 ```{r yielddiftable, warning = FALSE, message= FALSE}
 library(kableExtra)
@@ -700,7 +715,7 @@ yielddif_auction %>% mutate(auction_day = factor(auction_day), month = month(dat
 
 In conducting analysis on determining factors for the 10-year LCB yield, we will use dynamic regression model (DRM) to explain relation between our response and its predictors. There are two main advantages of using this type of model. First, it supports the use of regular linear regression model. Second, it enables us to combine the regression with ARIMA model that will handle timeseries dynamics [@Hyndman]. Thus, our DRM will consist of a linear regression model and an ARIMA model.
 
-Before constructing the DRM, we will apply some preliminary testing as a standard procedure for implementing linear regression with time series variables. First, we will check multicolinearity between the predictors fitted in the linear regression model. Second, as ARIMA model requires all variables to be stationary except if they are cointegrated [@Hyndman], we will check whether our response and predictors are cointegrated.
+Before constructing the DRM, we will apply some preliminary testing as a standard procedure for implementing linear regression with time series variables. First, we will check multicolinearity between the predictors fitted in the linear regression model. Second, as ARIMA model requires all variables to be stationer except if they are cointegrated [@Hyndman], we will check whether our response and predictors are cointegrated.
 
 The last step is to fit DRM and analyze performance of the model by forecasting the yield based on the DRM and comparing the prediction with the real yield.
 
@@ -718,18 +733,18 @@ For conducting multicolinearity test, we build a linear model with the LCB yield
 model1 <- lm(domestic_10y ~ ust_10y + vix + cds_5y + rate + foreign + exchange_mid + auction_day, data = yield_ts)
 
 library(caret)
-car::vif(model1) %>% tidy() %>%  rename(variable = names, VIF = x) %>% kable(caption = "Result of Multicolinearity Test") %>% kable_styling(bootstrap_options = "striped", latex_options = c("striped", "hold_position"))
+car::vif(model1) %>% tidy() %>%  rename(variable = names, VIF = x) %>% kable(caption = "Result of Multicolinearity Test") %>% kable_styling(bootstrap_options = "striped")
 ```
 
 From the result we see that all VIF values are still below 10 as the upper threshold of multicolinearity, with two variables; 5y-CDS and foreign ownership, have values exceed the conservative threshold of 5. However, since the dataset used in this study is considered large we can use the upper threshold for multicolinearity indication as suggested by Jongh et al. [-@Jongh2015]. Thus, we can use all variables in our model since there is no presence of multicolinearity. 
 
 ## Cointegration test
 
-Cointegration test is an important preliminary check before analysing time series of regression model especially in economics and finance, since many variables used in these fields are usually non-stationary, and regressing non-stationary time series could potentially produce spurious results [-@Wharton]. At the same time, if we try to use difference for all non-stationary predictors (detrending), this approach will erase all long run effect of these variables with only short run dynamics remains [-@Wharton]. As a result, the explanatory power of the model will be weakened. 
+Cointegration test is an important preliminary check before analysing time series of regression model especially in economics and finance, since many variables used in these fields are usually non-stationer, and regressing non-stationer time series could potentially produce spurious results [-@Wharton]. At the same time, if we try to use difference for all non-stationer predictors (detrending), this approach will erase all long run effect of these variables with only short run dynamics remains [-@Wharton]. As a result, the explanatory power of the model will be weakened. 
 
-The concept of cointegration can be described as follows: while individual variable is simply non-stationary, their long-run combination with other variables could potentially be stationary [-@Wharton]. Hence, we will check if all of our time series used in this study are actually cointegrated. 
+The concept of cointegration can be described as follows: while individual variable is simply non-stationer, their long-run combination with other variables could potentially be stationer [-@Wharton]. Hence, we will check if all of our time series used in this study are actually cointegrated. 
 
-For this purpose, we will use Johansen procedure^[The Johansen procedure is conducted in R using library urca (Pfaff, B. 2008)] [@Johansen1991] since this testing method enable us to use combination of more than two time series. As a requirement for the test, we must ensure that all time series are at the same level of order integration one I(1). Using Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test [@Kwiatkowski1992] to check required difference for all variables, we see that the foreign ownership variable is the only variable that need to be double differenced, or in other words this variable is in order of integration I(2) instead of I(1). Thus, we will use a single differenced version of this variable (diff_foreign) so as to make its integration order I(1) in the cointegration testing. No seasonal difference is needed for all variables. Full result of the KPSS test can be seen in table \@ref(tab:kpsstab)^[ndiff = regular difference needed, nsdiff = seasonal difference needed]. 
+For this purpose, we will use Johansen procedure [@Johansen1991] ^[The Johansen procedure is conducted in R using library urca (Pfaff, B. 2008)] since this testing method enable us to use combination of more than two time series. As a requirement for the test, we must ensure that all time series are at the same level of order integration one I(1). Using Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test [@Kwiatkowski1992] to check required difference for all variables, we see that the foreign ownership variable is the only variable that need to be double differenced, or in other words this variable is in order of integration I(2) instead of I(1). Thus, we will use a single differenced version of this variable (diff_foreign) so as to make its integration order I(1) in the cointegration testing. No seasonal difference is needed for all variables. Full result of the KPSS test can be seen in table \@ref(tab:kpsstab)^[ndiff = regular difference needed, nsdiff = seasonal difference needed]. 
 
 
 ```{r kpsstab}
@@ -738,12 +753,12 @@ For this purpose, we will use Johansen procedure^[The Johansen procedure is cond
 
 # all variables must be integrated in the same order
 # step 1 check lag required
-yield_fc %>% rename(lcb_10y = domestic_10y) %>% 
-  features_at(vars(lcb_10y, ust_10y, vix, foreign, cds_5y, exchange_mid, rate), list(unitroot_kpss, unitroot_ndiffs, unitroot_nsdiffs)) %>% 
+yield_fc %>% 
+  features_at(vars(domestic_10y, ust_10y, vix, foreign, cds_5y, exchange_mid, rate), list(unitroot_kpss, unitroot_ndiffs, unitroot_nsdiffs)) %>% 
   pivot_longer(names_to = "unit root", cols = everything()) %>% 
     kable(caption = "Table of Unitroot Test") %>% 
   kable_styling(bootstrap_options = 'striped', stripe_color = "#FFFFF")
-## kpss_pval less than 0.1 hence non-stationary for all variables
+## kpss_pval less than 0.1 hence non-stationer for all variables
 ##foreign percentage needs 2-differencing hence make it diff 1 to make it equal
 ```
 
@@ -752,12 +767,12 @@ yield_fc %>% rename(lcb_10y = domestic_10y) %>%
 
 df_cajo <- yield_fc %>% 
   mutate(dif_foreign = difference(foreign)) %>% 
-select(domestic_10y, ust_10y, vix, dif_foreign, cds_5y, exchange_mid, rate) %>% rename(lcb_10y = domestic_10y) %>%
+select(domestic_10y, ust_10y, vix, dif_foreign, cds_5y, exchange_mid, rate) %>% 
   # mutate(d_for = for_pct %>% difference()) %>% 
   as_tibble() %>% 
   select(-date)
 
-m <- ca.jo(data.frame(df_cajo$lcb_10y, df_cajo$ust_10y,  df_cajo$vix,  df_cajo$dif_foreign,  df_cajo$cds_5y,  df_cajo$exchange_mid,  df_cajo$rate),
+m <- ca.jo(data.frame(df_cajo$domestic_10y, df_cajo$ust_10y,  df_cajo$vix,  df_cajo$dif_foreign,  df_cajo$cds_5y,  df_cajo$exchange_mid,  df_cajo$rate),
           ecdet = "none", type = "trace", K = 2, spec = "longrun")
 
 # max lag 2, 
@@ -771,12 +786,7 @@ The Johansen procedure is conducted using trace statistic method that produce ei
 
 ```{r}
 # lambda (eigenvalues)
-
-lam_name <- c("lambda1", "lambda2", "lambda3", "lambda4", "lambda5", "lambda6", "lambda7") %>% as_tibble() 
-lam <- data.frame(m@lambda) %>% rename(lambda = m.lambda)
-lambda <- cbind(lam, lam_name)
-lambda %>% pivot_wider(names_from = value, values_from = lambda) %>% 
-  kable(align = "l", caption = "Eigenvalues of Variable's Linear Combination") %>% kable_styling(latex_options = c("hold_position", "striped"))
+data.frame(m@lambda) %>% rename(lambda = m.lambda) %>%  kable(align = "l", caption = "Eigenvalues of Variable's Linear Combination") %>% kable_styling(bootstrap_options = "striped")
 ```
 
 
@@ -788,38 +798,37 @@ sig_cajo <- data.frame(m@cval) %>% rename(lev_10pct = X10pct, lev_5pct = X5pct, 
 rank_result <- cbind(sig_cajo, test_cajo)
 
 rank_result %>% 
-kable(caption = "Rank of Matrix") %>% kable_styling(latex_options = c("hold_position", "striped"))
+kable(caption = "Rank of the Matrix") %>% kable_styling(bootstrap_options = "striped", stripe_color = "grey")
 
 # How do we go about forming such a linear combination? The answer is to make use of the eigenvector components of the eigenvector associated with the largest eigenvalue. We previously mentioned that the largest eigenvalue is approximately pl2. It corresponds to the vector given under the column p.l2, and is approximately equal to . If we form a linear combination of series using these components, we will receive a stationary series:
   
 ```
 
-
-Other test statistics for r<=1, r<=2 and r<=3 also show that the null hypothesis of no cointegration can be rejected. However, for the higher rank of matrix the null hypothesis cannot be rejected. Hence, we can conclude that in order to form linear combination that poses cointegration we need at least 4 combination of the variables. Using all combination (7 variables) can perfectly make these time series cointegrated. 
-
-Summing up cointegration values from multiplication of eigenvector in table \@ref(tab:compeig) with its corresponding variable, we can visualize the stationary of the linear combination of all time series as shown in figure \@ref(fig:viscoin). 
-
 ```{r compeig}
 comp_eig <- data.frame(m@V) %>% select(1) %>%
-  rename(lcb_yield = df_cajo.lcb_10y.l2)
+  rename(lcb_yield = df_cajo.domestic_10y.l2)
 
 rownames(comp_eig) <- c("lcb_yield","ust_yield","vix","dif_foreign", "cds", "exchange rate", "policy rate")
 
 comp_eig %>% 
-  kable(caption = "Component of Eigenvector for 10y-LCB yield") %>% kable_styling(latex_options = c("hold_position","striped"))
+  kable(caption = "Component of Eigenvector for 10y-LCB yield") %>% kable_styling(bootstrap_options = "striped")
 ```
 
-$Cointegration\_values  = 1*lcb\_10y + 0.2217401*ust\_10y + 0.106*vix + 4438.76*d\_foreign - 0.007*cds\_5y - 0.0004*exchange - 0.621*rate$
+Other test statistics for r<=1, r<=2 and r<=3 also show that the null hypothesis of no cointegration can be rejected. However, for the higher rank of matrix the null hypothesis cannot be rejected. Hence, we can conclude that in order to form linear combination that poses cointegration we need at least 4 combination of the variables. Using all combination (7 variables) can perfectly make these time series cointegrated. 
 
-```{r viscoin, fig.cap= "Stationarity of Cointegrated Variables", fig.align='center', fig.pos='H'}
+Summing up cointegration values from multiplication of eigenvector in table \@ref(tab:eigen) with its corresponding variable, we can visualize the stationary of the linear combination of all time series as shown in figure \@ref(fig:viscoin). 
+
+$Cointegration\_values  = 1*lcb\_10y + 0.2217401*ust\_10y + 0.106*vix + 4438.76*diff\_foreign - 0.007*cds\_5y - 0.0004*exchange - 0.621*rate$
+
+```{r viscoin, fig.cap= "Stationarity of Cointegrated Variables", fig.align='center'}
 # eigenvalues * each variable dataframe
-s <-(1.000000e+00*df_cajo$lcb_10y) + (0.2217401237 *df_cajo$ust_10y) + (0.1216112 *df_cajo$vix) + (1.5841457*df_cajo$dif_foreign) - (0.0081862  *df_cajo$cds_5y) - (0.0007258*df_cajo$exchange_mid) - (0.5994640*df_cajo$rate)
+s <-(1.000000e+00*df_cajo$domestic_10y) + (0.2217401237 *df_cajo$ust_10y) + (0.1216112 *df_cajo$vix) + (1.5841457*df_cajo$dif_foreign) - (0.0081862  *df_cajo$cds_5y) - (0.0007258*df_cajo$exchange_mid) - (0.5994640*df_cajo$rate)
 
 #remove NA value
 value <- s[!is.na(s)]
 
 # plot cointegration
-plot(value, type="l")# looks stationary
+plot(value, type="l")# looks stationer
 ```
 
 From the figure, we see that long-run effect of all combined variables seems not significantly different from zero (white noise) hence we can conclude that they are all cointegrated based on this visualization.
@@ -841,7 +850,7 @@ Summary statistic of the data is shown in table \@ref(tab:table1).
 ```{r table1, results = 'asis'}
 
 ###prepare variable for model
-data_model <- df_cajo %>% rename(exchange_rate = exchange_mid, pol_rate = rate)
+data_model <- df_cajo %>% rename(lcb_10y = domestic_10y, exchange_rate = exchange_mid, pol_rate = rate)
 
 stargazer(as.data.frame(data_model), type = "latex", header = FALSE,
            label = "tab:table1")
@@ -854,7 +863,8 @@ stargazer(as.data.frame(data_model), type = "latex", header = FALSE,
 
 ## Model Inference
 
-From the model statistics at table \@ref(tab:tabstat), all variables are significant on 5% level except for vix, dif_foreign and auction_day1. The pvalue of vix is significant on 10% level, while the dif_foreign and auction_day1 are not significant at all. Predictors with positive correlation are 10y-UST yield, 5y-CDS, Exchange Rate, and VIX, while Policy Rate, Foreign Ownership and Auction Day pose negative correlation.  
+
+From the model statistics at table \@ref(tab:tabstat), all variables are significant on 5% level except for vix, dif_foreign and auction_day1. The pvalue of vix is significant on 10% level, while the dif_foreign and auction_day1 are not significant. Predictors with positive correlation are 10y-UST yield, 5y-CDS, Exchange Rate, and VIX, while Policy Rate, Foreign Ownership and Auction Day pose negative correlation.  
 
 ```{r tabstat}
 # ARIMA describe autocorrelations in the data
@@ -874,28 +884,28 @@ fit_tidy <- tidy(fit)
 
 fit_tidy %>% mutate(pval = round(as.numeric(format(p.value, scientific = F)), digits = 3)) %>% 
   select(-p.value, -.model) %>% 
-  kable(caption = "Model Statistic") %>% kable_styling(bootstrap_options = "striped", latex_options = "hold_position")
+  kable(caption = "Model Statistic") %>% kable_styling(bootstrap_options = "striped")
 
 ```
 
-Interpretation from each predictor's coefficient can be written as follow^[The effect of each predictor on the response is assuming other factors are hold constant]:  
+Interpretation from each predictor's coefficient is as follows:  
 
-1. for 1% increase in 10y-UST yield, the LCB yield will increase about 14bps (on average)
+1. for 1% increase in 10y-UST yield, the LCB yield will increase about 14bps  
 
-1. for 10 points increase in 5y-CDS, the LCB yield will increase about 4bps (on average)  
+1. for 10 increase in 5y-CDS, the LCB yield will increase about 4bps  
 
-1. for 1000 USD/IDR increase in foreign exchange rate, the LCB yield will increase about 43bps (on average) 
+1. for 1000 increase in USD/IDR exchange rate, the LCB yield will increase about 43bps  
 
-1. for 10 points increase in VIX, the LCB yield will increase about 1bps (on average) 
+1. for 10 increase in VIX, the LCB yield will increase about 1bps  
 
-1. for 1% increase in policy rate, the LCB yield will decrease about 8bps (on average) 
+1. for 1% increase in policy rate, the LCB yield will decrease about 8bps  
 
-1. for IDR100 trillion increase in foreign ownership, the LCB yield will decrease about 2bps (on average)  
+1. for IDR100 trillion increase in foreign ownership, the LCB yield will decrease about 2bps  
 
-1. for each day in auction period, the LCB yield will decrease about 0.1bps compared to non-auction day (on average).  
+1. for each day in auction period, the LCB yield will decrease about 0.1bps compared to non-auction day.  
 
 
-## Model Performance
+## Performance of the Model
 
 ### Residual Check
 
@@ -950,7 +960,7 @@ myfit %>%
     
 ```
 
-From the plot, the DRM seems to nicely capture the LCB yield's dynamics (trend and volatility) quite well. The gap between prediction and real yield is fair enough, and the real yield is still mostly covered inside the 80% prediction interval band. Another thing to notice here is that the prediction interval looks quite wide. This is because we use information from quite short range time series (5 years long) and at the same time our forecast horizon is quite long (7 months). 
+From the plot, the DRM seems to nicely capture the LCB yield's dynamics (trend and volatility) quite well. The gap between prediction and real yield is moderate and the real yield still mostly covered inside the 80% prediction interval band.
 
 ```{r foreror}
 accuracy <- myfit %>%
@@ -967,22 +977,12 @@ accuracy %>% kable(caption = "Forecast Error of the Model") %>% kable_styling(bo
 
 From table \@ref(tab:foreror), the DRM seems to have very low prediction error indicated by small score of RMSE and MASE that are 0.3581206 and 2.54829 consecutively.  
   
-
-  
 \newpage
-
-# Limitation
-
-There are several limitation from this study. First, the range of most time series used in this study are quite short, i.e. 5 years and even shorter for the variable policy rate that only cover 4-years long data. Second, the study only include several predictors considered as major factors based on prior studies and that can be conveniently accessed from either Bloomberg platform or official website of data owner. Other data that are not publicly shared or need formal and rigid bureaucracy are not included considering time limitation of this study. Hence, future scope of study can include other variables assumed to have correlation with the LCB yield for example current account deficit, debt service ratio, as well as market liquidity during auction period. In addition, future study can also conduct further analysis on primary dealer's industry type, for example by using mixed-effect model, to see if trading behavior of any particular industry has interesting effect on the yield.
-
-
 \newpage  
   
   
   
 # Appendix
-
-## Yield Movement during Auction and Non-Auction Days  
 
 The yield movement in auction and non auction days from 2015-2021 are shown in the visualization below:
 
@@ -1042,7 +1042,6 @@ yield_move(yield_ts, 2021)
 
 ```
 
-
 ```{r yieldbox, fig.cap="10-year LCB Yield's Movement during Auction Days from 2015-2021"}
 yield_box <- function(data, year){
   title <- str_glue("10-year LCB Yield's Movement in ", as.character(year))
@@ -1059,8 +1058,6 @@ ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
 
 
 ```
-
-
 
 ```{r, fig.align='center', out.width= "70%"}
 yield_box(yield_ts, 2015)
@@ -1089,6 +1086,8 @@ yield_box(yield_ts, 2020)
 ```{r, fig.align='center', out.width= "70%"}
 yield_box(yield_ts, 2021)
 ```
+
+
 
 The boxplot of yield movement for each year (2015-2021) can be seen in the following plots:
 
@@ -1172,14 +1171,6 @@ ggplot(aes(y= domestic_10y, group = auction_day, color = factor(auction_day)))+
 
 ```
 
-## Yield's Difference in Auction and Non-Auction Days
-
-Table of yield's difference between first and last day in auction and non-auction period is shown in table \@ref(tab:ydiftab).  
-
-```{r ydiftab,}
-yielddif_auction %>% knitr::kable(caption = "Yield's Difference between Auction and Non-Auction Days") %>% kable_styling(latex_options = "HOLD_position", bootstrap_options = "striped", stripe_color = "grey")
-```
-
 
 The boxplot of yield difference between first day and last day in auction days as well as non-auction Days for each year:
 
@@ -1209,8 +1200,6 @@ yielddif_auction %>% mutate(auction_day = factor(auction_day), month = month(dat
 
 
 ```
-
-
 
 ```{r yielddifyear, fig.cap = "Yield Difference between First & Last Day in Auction and Non-Auction Days"}
 # by year

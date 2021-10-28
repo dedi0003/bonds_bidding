@@ -1,0 +1,35 @@
+---
+title: "Analysis on Determining Factors for 10-year Local Currency Sovereign Bonds Yield with Dynamic Regression Model: Indonesia Case"
+author:
+- familyname: Editya
+  othernames: Dea Avega
+  address: Monash Business School
+  qualifications: Graduate Student
+- familyname: Cook
+  othernames: Dianne
+  address: Monash Business School
+  qualifications: Professor
+department: Department of\newline Econometrics &\newline Business Statistics
+organization: Monash Business School
+bibliography: baca.bib
+biblio-style: authoryear-comp
+linestretch: 1.5
+output:
+  MonashEBSTemplates::report:
+    fig_caption: yes
+    fig_height: 5
+    fig_width: 8
+    includes:
+      in_header: preamble.tex
+    keep_tex: yes
+    number_sections: yes
+    citation_package: biblatex
+    toc: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache=TRUE, messages=FALSE, warning=FALSE)
+# Make sure you have the latest versions of rmarkdown and bookdown installed
+library(ggplot2)
+```
+

@@ -688,3 +688,484 @@ cek %>%
   mutate(
     difference = price_to - price_from
   )
+
+
+#### lagged plot
+
+
+### scaled with lag 1
+# yieldts_scalelag <- yieldts_scale %>% 
+#   mutate(domestic_10y = lag(domestic_10y))
+#   
+# yield_lag <- yieldts_scale %>% 
+#   select(date, domestic_10y) %>% 
+#   slice(1:nrow(yieldts_scale)-1)
+# 
+# yieldts_scalelag <- cbind(yield_lag, yieldts_scalelag)
+# gatherscale %>% 
+#   ggplot(aes(x = date, y = lag(value)))+
+#   geom_line(aes(color = variable))+
+#   facet_wrap(~ year(date), scale = "free")+
+#   ggtitle("Timeseries of Response and Predictor Variables")+
+#   theme(legend.position = "bottom")
+# ggplotly()
+
+yieldts_scale %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = domestic_10y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  facet_wrap(~ year(date), scale = "free")+
+  ggtitle("Timeseries of Lagged-10y LCB Yield and 10y LCB Yield")
+
+## lagged domestic 10y vs FX
+fxlag1 <- yieldts_scale %>% 
+  filter(year(date) == 2015) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = exchange_mid), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2015")
+
+fxlag2 <- yieldts_scale %>% 
+  filter(year(date) == 2016) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = exchange_mid), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2016")
+
+fxlag3 <- yieldts_scale %>% 
+  filter(year(date) == 2017) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = exchange_mid), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2017")
+
+fxlag4 <- yieldts_scale %>% 
+  filter(year(date) == 2018) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = exchange_mid), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2018")
+
+fxlag5 <- yieldts_scale %>% 
+  filter(year(date) == 2019) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = exchange_mid), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2019")
+
+fxlag6 <- yieldts_scale %>% 
+  filter(year(date) == 2020) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = exchange_mid), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2020")
+
+fxlag7 <- yieldts_scale %>% 
+  filter(year(date) == 2021) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = exchange_mid), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2021")
+
+(fxlag1+fxlag2+fxlag3 + fxlag4+fxlag5 + fxlag6+ fxlag7) + plot_annotation(title = "Timeseries Lagged-LCB Yield and Exchange Rate")
+
+
+## lagged domestic 10y vs ust
+ustlag1 <- yieldts_scale %>% 
+  filter(year(date) == 2015) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = ust_10y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2015")
+
+ustlag2 <- yieldts_scale %>% 
+  filter(year(date) == 2016) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = ust_10y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2016")
+
+ustlag3 <- yieldts_scale %>% 
+  filter(year(date) == 2017) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = ust_10y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2017")
+
+ustlag4 <- yieldts_scale %>% 
+  filter(year(date) == 2018) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = ust_10y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2018")
+
+ustlag5 <- yieldts_scale %>% 
+  filter(year(date) == 2019) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = ust_10y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2019")
+
+ustlag6 <- yieldts_scale %>% 
+  filter(year(date) == 2020) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = ust_10y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2020")
+
+ustlag7 <- yieldts_scale %>% 
+  filter(year(date) == 2021) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = ust_10y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2021")
+
+(ustlag1+ustlag2+ustlag3 + ustlag4+ustlag5 + ustlag6+ ustlag7) + plot_annotation(title = "Timeseries Lagged-LCB Yield and 10y-UST")
+
+
+## lagged domestic 10y vs cds
+cdslag1 <- yieldts_scale %>% 
+  filter(year(date) == 2015) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = cds_5y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2015")
+
+cdslag2 <- yieldts_scale %>% 
+  filter(year(date) == 2016) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = cds_5y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2016")
+
+cdslag3 <- yieldts_scale %>% 
+  filter(year(date) == 2017) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = cds_5y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2017")
+
+cdslag4 <- yieldts_scale %>% 
+  filter(year(date) == 2018) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = cds_5y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2018")
+
+cdslag5 <- yieldts_scale %>% 
+  filter(year(date) == 2019) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = cds_5y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2019")
+
+cdslag6 <- yieldts_scale %>% 
+  filter(year(date) == 2020) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = cds_5y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2020")
+
+cdslag7 <- yieldts_scale %>% 
+  filter(year(date) == 2021) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = cds_5y), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2021")
+
+(cdslag1+cdslag2+cdslag3 + cdslag4+cdslag5 + cdslag6+ cdslag7) + plot_annotation(title = "Timeseries Lagged-LCB Yield and 5y-CDS")
+
+## lagged domestic 10y vs VIX
+vixlag1 <- yieldts_scale %>% 
+  filter(year(date) == 2015) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = vix), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2015")
+
+vixlag2 <- yieldts_scale %>% 
+  filter(year(date) == 2016) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = vix), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2016")
+
+vixlag3 <- yieldts_scale %>% 
+  filter(year(date) == 2017) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = vix), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2017")
+
+vixlag4 <- yieldts_scale %>% 
+  filter(year(date) == 2018) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = vix), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2018")
+
+vixlag5 <- yieldts_scale %>% 
+  filter(year(date) == 2019) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = vix), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2019")
+
+vixlag6 <- yieldts_scale %>% 
+  filter(year(date) == 2020) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = vix), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2020")
+
+vixlag7 <- yieldts_scale %>% 
+  filter(year(date) == 2021) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = vix), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2021")
+
+(vixlag1+vixlag2+vixlag3 + vixlag4+vixlag5 + vixlag6+ vixlag7) + plot_annotation(title = "Timeseries Lagged-LCB Yield and VIX")
+
+## lagged domestic 10y vs Foreign
+forlag1 <- yieldts_scale %>% 
+  filter(year(date) == 2015) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = for_pct), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2015")
+
+forlag2 <- yieldts_scale %>% 
+  filter(year(date) == 2016) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = for_pct), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2016")
+
+forlag3 <- yieldts_scale %>% 
+  filter(year(date) == 2017) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = for_pct), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2017")
+
+forlag4 <- yieldts_scale %>% 
+  filter(year(date) == 2018) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = for_pct), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2018")
+
+forlag5 <- yieldts_scale %>% 
+  filter(year(date) == 2019) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = for_pct), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2019")
+
+forlag6 <- yieldts_scale %>% 
+  filter(year(date) == 2020) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = for_pct), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2020")
+
+forlag7 <- yieldts_scale %>% 
+  filter(year(date) == 2021) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = for_pct), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2021")
+
+(forlag1+forlag2+forlag3 + forlag4+forlag5 + forlag6+ forlag7) + plot_annotation(title = "Timeseries Lagged-LCB Yield and Foreign Ownership")
+
+## lagged domestic 10y vs Policy Rate
+ratelag1 <- yieldts_scale %>% 
+  filter(year(date) == 2015) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = rate), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2015")
+
+ratelag2 <- yieldts_scale %>% 
+  filter(year(date) == 2016) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = rate), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2016")
+
+ratelag3 <- yieldts_scale %>% 
+  filter(year(date) == 2017) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = rate), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2017")
+
+ratelag4 <- yieldts_scale %>% 
+  filter(year(date) == 2018) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = rate), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2018")
+
+ratelag5 <- yieldts_scale %>% 
+  filter(year(date) == 2019) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = rate), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2019")
+
+ratelag6 <- yieldts_scale %>% 
+  filter(year(date) == 2020) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = rate), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2020")
+
+ratelag7 <- yieldts_scale %>% 
+  filter(year(date) == 2021) %>% 
+  ggplot(aes(x = date)) +
+  geom_line(aes(y = rate), alpha = 0.8)+
+  geom_line(aes(y = lag(domestic_10y, 1)), color = "red", alpha = 0.5)+
+  ggtitle("2021")
+
+(ratelag1+ratelag2+ratelag3 + ratelag4+ratelag5 + ratelag6+ ratelag7) + plot_annotation(title = "Timeseries Lagged-LCB Yield and Policy Rate")
+
+
+### Impute full date for fable purpose
+yield_fc <- yield_ts %>% as_tibble()
+
+date_all <-  tibble(date = seq(mdy('1/2/2015'), mdy('8/5/2021'), by = "day"))
+yield_fc <- left_join(date_all, yield_fc, "date")
+yield_fc <- fill_(yield_fc, names(yield_fc)) ## full date no gaps
+
+saveRDS(yield_fc, file = "yield_fc.rds")
+
+
+
+#cointegration = long run relationship
+
+# plot both interest series
+
+# spread_ust <- yield_factors$domestic_10y-yield_factors$ust_10y
+# yield_factors %>% 
+#   ggplot(aes(x = date))+
+#   geom_area(aes(y = domestic_10y), alpha = 0.4, fill = "steelblue")+
+#   geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.5)+
+#   geom_area(aes(y = ust_10y), alpha = 0.2, fill = "darkred")+
+#   geom_line(aes(y = ust_10y), color = "red", alpha = 0.5)+
+#   geom_line(aes(y= spread_ust), alpha = 0.6)+
+#   geom_hline(yintercept = mean(spread_ust), linetype = "dashed")
+
+yield_scale <- yield_factors %>% 
+  mutate(for_pct = foreign/tot_ownership) %>% 
+  select_if(is.numeric) %>% 
+  scale() %>% as_tibble()
+
+yield_scale <- cbind(yield_factors$date, yield_scale) %>% rename(date = `yield_factors$date`)
+```
+
+
+```{r fig.cap = "Visual Test of Cointegration between 10y-LCB Yield and 10y-UST Yield"}
+spread_ust <- yield_scale$domestic_10y-yield_scale$ust_10y
+
+yield_scale %>% 
+  ggplot(aes(x = date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = ust_10y), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = ust_10y), color = "red", alpha = 0.1)+
+  geom_line(aes(y= spread_ust), alpha = 0.6)+
+  geom_hline(yintercept = mean(spread_ust), linetype = "dashed")
+
+#the spread between cds and yields looks whitenoise
+#The plot suggests that 10y domestic and 10y UST are cointegrated: 
+# both seem to have the same long-run behavior. They share a common stochastic trend. The spread, which is obtained by taking the difference between 2 variables, seems to be stationary. In fact, the expectations theory of the term structure suggests the cointegrating coefficient (theta) to be 1. This is consistent with the visual result.
+
+
+```
+
+```{r fig.cap = "Visual Test of Cointegration between 10y-LCB Yield and Exchange Rate"}
+yield_scale <- yield_scale %>% 
+  mutate(dif_fx = domestic_10y-exchange_mid)
+
+yield_scale %>% 
+  ggplot(aes(x = date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = exchange_mid), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = exchange_mid), color = "red", alpha = 0.1)+
+  geom_line(aes(y= dif_fx), alpha = 0.6)+
+  geom_hline(yintercept = mean(yield_scale$dif_fx), linetype = "dashed")
+
+
+```
+
+```{r fig.cap = "Visual Test of Cointegration between 10y-LCB Yield and Policy Rate"}
+spread_rate <- yield_scale$domestic_10y-yield_scale$rate
+
+yield_scale %>% 
+  ggplot(aes(x = yield_factors$date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = rate), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = rate), color = "red", alpha = 0.1)+
+  geom_line(aes(y= spread_rate), alpha = 0.6)+
+  geom_hline(yintercept = mean(spread_rate), linetype = "dashed")
+
+#diff with policy rate looks stationer
+
+
+```
+
+```{r fig.cap = "Visual Test of Cointegration between 10y-LCB Yield and VIX"}
+spread_vix <- yield_scale$domestic_10y-yield_scale$vix
+
+yield_scale %>% 
+  ggplot(aes(x = yield_factors$date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = vix), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = vix), color = "red", alpha = 0.1)+
+  geom_line(aes(y= spread_vix), alpha = 0.6)+
+  geom_hline(yintercept = mean(spread_vix), linetype = "dashed")
+
+# diff with vix looks stationer
+
+```
+
+```{r fig.cap="Difference of 10y-LCB yield and Percentage of Foreign Ownership"}
+#the diff with foreign_pct is stationer...
+
+tab <- cbind(yield_scale$domestic_10y, yield_scale$for_pct) %>% as.data.frame()
+tab <- tab %>% 
+  mutate(dif_for = V1-V2)
+
+yield_scale %>% 
+  ggplot(aes(x = date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = for_pct), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = for_pct), color = "red", alpha = 0.1)+
+  geom_line(aes(y= tab$dif_for), alpha = 0.6)+
+  geom_hline(yintercept = mean(tab$dif_for), linetype = "dashed")
+
+```
+
+
+```{r fig.cap="Difference of 10y-LCB yield and 5y-CDS"}
+spread_cds <- yield_scale$domestic_10y-yield_scale$cds_5y
+yield_scale %>% 
+  ggplot(aes(x = date))+
+  geom_area(aes(y = domestic_10y), alpha = 0.1, fill = "steelblue")+
+  geom_line(aes(y = domestic_10y), color = "blue", alpha = 0.1)+
+  geom_area(aes(y = cds_5y), alpha = 0.1, fill = "darkred")+
+  geom_line(aes(y = cds_5y), color = "red", alpha = 0.1)+
+  geom_line(aes(y= spread_cds), alpha = 0.6)+
+  geom_hline(yintercept = mean(spread_cds), linetype = "dashed")+ggtitle("Diff with CDS")
+
+#the diff between cds and yields looks stationer
+```
+
+
+

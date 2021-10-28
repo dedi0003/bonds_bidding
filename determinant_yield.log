@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.9.18)  12 OCT 2021 09:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.10.21)  28 OCT 2021 13:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **determinant_yield.tex
 (./determinant_yield.tex
 LaTeX2e <2021-06-01> patch level 1
-L3 programming layer <2021-08-27> (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-
+L3 programming layer <2021-10-18> (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-
 dist/tex/latex/base/article.cls
 Document Class: article 2021/02/12 v1.4n Standard LaTeX document class
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
@@ -460,33 +460,48 @@ Package graphics Info: Driver file: pdftex.def on input line 107.
 \Gin@req@height=\dimen180
 \Gin@req@width=\dimen181
 )
+(c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/footmisc/footmisc.s
+ty
+Package: footmisc 2011/06/06 v5.5b a miscellany of footnote facilities
+\FN@temptoken=\toks28
+\footnotemargin=\dimen182
+\c@pp@next@reset=\count296
+Package footmisc Info: Declaring symbol style bringhurst on input line 855.
+Package footmisc Info: Declaring symbol style chicago on input line 863.
+Package footmisc Info: Declaring symbol style wiley on input line 872.
+Package footmisc Info: Declaring symbol style lamport-robust on input line 883.
+
+Package footmisc Info: Declaring symbol style lamport* on input line 903.
+Package footmisc Info: Declaring symbol style lamport*-robust on input line 924
+.
+)
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.s
 ty
 Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \multirow@colwidth=\skip63
-\multirow@cntb=\count296
+\multirow@cntb=\count297
 \multirow@dima=\skip64
-\bigstrutjot=\dimen182
+\bigstrutjot=\dimen183
 )
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.sty
-\wrapoverhang=\dimen183
-\WF@size=\dimen184
-\c@WF@wrappedlines=\count297
+\wrapoverhang=\dimen184
+\WF@size=\dimen185
+\c@WF@wrappedlines=\count298
 \WF@box=\box60
-\WF@everypar=\toks28
+\WF@everypar=\toks29
 Package: wrapfig 2003/01/31  v 3.6
 ) (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count298
-\float@exts=\toks29
+\c@float@type=\count299
+\float@exts=\toks30
 \float@box=\box61
-\@float@everytoks=\toks30
+\@float@everytoks=\toks31
 \@floatcapt=\box62
 )
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.s
 ty
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
-\everycr=\toks31
+\everycr=\toks32
 \minrowclearance=\skip65
 )
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape
@@ -504,27 +519,27 @@ Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
 ty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box63
-\sift@deathcycles=\count299
-\@vwid@loff=\dimen185
-\@vwid@roff=\dimen186
+\sift@deathcycles=\count300
+\@vwid@loff=\dimen186
+\@vwid@roff=\dimen187
 )
-\c@taburow=\count300
-\tabu@nbcols=\count301
-\tabu@cnt=\count302
-\tabu@Xcol=\count303
-\tabu@alloc=\count304
-\tabu@nested=\count305
-\tabu@target=\dimen187
-\tabu@spreadtarget=\dimen188
-\tabu@naturalX=\dimen189
-\tabucolX=\dimen190
-\tabu@Xsum=\dimen191
-\extrarowdepth=\dimen192
-\abovetabulinesep=\dimen193
-\belowtabulinesep=\dimen194
-\tabustrutrule=\dimen195
-\tabu@thebody=\toks32
-\tabu@footnotes=\toks33
+\c@taburow=\count301
+\tabu@nbcols=\count302
+\tabu@cnt=\count303
+\tabu@Xcol=\count304
+\tabu@alloc=\count305
+\tabu@nested=\count306
+\tabu@target=\dimen188
+\tabu@spreadtarget=\dimen189
+\tabu@naturalX=\dimen190
+\tabucolX=\dimen191
+\tabu@Xsum=\dimen192
+\extrarowdepth=\dimen193
+\abovetabulinesep=\dimen194
+\belowtabulinesep=\dimen195
+\tabustrutrule=\dimen196
+\tabu@thebody=\toks33
+\tabu@footnotes=\toks34
 \tabu@box=\box64
 \tabu@arstrutbox=\box65
 \tabu@hleads=\box66
@@ -552,58 +567,58 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 \UL@box=\box69
 \UL@hyphenbox=\box70
 \UL@skip=\skip68
-\UL@hook=\toks34
-\UL@height=\dimen196
-\UL@pe=\count306
-\UL@pixel=\dimen197
+\UL@hook=\toks35
+\UL@height=\dimen197
+\UL@pe=\count307
+\UL@pixel=\dimen198
 \ULC@box=\box71
 Package: ulem 2019/11/18
-\ULdepth=\dimen198
+\ULdepth=\dimen199
 )
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/makecell/makecell.s
 ty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
-\rotheadsize=\dimen199
-\c@nlinenum=\count307
-\TeXr@lab=\toks35
+\rotheadsize=\dimen256
+\c@nlinenum=\count308
+\TeXr@lab=\toks36
 )
 \cslhangindent=\skip69
 \csllabelwidth=\skip70
 
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend
 -pdftex.def
-File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count308
+File: l3backend-pdftex.def 2021-10-18 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count309
 \l__pdf_internal_box=\box72
 ) (./determinant_yield.aux)
 \openout1 = `determinant_yield.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Info: Redefining \microtypecontext on input line 114.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Info: Redefining \microtypecontext on input line 115.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 114.
+LaTeX Info: Redefining \showhyphens on input line 115.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -624,7 +639,7 @@ f-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 114.
+Package hyperref Info: Link coloring OFF on input line 115.
 
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.st
 y
@@ -638,11 +653,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ttitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count309
+\c@section@level=\count310
 )
-LaTeX Info: Redefining \ref on input line 114.
-LaTeX Info: Redefining \pageref on input line 114.
-LaTeX Info: Redefining \nameref on input line 114.
+LaTeX Info: Redefining \ref on input line 115.
+LaTeX Info: Redefining \pageref on input line 115.
+LaTeX Info: Redefining \nameref on input line 115.
 (./determinant_yield.out) (./determinant_yield.out)
 \@outlinefile=\write3
 \openout3 = `determinant_yield.out'.
@@ -682,32 +697,32 @@ LaTeX Info: Redefining \nameref on input line 114.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-16.
+17.
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-16.
+17.
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-116.
+117.
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-116.
+117.
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 116.
+(Font)              <12> on input line 117.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 116.
+(Font)              <8> on input line 117.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 116.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 116
+(Font)              <6> on input line 117.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 117
 .
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -716,7 +731,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 g
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 116
+LaTeX Font Info:    Trying to load font information for U+msb on input line 117
 .
 (c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -731,569 +746,947 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 4.
-)
-\tf@toc=\write4
-\openout4 = `determinant_yield.toc'.
-
 [1
 
 {c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex
-.map}] [2] [3]
-<determinant_yield_files/figure-latex/unnamed-chunk-2-1.pdf, id=133, 469.755pt 
-x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (
-type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-2-1
-.pdf  used on input line 172.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<picture/lcb_ust.png, id=134, 1257.69875pt x 779.91376pt>
-File: picture/lcb_ust.png Graphic file (type png)
-<use picture/lcb_ust.png>
-Package pdftex.def Info: picture/lcb_ust.png  used on input line 174.
-(pdftex.def)             Requested size: 234.87758pt x 145.65034pt.
-[4 <./determinant_yield_files/figure-latex/unnamed-chunk-2-1.pdf>]
-<picture/lcb_cds.png, id=150, 1257.69875pt x 779.91376pt>
-File: picture/lcb_cds.png Graphic file (type png)
-<use picture/lcb_cds.png>
-Package pdftex.def Info: picture/lcb_cds.png  used on input line 176.
-(pdftex.def)             Requested size: 234.87758pt x 145.65034pt.
-<picture/lcb_fx.png, id=151, 1257.69875pt x 779.91376pt>
-File: picture/lcb_fx.png Graphic file (type png)
-<use picture/lcb_fx.png>
-Package pdftex.def Info: picture/lcb_fx.png  used on input line 178.
-(pdftex.def)             Requested size: 234.87758pt x 145.65034pt.
-<picture/lcb_vix.png, id=152, 1257.69875pt x 779.91376pt>
-File: picture/lcb_vix.png Graphic file (type png)
-<use picture/lcb_vix.png>
-Package pdftex.def Info: picture/lcb_vix.png  used on input line 180.
-(pdftex.def)             Requested size: 234.87758pt x 145.65034pt.
-<picture/lcb_foreign.png, id=153, 1257.69875pt x 779.91376pt>
-File: picture/lcb_foreign.png Graphic file (type png)
-<use picture/lcb_foreign.png>
-Package pdftex.def Info: picture/lcb_foreign.png  used on input line 182.
-(pdftex.def)             Requested size: 234.87758pt x 145.65034pt.
-[5 <./picture/lcb_ust.png> <./picture/lcb_cds.png> <./picture/lcb_fx.png> <./pi
-cture/lcb_vix.png>]
-<picture/lcb_rate.png, id=162, 1257.69875pt x 779.91376pt>
-File: picture/lcb_rate.png Graphic file (type png)
-<use picture/lcb_rate.png>
-Package pdftex.def Info: picture/lcb_rate.png  used on input line 184.
-(pdftex.def)             Requested size: 234.87758pt x 145.65034pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-10-1.pdf, id=163, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-10-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-10-
-1.pdf  used on input line 186.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-10-2.pdf, id=164, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-10-2.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-10-2.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-10-
-2.pdf  used on input line 186.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-10-3.pdf, id=165, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-10-3.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-10-3.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-10-
-3.pdf  used on input line 186.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-10-4.pdf, id=166, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-10-4.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-10-4.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-10-
-4.pdf  used on input line 186.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-10-5.pdf, id=167, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-10-5.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-10-5.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-10-
-5.pdf  used on input line 186.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-10-6.pdf, id=168, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-10-6.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-10-6.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-10-
-6.pdf  used on input line 186.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-10-7.pdf, id=169, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-10-7.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-10-7.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-10-
-7.pdf  used on input line 186.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+.map}])
+\tf@toc=\write4
+\openout4 = `determinant_yield.toc'.
 
-Underfull \hbox (badness 10000) in paragraph at lines 186--187
-[][]
- []
+[2] [3] [4]
+<determinant_yield_files/figure-latex/lcb-1.pdf, id=175, 469.755pt x 325.215pt>
 
+File: determinant_yield_files/figure-latex/lcb-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/lcb-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcb-1.pdf  used o
+n input line 176.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/lcbseason-1.pdf, id=177, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/lcbseason-1.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/lcbseason-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbseason-1.pdf  
+used on input line 187.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[5pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.193 
+       <./determinant_yield_files/figure-latex/lcb-1.pdf>]
+<determinant_yield_files/figure-latex/lcbprob-1.pdf, id=192, 867.24pt x 578.16p
+t>
+File: determinant_yield_files/figure-latex/lcbprob-1.pdf Graphic file (type pdf
+)
+<use determinant_yield_files/figure-latex/lcbprob-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbprob-1.pdf  us
+ed on input line 198.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+[6pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.215 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.215 
+       <./determinant_yield_files/figure-latex/lcbseason-1.pdf> <./determinant_
+yield_files/figure-latex/lcbprob-1.pdf>]
+<determinant_yield_files/figure-latex/usts-1.pdf, id=210, 469.755pt x 325.215pt
+>
+File: determinant_yield_files/figure-latex/usts-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/usts-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/usts-1.pdf  used 
+on input line 218.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/lcbust-1.pdf, id=212, 867.24pt x 578.16pt
+>
+File: determinant_yield_files/figure-latex/lcbust-1.pdf Graphic file (type pdf)
 
-Underfull \hbox (badness 10000) in paragraph at lines 186--187
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 186--187
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 186--187
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 186--187
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 186--187
-[]
- []
-
-[6 <./picture/lcb_foreign.png> <./picture/lcb_rate.png> <./determinant_yield_fi
-les/figure-latex/unnamed-chunk-10-1.pdf>] [7 <./determinant_yield_files/figure-
-latex/unnamed-chunk-10-2.pdf>] [8 <./determinant_yield_files/figure-latex/unnam
-ed-chunk-10-3.pdf>] [9 <./determinant_yield_files/figure-latex/unnamed-chunk-10
--4.pdf>] [10 <./determinant_yield_files/figure-latex/unnamed-chunk-10-5.pdf>] [
-11 <./determinant_yield_files/figure-latex/unnamed-chunk-10-6.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-11-1.pdf, id=252, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-11-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-11-
-1.pdf  used on input line 199.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[12 <./determinant_yield_files/figure-latex/unnamed-chunk-10-7.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-12-1.pdf, id=268, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-12-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-12-
-1.pdf  used on input line 201.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[13 <./determinant_yield_files/figure-latex/unnamed-chunk-11-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-13-1.pdf, id=279, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-13-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-13-
-1.pdf  used on input line 203.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[14 <./determinant_yield_files/figure-latex/unnamed-chunk-12-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-14-1.pdf, id=293, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-14-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-14-
-1.pdf  used on input line 210.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[15 <./determinant_yield_files/figure-latex/unnamed-chunk-13-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-15-1.pdf, id=309, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-15-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-15-
-1.pdf  used on input line 212.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[16 <./determinant_yield_files/figure-latex/unnamed-chunk-14-1.pdf>]
-<determinant_yield_files/figure-latex/ownprop-1.pdf, id=320, 469.755pt x 325.21
+<use determinant_yield_files/figure-latex/lcbust-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbust-1.pdf  use
+d on input line 229.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+[7pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.235 
+       <./determinant_yield_files/figure-latex/usts-1.pdf>]
+<determinant_yield_files/figure-latex/ustseason-1.pdf, id=227, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/ustseason-1.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/ustseason-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/ustseason-1.pdf  
+used on input line 240.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/ustprob-1.pdf, id=229, 867.24pt x 578.16p
+t>
+File: determinant_yield_files/figure-latex/ustprob-1.pdf Graphic file (type pdf
+)
+<use determinant_yield_files/figure-latex/ustprob-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/ustprob-1.pdf  us
+ed on input line 251.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+[8pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.257 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+6}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.257 
+       <./determinant_yield_files/figure-latex/lcbust-1.pdf> <./determinant_yie
+ld_files/figure-latex/ustseason-1.pdf>]
+<determinant_yield_files/figure-latex/lcbustcor-1.pdf, id=247, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/lcbustcor-1.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/lcbustcor-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbustcor-1.pdf  
+used on input line 262.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/forts-1.pdf, id=249, 469.755pt x 325.215p
+t>
+File: determinant_yield_files/figure-latex/forts-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/forts-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/forts-1.pdf  used
+ on input line 276.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[9pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.282 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+8}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.282 
+       <./determinant_yield_files/figure-latex/ustprob-1.pdf> <./determinant_yi
+eld_files/figure-latex/lcbustcor-1.pdf>]
+<determinant_yield_files/figure-latex/forseason-1.pdf, id=272, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/forseason-1.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/forseason-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/forseason-1.pdf  
+used on input line 287.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/forprob-1.pdf, id=274, 867.24pt x 578.16p
+t>
+File: determinant_yield_files/figure-latex/forprob-1.pdf Graphic file (type pdf
+)
+<use determinant_yield_files/figure-latex/forprob-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/forprob-1.pdf  us
+ed on input line 298.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+[10pdfTeX warning (ext4): destination with the same identifier (name{figure.9})
+ has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.304 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+10}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.304 
+       <./determinant_yield_files/figure-latex/forts-1.pdf> <./determinant_yiel
+d_files/figure-latex/forseason-1.pdf>]
+<determinant_yield_files/figure-latex/ownprop-1.pdf, id=292, 469.755pt x 325.21
 5pt>
 File: determinant_yield_files/figure-latex/ownprop-1.pdf Graphic file (type pdf
 )
 <use determinant_yield_files/figure-latex/ownprop-1.pdf>
 Package pdftex.def Info: determinant_yield_files/figure-latex/ownprop-1.pdf  us
-ed on input line 218.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-17-1.pdf, id=321, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-17-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-17-
-1.pdf  used on input line 222.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[17 <./determinant_yield_files/figure-latex/unnamed-chunk-15-1.pdf>] [18pdfTeX 
-warning (ext4): destination with the same identifier (name{figure.1}) has been 
-already used, duplicate ignored
+ed on input line 309.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[11pdfTeX warning (ext4): destination with the same identifier (name{figure.11}
+) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.225 ...default-risk-5-year-credit-default-swap}}
-                                                   <./determinant_yield_files/f
-igure-latex/ownprop-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-18-1.pdf, id=348, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-18-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-18-
-1.pdf  used on input line 232.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[19 <./determinant_yield_files/figure-latex/unnamed-chunk-17-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-19-1.pdf, id=364, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-19-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-19-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-19-
-1.pdf  used on input line 234.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[20 <./determinant_yield_files/figure-latex/unnamed-chunk-18-1.pdf>]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 2
-43.
-(c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+l.317 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+12}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.317 
+       <./determinant_yield_files/figure-latex/forprob-1.pdf> <./determinant_yi
+eld_files/figure-latex/ownprop-1.pdf>]
+<determinant_yield_files/figure-latex/lcbfor-1.pdf, id=310, 867.24pt x 578.16pt
+>
+File: determinant_yield_files/figure-latex/lcbfor-1.pdf Graphic file (type pdf)
+
+<use determinant_yield_files/figure-latex/lcbfor-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbfor-1.pdf  use
+d on input line 322.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+<determinant_yield_files/figure-latex/corfor-1.pdf, id=312, 469.755pt x 325.215
+pt>
+File: determinant_yield_files/figure-latex/corfor-1.pdf Graphic file (type pdf)
+
+<use determinant_yield_files/figure-latex/corfor-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/corfor-1.pdf  use
+d on input line 333.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[12pdfTeX warning (ext4): destination with the same identifier (name{figure.13}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.344 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+14}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.344 
+       <./determinant_yield_files/figure-latex/lcbfor-1.pdf> <./determinant_yie
+ld_files/figure-latex/corfor-1.pdf>]
+<determinant_yield_files/figure-latex/cdsts-1.pdf, id=335, 469.755pt x 325.215p
+t>
+File: determinant_yield_files/figure-latex/cdsts-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/cdsts-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/cdsts-1.pdf  used
+ on input line 349.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/cdsseason-1.pdf, id=337, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/cdsseason-1.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/cdsseason-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/cdsseason-1.pdf  
+used on input line 360.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[13pdfTeX warning (ext4): destination with the same identifier (name{figure.15}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.366 
+       <./determinant_yield_files/figure-latex/cdsts-1.pdf>]
+<determinant_yield_files/figure-latex/cdsprob-1.pdf, id=351, 867.24pt x 578.16p
+t>
+File: determinant_yield_files/figure-latex/cdsprob-1.pdf Graphic file (type pdf
 )
-Overfull \hbox (286.24278pt too wide) in paragraph at lines 252--252
-[]\T1/lmtt/m/n/10 ## Warning in gran_warn(.data, gran1, gran2, hierarchy_tbl = 
-hierarchy_tbl, : Some combinations of granularities have less than 30 observati
-ons.[] 
- []
+<use determinant_yield_files/figure-latex/cdsprob-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/cdsprob-1.pdf  us
+ed on input line 371.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+<determinant_yield_files/figure-latex/lcbcds-1.pdf, id=353, 867.24pt x 578.16pt
+>
+File: determinant_yield_files/figure-latex/lcbcds-1.pdf Graphic file (type pdf)
+
+<use determinant_yield_files/figure-latex/lcbcds-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbcds-1.pdf  use
+d on input line 382.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+[14pdfTeX warning (ext4): destination with the same identifier (name{figure.16}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.388 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+17}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.388 
+       <./determinant_yield_files/figure-latex/cdsseason-1.pdf> <./determinant_
+yield_files/figure-latex/cdsprob-1.pdf>]
+<determinant_yield_files/figure-latex/corcds-1.pdf, id=371, 469.755pt x 325.215
+pt>
+File: determinant_yield_files/figure-latex/corcds-1.pdf Graphic file (type pdf)
+
+<use determinant_yield_files/figure-latex/corcds-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/corcds-1.pdf  use
+d on input line 393.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[15pdfTeX warning (ext4): destination with the same identifier (name{figure.18}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.407 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+19}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.407 
+       <./determinant_yield_files/figure-latex/lcbcds-1.pdf> <./determinant_yie
+ld_files/figure-latex/corcds-1.pdf>]
+<determinant_yield_files/figure-latex/vixts-1.pdf, id=394, 469.755pt x 325.215p
+t>
+File: determinant_yield_files/figure-latex/vixts-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/vixts-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/vixts-1.pdf  used
+ on input line 414.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/vixseason-1.pdf, id=396, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/vixseason-1.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/vixseason-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/vixseason-1.pdf  
+used on input line 425.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[16pdfTeX warning (ext4): destination with the same identifier (name{figure.20}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.431 
+       <./determinant_yield_files/figure-latex/vixts-1.pdf>]
+<determinant_yield_files/figure-latex/vixprob-1.pdf, id=409, 867.24pt x 578.16p
+t>
+File: determinant_yield_files/figure-latex/vixprob-1.pdf Graphic file (type pdf
+)
+<use determinant_yield_files/figure-latex/vixprob-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/vixprob-1.pdf  us
+ed on input line 436.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+<determinant_yield_files/figure-latex/lcbvix-1.pdf, id=411, 867.24pt x 578.16pt
+>
+File: determinant_yield_files/figure-latex/lcbvix-1.pdf Graphic file (type pdf)
+
+<use determinant_yield_files/figure-latex/lcbvix-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbvix-1.pdf  use
+d on input line 447.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+[17pdfTeX warning (ext4): destination with the same identifier (name{figure.21}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.453 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+22}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.453 
+       <./determinant_yield_files/figure-latex/vixseason-1.pdf> <./determinant_
+yield_files/figure-latex/vixprob-1.pdf>]
+<determinant_yield_files/figure-latex/corvix-1.pdf, id=430, 469.755pt x 325.215
+pt>
+File: determinant_yield_files/figure-latex/corvix-1.pdf Graphic file (type pdf)
+
+<use determinant_yield_files/figure-latex/corvix-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/corvix-1.pdf  use
+d on input line 458.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[18pdfTeX warning (ext4): destination with the same identifier (name{figure.23}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.469 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+24}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.469 
+       <./determinant_yield_files/figure-latex/lcbvix-1.pdf> <./determinant_yie
+ld_files/figure-latex/corvix-1.pdf>]
+<determinant_yield_files/figure-latex/rate-1.pdf, id=454, 469.755pt x 325.215pt
+>
+File: determinant_yield_files/figure-latex/rate-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/rate-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/rate-1.pdf  used 
+on input line 476.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/corrate-1.pdf, id=456, 469.755pt x 325.21
+5pt>
+File: determinant_yield_files/figure-latex/corrate-1.pdf Graphic file (type pdf
+)
+<use determinant_yield_files/figure-latex/corrate-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/corrate-1.pdf  us
+ed on input line 487.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[19pdfTeX warning (ext4): destination with the same identifier (name{figure.25}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.493 
+       <./determinant_yield_files/figure-latex/rate-1.pdf>]
+<determinant_yield_files/figure-latex/lcbrate-1.pdf, id=471, 469.755pt x 325.21
+5pt>
+File: determinant_yield_files/figure-latex/lcbrate-1.pdf Graphic file (type pdf
+)
+<use determinant_yield_files/figure-latex/lcbrate-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbrate-1.pdf  us
+ed on input line 498.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[20pdfTeX warning (ext4): destination with the same identifier (name{figure.26}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.509 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+27}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.509 
+       <./determinant_yield_files/figure-latex/corrate-1.pdf> <./determinant_yi
+eld_files/figure-latex/lcbrate-1.pdf>]
+<determinant_yield_files/figure-latex/fxts-1.pdf, id=495, 469.755pt x 325.215pt
+>
+File: determinant_yield_files/figure-latex/fxts-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/fxts-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/fxts-1.pdf  used 
+on input line 514.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/fxseason-1.pdf, id=497, 469.755pt x 325.2
+15pt>
+File: determinant_yield_files/figure-latex/fxseason-1.pdf Graphic file (type pd
+f)
+<use determinant_yield_files/figure-latex/fxseason-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/fxseason-1.pdf  u
+sed on input line 525.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/fxprob-1.pdf, id=499, 867.24pt x 578.16pt
+>
+File: determinant_yield_files/figure-latex/fxprob-1.pdf Graphic file (type pdf)
+
+<use determinant_yield_files/figure-latex/fxprob-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/fxprob-1.pdf  use
+d on input line 536.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+<determinant_yield_files/figure-latex/lcbfx-1.pdf, id=501, 867.24pt x 578.16pt>
+
+File: determinant_yield_files/figure-latex/lcbfx-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/lcbfx-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/lcbfx-1.pdf  used
+ on input line 547.
+(pdftex.def)             Requested size: 328.82681pt x 219.21786pt.
+<determinant_yield_files/figure-latex/corfx-1.pdf, id=503, 469.755pt x 325.215p
+t>
+File: determinant_yield_files/figure-latex/corfx-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/corfx-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/corfx-1.pdf  used
+ on input line 558.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[21pdfTeX warning (ext4): destination with the same identifier (name{figure.28}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.564 
+       <./determinant_yield_files/figure-latex/fxts-1.pdf>] [22pdfTeX warning (
+ext4): destination with the same identifier (name{figure.29}) has been already 
+used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.564 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+30}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.564 
+       <./determinant_yield_files/figure-latex/fxseason-1.pdf> <./determinant_y
+ield_files/figure-latex/fxprob-1.pdf>] [23pdfTeX warning (ext4): destination wi
+th the same identifier (name{figure.31}) has been already used, duplicate ignor
+ed
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.571 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+32}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.571 
+       <./determinant_yield_files/figure-latex/lcbfx-1.pdf> <./determinant_yiel
+d_files/figure-latex/corfx-1.pdf>]
+<determinant_yield_files/figure-latex/yielddifline-1.pdf, id=550, 469.755pt x 3
+25.215pt>
+File: determinant_yield_files/figure-latex/yielddifline-1.pdf Graphic file (typ
+e pdf)
+<use determinant_yield_files/figure-latex/yielddifline-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/yielddifline-1.pd
+f  used on input line 611.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/yielddifbox-1.pdf, id=553, 469.755pt x 32
+5.215pt>
+File: determinant_yield_files/figure-latex/yielddifbox-1.pdf Graphic file (type
+ pdf)
+<use determinant_yield_files/figure-latex/yielddifbox-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/yielddifbox-1.pdf
+  used on input line 623.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[24pdfTeX warning (ext4): destination with the same identifier (name{table.1}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.630 \newpage
+              ] [25pdfTeX warning (ext4): destination with the same identifier 
+(name{figure.33}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.630 \newpage
+              pdfTeX warning (ext4): destination with the same identifier (name
+{figure.34}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.630 \newpage
+               <./determinant_yield_files/figure-latex/yielddifline-1.pdf> <./d
+eterminant_yield_files/figure-latex/yielddifbox-1.pdf>] [26pdfTeX warning (ext4
+): destination with the same identifier (name{table.2}) has been already used, 
+duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.681 
+      ]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (286.24278pt too wide) in paragraph at lines 263--263
-[]\T1/lmtt/m/n/10 ## Warning in gran_warn(.data, gran1, gran2, hierarchy_tbl = 
-hierarchy_tbl, : Some combinations of granularities have less than 30 observati
-ons.[] 
- []
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[21 <./determinant_yield_files/figure-latex/unnamed-chunk-19-1.pdf>]
-Overfull \hbox (286.24278pt too wide) in paragraph at lines 274--274
-[]\T1/lmtt/m/n/10 ## Warning in gran_warn(.data, gran1, gran2, hierarchy_tbl = 
-hierarchy_tbl, : Some combinations of granularities have less than 30 observati
-ons.[] 
- []
-
-
-Overfull \hbox (286.24278pt too wide) in paragraph at lines 285--285
-[]\T1/lmtt/m/n/10 ## Warning in gran_warn(.data, gran1, gran2, hierarchy_tbl = 
-hierarchy_tbl, : Some combinations of granularities have less than 30 observati
-ons.[] 
- []
-
-
-Overfull \hbox (286.24278pt too wide) in paragraph at lines 296--296
-[]\T1/lmtt/m/n/10 ## Warning in gran_warn(.data, gran1, gran2, hierarchy_tbl = 
-hierarchy_tbl, : Some combinations of granularities have less than 30 observati
-ons.[] 
- []
-
-
-Overfull \hbox (286.24278pt too wide) in paragraph at lines 307--307
-[]\T1/lmtt/m/n/10 ## Warning in gran_warn(.data, gran1, gran2, hierarchy_tbl = 
-hierarchy_tbl, : Some combinations of granularities have less than 30 observati
-ons.[] 
- []
-
-
-Overfull \hbox (286.24278pt too wide) in paragraph at lines 318--318
-[]\T1/lmtt/m/n/10 ## Warning in gran_warn(.data, gran1, gran2, hierarchy_tbl = 
-hierarchy_tbl, : Some combinations of granularities have less than 30 observati
-ons.[] 
- []
-
-<determinant_yield_files/figure-latex/unnamed-chunk-20-1.pdf, id=393, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-20-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-20-
-1.pdf  used on input line 324.
+[27pdfTeX warning (ext4): destination with the same identifier (name{table.3}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.792 
+      ]
+<determinant_yield_files/figure-latex/viscoin-1.pdf, id=604, 469.755pt x 325.21
+5pt>
+File: determinant_yield_files/figure-latex/viscoin-1.pdf Graphic file (type pdf
+)
+<use determinant_yield_files/figure-latex/viscoin-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/viscoin-1.pdf  us
+ed on input line 822.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[28pdfTeX warning (ext4): destination with the same identifier (name{table.4}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.828 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.5
+}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.828 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.6
+}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.828 
+      ] [29pdfTeX warning (ext4): destination with the same identifier (name{fi
+gure.35}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.864 \newpage
+              pdfTeX warning (ext4): destination with the same identifier (name
+{table.7}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.864 \newpage
+               <./determinant_yield_files/figure-latex/viscoin-1.pdf>]
+<determinant_yield_files/figure-latex/innov-1.pdf, id=630, 469.755pt x 325.215p
+t>
+File: determinant_yield_files/figure-latex/innov-1.pdf Graphic file (type pdf)
+<use determinant_yield_files/figure-latex/innov-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/innov-1.pdf  used
+ on input line 937.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[30pdfTeX warning (ext4): destination with the same identifier (name{table.8}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.957 \end{table}
+                 ]
+<determinant_yield_files/figure-latex/modperf-1.pdf, id=650, 469.755pt x 325.21
+5pt>
+File: determinant_yield_files/figure-latex/modperf-1.pdf Graphic file (type pdf
+)
+<use determinant_yield_files/figure-latex/modperf-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/modperf-1.pdf  us
+ed on input line 968.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[22]
-<determinant_yield_files/figure-latex/unnamed-chunk-21-1.pdf, id=398, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-21-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-21-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-21-
-1.pdf  used on input line 326.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[23 <./determinant_yield_files/figure-latex/unnamed-chunk-20-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-22-1.pdf, id=412, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-22-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-22-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-22-
-1.pdf  used on input line 333.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[24 <./determinant_yield_files/figure-latex/unnamed-chunk-21-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-23-1.pdf, id=428, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-23-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-23-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-23-
-1.pdf  used on input line 335.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[25 <./determinant_yield_files/figure-latex/unnamed-chunk-22-1.pdf>] [26 <./det
-erminant_yield_files/figure-latex/unnamed-chunk-23-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-25-1.pdf, id=453, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-25-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-25-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-25-
-1.pdf  used on input line 350.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-25-2.pdf, id=454, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-25-2.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-25-2.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-25-
-2.pdf  used on input line 350.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-25-3.pdf, id=455, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-25-3.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-25-3.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-25-
-3.pdf  used on input line 350.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-25-4.pdf, id=456, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-25-4.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-25-4.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-25-
-4.pdf  used on input line 350.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 350--351
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 350--351
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 350--351
-[]
- []
-
-[27 <./determinant_yield_files/figure-latex/unnamed-chunk-25-1.pdf>] [28 <./det
-erminant_yield_files/figure-latex/unnamed-chunk-25-2.pdf>] [29 <./determinant_y
-ield_files/figure-latex/unnamed-chunk-25-3.pdf>]
-<determinant_yield_files/figure-latex/yieldmove-1.pdf, id=485, 469.755pt x 325.
+[31pdfTeX warning (ext4): destination with the same identifier (name{figure.36}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.991 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.9
+}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.991 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.1
+0}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.991 
+       <./determinant_yield_files/figure-latex/innov-1.pdf>] [32pdfTeX warning 
+(ext4): destination with the same identifier (name{figure.37}) has been already
+ used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.991 
+       <./determinant_yield_files/figure-latex/modperf-1.pdf>] [33] [34]
+<determinant_yield_files/figure-latex/yieldmove-1.pdf, id=685, 469.755pt x 325.
 215pt>
 File: determinant_yield_files/figure-latex/yieldmove-1.pdf Graphic file (type p
 df)
 <use determinant_yield_files/figure-latex/yieldmove-1.pdf>
 Package pdftex.def Info: determinant_yield_files/figure-latex/yieldmove-1.pdf  
-used on input line 356.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-26-1.pdf, id=487, 469.755pt
+used on input line 1011.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/yieldmove-2.pdf, id=686, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/yieldmove-2.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/yieldmove-2.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/yieldmove-2.pdf  
+used on input line 1019.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/yieldmove-3.pdf, id=687, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/yieldmove-3.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/yieldmove-3.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/yieldmove-3.pdf  
+used on input line 1027.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/yieldmove-4.pdf, id=688, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/yieldmove-4.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/yieldmove-4.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/yieldmove-4.pdf  
+used on input line 1035.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/yieldmove-5.pdf, id=689, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/yieldmove-5.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/yieldmove-5.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/yieldmove-5.pdf  
+used on input line 1043.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/yieldmove-6.pdf, id=690, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/yieldmove-6.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/yieldmove-6.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/yieldmove-6.pdf  
+used on input line 1051.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/yieldmove-7.pdf, id=691, 469.755pt x 325.
+215pt>
+File: determinant_yield_files/figure-latex/yieldmove-7.pdf Graphic file (type p
+df)
+<use determinant_yield_files/figure-latex/yieldmove-7.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/yieldmove-7.pdf  
+used on input line 1059.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-9-1.pdf, id=692, 469.755pt 
+x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (
+type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-9-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-9-1
+.pdf  used on input line 1066.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-10-1.pdf, id=693, 469.755pt
  x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-26-1.pdf Graphic file 
+File: determinant_yield_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file 
 (type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-26-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-26-
-1.pdf  used on input line 361.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[30 <./determinant_yield_files/figure-latex/unnamed-chunk-25-4.pdf>] [31pdfTeX 
-warning (ext4): destination with the same identifier (name{figure.2}) has been 
-already used, duplicate ignored
+<use determinant_yield_files/figure-latex/unnamed-chunk-10-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-10-
+1.pdf  used on input line 1068.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[35pdfTeX warning (ext4): destination with the same identifier (name{figure.38}
+) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.363 W
-       e analyze the difference in yield's movement between auction days and...
- <./determinant_yield_files/figure-latex/yieldmove-1.pdf>]
-
-LaTeX Warning: Reference `tab:yielddiftable' on page 32 undefined on input line
- 363.
-
-[32 <./determinant_yield_files/figure-latex/unnamed-chunk-26-1.pdf>]
-<determinant_yield_files/figure-latex/yielddif_line-1.pdf, id=522, 469.755pt x 
-325.215pt>
-File: determinant_yield_files/figure-latex/yielddif_line-1.pdf Graphic file (ty
-pe pdf)
-<use determinant_yield_files/figure-latex/yielddif_line-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/yielddif_line-1.p
-df  used on input line 417.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/yielddif_line-2.pdf, id=523, 469.755pt x 
-325.215pt>
-File: determinant_yield_files/figure-latex/yielddif_line-2.pdf Graphic file (ty
-pe pdf)
-<use determinant_yield_files/figure-latex/yielddif_line-2.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/yielddif_line-2.p
-df  used on input line 423.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-27-1.pdf, id=524, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-27-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-27-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-27-
-1.pdf  used on input line 427.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[33 <./determinant_yield_files/figure-latex/yielddif_line-1.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-28-1.pdf, id=535, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-28-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-28-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-28-
-1.pdf  used on input line 434.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-30-1.pdf, id=536, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-30-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-30-
-1.pdf  used on input line 454.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-30-2.pdf, id=537, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-30-2.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-30-2.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-30-
-2.pdf  used on input line 454.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-30-3.pdf, id=538, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-30-3.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-30-3.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-30-
-3.pdf  used on input line 454.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<determinant_yield_files/figure-latex/unnamed-chunk-30-4.pdf, id=539, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-30-4.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-30-4.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-30-
-4.pdf  used on input line 454.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 454--455
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 454--455
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 454--455
-[]
- []
-
-[34 <./determinant_yield_files/figure-latex/yielddif_line-2.pdf>] [35pdfTeX war
-ning (ext4): destination with the same identifier (name{figure.3}) has been alr
-eady used, duplicate ignored
+l.1068 ...e-latex/unnamed-chunk-10-1} \end{center}
+                                                   <./determinant_yield_files/f
+igure-latex/yieldmove-1.pdf> <./determinant_yield_files/figure-latex/unnamed-ch
+unk-9-1.pdf>] [36pdfTeX warning (ext4): destination with the same identifier (n
+ame{figure.39}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.455 
-       <./determinant_yield_files/figure-latex/unnamed-chunk-27-1.pdf>] [36pdfT
-eX warning (ext4): destination with the same identifier (name{figure.4}) has be
-en already used, duplicate ignored
+l.1068 ...e-latex/unnamed-chunk-10-1} \end{center}
+                                                  pdfTeX warning (ext4): destin
+ation with the same identifier (name{figure.40}) has been already used, duplica
+te ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.455 
-       <./determinant_yield_files/figure-latex/unnamed-chunk-28-1.pdf>] [37]
-Overfull \vbox (46.91487pt too high) has occurred while \output is active []
-
-[38 <./determinant_yield_files/figure-latex/unnamed-chunk-30-1.pdf> <./determin
-ant_yield_files/figure-latex/unnamed-chunk-30-2.pdf>] [39 <./determinant_yield_
-files/figure-latex/unnamed-chunk-30-3.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-30-5.pdf, id=618, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-30-5.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-30-5.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-30-
-5.pdf  used on input line 470.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[40 <./determinant_yield_files/figure-latex/unnamed-chunk-30-4.pdf>]
-<determinant_yield_files/figure-latex/unnamed-chunk-30-6.pdf, id=633, 469.755pt
- x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-30-6.pdf Graphic file 
-(type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-30-6.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-30-
-6.pdf  used on input line 478.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[41 <./determinant_yield_files/figure-latex/unnamed-chunk-30-5.pdf>] [42pdfTeX 
-warning (ext4): destination with the same identifier (name{table.1}) has been a
-lready used, duplicate ignored
+l.1068 ...e-latex/unnamed-chunk-10-1} \end{center}
+                                                   <./determinant_yield_files/f
+igure-latex/yieldmove-2.pdf> <./determinant_yield_files/figure-latex/yieldmove-
+3.pdf>] [37pdfTeX warning (ext4): destination with the same identifier (name{fi
+gure.41}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.521 
-       <./determinant_yield_files/figure-latex/unnamed-chunk-30-6.pdf>] [43] [4
-4]
-<determinant_yield_files/figure-latex/unnamed-chunk-34-1.pdf, id=686, 469.755pt
+l.1068 ...e-latex/unnamed-chunk-10-1} \end{center}
+                                                  pdfTeX warning (ext4): destin
+ation with the same identifier (name{figure.42}) has been already used, duplica
+te ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1068 ...e-latex/unnamed-chunk-10-1} \end{center}
+                                                   <./determinant_yield_files/f
+igure-latex/yieldmove-4.pdf> <./determinant_yield_files/figure-latex/yieldmove-
+5.pdf>] [38pdfTeX warning (ext4): destination with the same identifier (name{fi
+gure.43}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1068 ...e-latex/unnamed-chunk-10-1} \end{center}
+                                                  pdfTeX warning (ext4): destin
+ation with the same identifier (name{figure.44}) has been already used, duplica
+te ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1068 ...e-latex/unnamed-chunk-10-1} \end{center}
+                                                   <./determinant_yield_files/f
+igure-latex/yieldmove-6.pdf> <./determinant_yield_files/figure-latex/yieldmove-
+7.pdf>]
+<determinant_yield_files/figure-latex/unnamed-chunk-11-1.pdf, id=760, 469.755pt
  x 325.215pt>
-File: determinant_yield_files/figure-latex/unnamed-chunk-34-1.pdf Graphic file 
+File: determinant_yield_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file 
 (type pdf)
-<use determinant_yield_files/figure-latex/unnamed-chunk-34-1.pdf>
-Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-34-
-1.pdf  used on input line 638.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[45 <./determinant_yield_files/figure-latex/unnamed-chunk-34-1.pdf>] [46] (./de
-terminant_yield.aux)
+<use determinant_yield_files/figure-latex/unnamed-chunk-11-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-11-
+1.pdf  used on input line 1070.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-12-1.pdf, id=761, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-12-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-12-
+1.pdf  used on input line 1072.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[39 <./determinant_yield_files/figure-latex/unnamed-chunk-10-1.pdf> <./determin
+ant_yield_files/figure-latex/unnamed-chunk-11-1.pdf>]
+<determinant_yield_files/figure-latex/unnamed-chunk-13-1.pdf, id=776, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-13-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-13-
+1.pdf  used on input line 1074.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-14-1.pdf, id=777, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-14-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-14-
+1.pdf  used on input line 1076.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[40 <./determinant_yield_files/figure-latex/unnamed-chunk-12-1.pdf> <./determin
+ant_yield_files/figure-latex/unnamed-chunk-13-1.pdf>]
+<determinant_yield_files/figure-latex/unnamed-chunk-15-1.pdf, id=792, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-15-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-15-
+1.pdf  used on input line 1078.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-16-1.pdf, id=793, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-16-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-16-
+1.pdf  used on input line 1084.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-16-2.pdf, id=794, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-16-2.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-16-2.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-16-
+2.pdf  used on input line 1092.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-16-3.pdf, id=795, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-16-3.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-16-3.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-16-
+3.pdf  used on input line 1100.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-16-4.pdf, id=796, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-16-4.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-16-4.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-16-
+4.pdf  used on input line 1108.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-16-5.pdf, id=797, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-16-5.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-16-5.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-16-
+5.pdf  used on input line 1116.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-16-6.pdf, id=798, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-16-6.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-16-6.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-16-
+6.pdf  used on input line 1124.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-16-7.pdf, id=799, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-16-7.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-16-7.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-16-
+7.pdf  used on input line 1132.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[41 <./determinant_yield_files/figure-latex/unnamed-chunk-14-1.pdf> <./determin
+ant_yield_files/figure-latex/unnamed-chunk-15-1.pdf>] [42pdfTeX warning (ext4):
+ destination with the same identifier (name{figure.45}) has been already used, 
+duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1682 
+       pdfTeX warning (ext4): destination with the same identifier (name{figure
+.46}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1682 
+        <./determinant_yield_files/figure-latex/unnamed-chunk-16-1.pdf> <./dete
+rminant_yield_files/figure-latex/unnamed-chunk-16-2.pdf>] [43pdfTeX warning (ex
+t4): destination with the same identifier (name{figure.47}) has been already us
+ed, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1682 
+       pdfTeX warning (ext4): destination with the same identifier (name{figure
+.48}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1682 
+        <./determinant_yield_files/figure-latex/unnamed-chunk-16-3.pdf> <./dete
+rminant_yield_files/figure-latex/unnamed-chunk-16-4.pdf>] [44pdfTeX warning (ex
+t4): destination with the same identifier (name{figure.49}) has been already us
+ed, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1682 
+       pdfTeX warning (ext4): destination with the same identifier (name{figure
+.50}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1682 
+        <./determinant_yield_files/figure-latex/unnamed-chunk-16-5.pdf> <./dete
+rminant_yield_files/figure-latex/unnamed-chunk-16-6.pdf>]
+Overfull \vbox (2932.05049pt too high) has occurred while \output is active []
 
-LaTeX Warning: There were undefined references.
-
+[45pdfTeX warning (ext4): destination with the same identifier (name{figure.51}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1682 
+       pdfTeX warning (ext4): destination with the same identifier (name{table.
+11}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1682 
+        <./determinant_yield_files/figure-latex/unnamed-chunk-16-7.pdf>]
+<determinant_yield_files/figure-latex/unnamed-chunk-17-1.pdf, id=877, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-17-1.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-17-
+1.pdf  used on input line 1685.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-17-2.pdf, id=878, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-17-2.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-17-2.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-17-
+2.pdf  used on input line 1687.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+<determinant_yield_files/figure-latex/unnamed-chunk-17-3.pdf, id=879, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-17-3.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-17-3.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-17-
+3.pdf  used on input line 1689.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[46 <./determinant_yield_files/figure-latex/unnamed-chunk-17-1.pdf> <./determin
+ant_yield_files/figure-latex/unnamed-chunk-17-2.pdf>]
+<determinant_yield_files/figure-latex/unnamed-chunk-17-4.pdf, id=894, 469.755pt
+ x 325.215pt>
+File: determinant_yield_files/figure-latex/unnamed-chunk-17-4.pdf Graphic file 
+(type pdf)
+<use determinant_yield_files/figure-latex/unnamed-chunk-17-4.pdf>
+Package pdftex.def Info: determinant_yield_files/figure-latex/unnamed-chunk-17-
+4.pdf  used on input line 1691.
+(pdftex.def)             Requested size: 328.82626pt x 227.64894pt.
+[47 <./determinant_yield_files/figure-latex/unnamed-chunk-17-3.pdf> <./determin
+ant_yield_files/figure-latex/unnamed-chunk-17-4.pdf>] [48] [49] (./determinant_
+yield.aux)
 Package rerunfilecheck Info: File `determinant_yield.out' has not changed.
-(rerunfilecheck)             Checksum: 07CB9649EF942AB45B4E6FD92E541399;3217.
+(rerunfilecheck)             Checksum: D551CDD4F5EE6C14D26F85A61CD2E447;4576.
  ) 
 Here is how much of TeX's memory you used:
- 14309 strings out of 480559
- 228615 string characters out of 5901864
- 559851 words of memory out of 5000000
- 31331 multiletter control sequences out of 15000+600000
- 472620 words of font info for 152 fonts, out of 8000000 for 9000
+ 14765 strings out of 480539
+ 244969 string characters out of 5901220
+ 724306 words of memory out of 5000000
+ 31694 multiletter control sequences out of 15000+600000
+ 472764 words of font info for 156 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,9n,66p,971b,483s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.en
-c}{c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.en
-c}{c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathi
-t.enc}<c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/l
-mbx10.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/
-lm/lmbx12.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/pub
-lic/lm/lmmi10.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1
-/public/lm/lmr10.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/ty
-pe1/public/lm/lmr12.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts
-/type1/public/lm/lmr17.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fo
-nts/type1/public/lm/lmr6.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/
-fonts/type1/public/lm/lmr7.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dis
-t/fonts/type1/public/lm/lmr8.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-d
-ist/fonts/type1/public/lm/lmri10.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/tex
-mf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on determinant_yield.pdf (46 pages, 3272124 bytes).
+ 60i,10n,66p,1065b,415s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{Hfootnote.9} has been referenced but does not exi
+st, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.8} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.7} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.6} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.5} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.4} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.3} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist
+, replaced by a fixed one
+
+{c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}
+{c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}
+{c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.
+enc}{c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mat
+hsy.enc}<c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm
+/lmbx10.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/publi
+c/lm/lmbx12.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/p
+ublic/lm/lmmi10.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/typ
+e1/public/lm/lmmi7.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fonts/
+type1/public/lm/lmr10.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/fon
+ts/type1/public/lm/lmr12.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-dist/
+fonts/type1/public/lm/lmr17.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-di
+st/fonts/type1/public/lm/lmr6.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texmf-
+dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/texm
+f-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/Vega/AppData/Roaming/TinyTeX/te
+xmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/Vega/AppData/Roaming/TinyTe
+X/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
+Output written on determinant_yield.pdf (49 pages, 1863543 bytes).
 PDF statistics:
- 832 PDF objects out of 1000 (max. 8388607)
- 665 compressed objects within 7 object streams
- 120 named destinations out of 1000 (max. 500000)
- 37245 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 1086 PDF objects out of 1200 (max. 8388607)
+ 876 compressed objects within 9 object streams
+ 208 named destinations out of 1000 (max. 500000)
+ 37391 words of extra memory for PDF output out of 42996 (max. 10000000)
 
