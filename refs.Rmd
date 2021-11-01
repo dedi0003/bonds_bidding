@@ -1,0 +1,43 @@
+---
+title: R packages used
+bibliography: pkg-refs.bib
+#csl: null.csl
+---
+
+- base [@base]
+- rmarkdown [@rmarkdown]
+- MonashEBSTemplates [@MonashEBSTemplates]
+- ggplot2 [@ggplot2]
+- knitr [@knitr]
+- bookdown [@bookdown]
+- caret [@caret]
+- cleaner [@cleaner]
+- dplyr [@dplyr]
+- flipTime [@flipTime]
+- forecast [@forecast]
+- fpp3 [@fpp3]
+- GGally [@GGally]
+- ggh4x [@ggh4x]
+- gravitas [@gravitas]
+- janitor [@janitor]
+- kableExtra [@kableExtra]
+- lubridate [@lubridate]
+- lvplot [@lvplot]
+- openxlsx [@openxlsx]
+- patchwork [@patchwork]
+- plotly [@plotly]
+- purrr [@purrr]
+- readr [@readr]
+- readxl [@readxl]
+- scales [@scales]
+- stargazer [@stargazer]
+- stringr [@stringr]
+- sugrrants [@sugrrants]
+- tidyverse [@tidyverse]
+- tsibble [@tsibble]
+- tsibbletalk [@tsibbletalk]
+- urca [@urca]
+- zoo [@zoo]
+- car [@car]
+
+## References
