@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Determining Factors for Local Currency Bonds Yield: Indonesia Case</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dea Avega Editya" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+class: hide-count, center, middle
+
+background-image: url("https://media.timeout.com/images/105240189/750/422/image.jpg")
+
+
+background-position: left
+background-size: 50% auto
+
+.pull-right[
+
+### Determining Factors for Local Currency Bonds (LCB) Yield: &lt;br&gt; Indonesia Case
+
+.pull-bottom[
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+Dea Avega Editya
+
+]
+
+]
+
+
+---
+class: left
+
+
+### Response
+LCB yield (%) with 10-year of maturity
+
+
+### Predictors
+
+.pull-left[
+#### 1. 10y-UST
+US treasury (UST) bonds yield (%) with 10-year of maturity
+
+#### 2. 5y-CDS
+Indonesia's 5y-Credit Default Swap (CDS)
+
+#### 3. VIX 
+Indonesia's volatility index (VIX) / fear index
+
+]
+
+.pull-right[
+#### 4. Exchange rate (USD/IDR)
+
+#### 5. Foreign ownership (trillion IDR)
+Foreign holding in sovereign bonds
+
+#### 6. Policy rate
+Central bank's rate (%)
+
+#### 7. Auction days (primary dealers behaviour)
+Auction period: T-3 until T+2 of auction event (Tuesday)
+]
+---
+
+### 10y-UST yield vs 10y-LCB
+
+
+
+
+&lt;img src="presentation_files/figure-html/plot-label-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+### 5y-CDS vs 10y-LCB yield
+
+&lt;img src="presentation_files/figure-html/plot-cds-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Foreign Ownership vs 10y-LCB 
+
+&lt;img src="presentation_files/figure-html/plot-foreign-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+### VIX vs 10y-LCB yield
+
+&lt;img src="presentation_files/figure-html/plot-vix-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+---
+### Policy rate vs 10y-LCB yield
+
+&lt;img src="presentation_files/figure-html/plot-rate-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+---
+
+### Exchange rate vs 10y-LCB yield
+
+&lt;img src="presentation_files/figure-html/plot-fx-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+---
+
+### Auction day
+
+
+
+
+&lt;img src="presentation_files/figure-html/plot-auc-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+
+
+
+## Modelling relationship
+
+### Dynamic regression model
+
+$$
+`\begin{aligned}
+y_t = &amp;\beta_0 + \beta_1 x_{1t} + \beta_2 x_{2t} + \beta_3 x_{3t} + \beta_4 x_{4t} + \beta_5 x_{5t} + \beta_6 x_{6t} + \beta_7 x_{7t} + \eta_t
+\end{aligned}`
+$$
+
+Pre-checking:
+
+1. multicolinearity
+
+2. cointegration
+
+
+---
+
+## Modelling relationship
+
+### Full model
+
+&lt;table class="table table-striped" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ar1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1181132 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ar2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0526955 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0216734 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sar1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0398477 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0839226 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ust_10y &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1370087 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000026 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cds_5y &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0036263 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; exchange_rate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0004335 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; vix &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0011568 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0779356 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; pol_rate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0765192 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0393375 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; dif_foreign &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0002195 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5466763 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; auction_day1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0009200 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7610155 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Result:  
+VIX, dif_foreign, auction_day1 as well as seasonal AR(1) are not significant.
+
+
+---
+## Modelling relationship
+
+### Smaller model
+
+&lt;table class="table table-striped" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p.value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ar1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1242175 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000001 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ar2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0526739 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0212935 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ust_10y &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1219783 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000118 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cds_5y &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0037951 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; exchange_rate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0004252 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0000000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; pol_rate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0772481 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0366893 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Result:  
+All variables are significant.
+
+---
+
+## Modelling relationship
+
+### Comparing full and smaller model 
+
+
+
+
+
+
+&lt;table class="table table-striped" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; .model &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; AICc &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; full model no lags &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ARIMA(lcb_10y ~ ust_10y + cds_5y + exchange_rate + vix + pol_rate + 
+    dif_foreign + auction_day) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6594 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; smaller model no lags &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ARIMA(lcb_10y ~ ust_10y + cds_5y + exchange_rate + pol_rate + 
+    pdq(2, 1, 0) + PDQ(0, 0, 0)) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6596 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Smaller model is preferred due to slightly better AICc with less predictors. 
+
+---
+## Modelling relationship
+
+### Smaller model with lagged predictors
+
+
+
+&lt;table class="table table-striped" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std.error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pval &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ar1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1241 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.33 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ar2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0421 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.83 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.07 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ust_10y &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1383 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.03 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.05 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; lag(ust_10y, 1) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.2036 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.03 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.48 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cds_5y &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0041 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.03 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; lag(cds_5y, 1) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0018 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; exchange_rate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.0004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.21 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; pol_rate &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.0752 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.04 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.07 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.04 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Result:  
+1. UST yield and its lag-1 are the most important factors that drive the Indonesia's LCB yield of 10y maturity.
+2. Exchange rate is also crucial factor considering that only a modest increase of 1000 USD/IDR, will raise the yield about 40bps (0.4%) on average.
+
+---
+## Modelling relationship
+### Comparing all models
+&lt;table class="table table-striped" style="font-size: 12px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; .model &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; AICc &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; full model no lags &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ARIMA(lcb_10y ~ ust_10y + cds_5y + exchange_rate + vix + pol_rate + 
+    dif_foreign + auction_day) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6594 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; smaller model no lags &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ARIMA(lcb_10y ~ ust_10y + cds_5y + exchange_rate + pol_rate + 
+    pdq(2, 1, 0) + PDQ(0, 0, 0)) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6596 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; smaller model with lags &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ARIMA(lcb_10y ~ ust_10y + lag(ust_10y, 1) + cds_5y + lag(cds_5y, 
+    1) + exchange_rate + pol_rate + pdq(2, 1, 0) + PDQ(0, 0, 
+    0)) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6677 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+The best model is smaller model with lagged predictors due to the smallest AICc.
+
+---
+
+## Model's performance evaluation
+
+### Residuals check
+
+.pull-left[
+#### Visualization using gg_tsresiduals
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-12-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+#### Ljung-Box test on innovation residuals
+
+
+&lt;table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; lb_stat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lb_pvalue &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 25.12276 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.24 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+## Model's performance evaluation
+### Prediction using best model
+
+
+
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-16-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+Accuracy scores (RMSE and MASE) are  0.26 and 1.78 respectively.
+---
+
+# Thank you!
+
+*Acknowledgement:*  
+This reports is written with the help from:
+1. Prof Dianne Cook who provide useful advice and supervision during the writing
+2. Prof Rob Hyndman for his lecture on forecasting, otext3 book, and his feedback on author's question during writing
+3. Muhammad Aulia, Sandi Arifianto and several colleagues at Indonesia's Ministry of Finance who give inspiration as well as collect Bloomberg and auction data
+5. Handi Yunianto, head of research at Mandiri Securities Indonesia for his insights on financial events observed in the analysis.
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

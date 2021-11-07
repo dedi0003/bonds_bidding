@@ -1,0 +1,569 @@
+---
+title: "Determining Factors for Local Currency Bonds Yield: Indonesia Case"
+author: "Dea Avega Editya"
+date: "(updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    seal: false
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE, dpi=300)
+```
+
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#FFCCFF",
+  header_font_google = google_font("Karla", "300", "300i"),
+  text_font_google   = google_font("Balsamiq Sans", "300", "300i"),
+  code_font_google   = google_font("Space Mono"),
+  title_slide_text_color = "#00000",
+  text_color = "#00000",
+  header_color= "#00000"
+)
+
+
+
+
+
+```
+
+
+class: hide-count, center, middle
+
+background-image: url("https://media.timeout.com/images/105240189/750/422/image.jpg")
+
+
+background-position: left
+background-size: 50% auto
+
+.pull-right[
+
+### Determining Factors for Local Currency Bonds (LCB) Yield: <br> Indonesia Case
+
+.pull-bottom[
+<br>
+<br>
+<br>
+
+Dea Avega Editya
+
+]
+
+]
+
+
+---
+class: left
+
+
+### Response
+LCB yield (%) with 10-year of maturity
+
+
+### Predictors
+
+.pull-left[
+#### 1. 10y-UST
+US treasury (UST) bonds yield (%) with 10-year of maturity
+
+#### 2. 5y-CDS
+Indonesia's 5y-Credit Default Swap (CDS)
+
+#### 3. VIX 
+Indonesia's volatility index (VIX) / fear index
+
+]
+
+.pull-right[
+#### 4. Exchange rate (USD/IDR)
+
+#### 5. Foreign ownership (trillion IDR)
+Foreign holding in sovereign bonds
+
+#### 6. Policy rate
+Central bank's rate (%)
+
+#### 7. Auction days (primary dealers behaviour)
+Auction period: T-3 until T+2 of auction event (Tuesday)
+]
+---
+
+### 10y-UST yield vs 10y-LCB
+
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(tsibble)
+library(gravitas)
+library(dplyr)
+library(lubridate)
+library(scales)
+library(kableExtra)
+library(fpp3)
+library(forecast)
+
+yield_ts <- readRDS("yield_ts.rds")
+
+yield_fc <- readRDS("yield_fc.rds") %>% 
+  as_tsibble(index = date)
+
+yieldts_scale <- yield_ts %>% as_tibble() %>% 
+  mutate(for_pct = foreign/tot_ownership) %>% 
+  select_if(is.numeric) %>% 
+  scale()
+
+yieldts_scale <- cbind(as_tibble(yield_ts$date), yieldts_scale) %>% rename(date = value)
+```
+
+```{r plot-label, echo = FALSE, ref.label="plot-label", warning = FALSE,out.width="70%", echo= FALSE, fig.align='center', fig.retina=3}
+
+yieldts_scale %>% 
+  ggplot(aes(x = date))+
+  geom_line(aes(y = domestic_10y, color = "red") , size = 1)+
+  geom_line(aes(y = ust_10y, color = "darkgreen"), size = 1)+
+  facet_wrap(~ year(date), scale = "free")+
+  ylab("value")+
+  scale_color_viridis_d(name = "Variable", labels = c("10y-UST yield", "10y-LCB yield"))+
+  theme_light()+theme(legend.position = "bottom", axis.text=element_text(size=12), axis.title=element_text(size=18),
+                      strip.text.x = element_text(size = 16),
+                      legend.title = element_text(size = 16),
+  legend.text = element_text(size = 16))+
+  scale_x_date(labels = date_format("%b"))
+```
+
+---
+
+### 5y-CDS vs 10y-LCB yield
+
+```{r plot-cds, echo = FALSE, ref.label="plot-cds", warning = FALSE,out.width="70%", echo= FALSE, fig.align='center', fig.retina=3}
+
+yieldts_scale %>% 
+  ggplot(aes(x = date))+
+  geom_line(aes(y = domestic_10y, color = "red") , size = 1)+
+  geom_line(aes(y = cds_5y, color = "darkgreen"), size = 1)+
+  facet_wrap(~ year(date), scale = "free")+
+   scale_color_viridis_d(name = "Variable", labels = c("5y-CDS", "10y-LCB yield"))+
+  ylab("value")+
+  theme_light() + scale_x_date(labels = date_format("%b"))+
+  theme(legend.position = "bottom", axis.text=element_text(size=12), axis.title=element_text(size=14),
+                      strip.text.x = element_text(size = 14),
+                      legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12))
+
+```
+
+---
+
+### Foreign Ownership vs 10y-LCB 
+
+```{r plot-foreign, echo = FALSE, ref.label="plot-foreign", warning = FALSE,out.width="70%", echo= FALSE, fig.align='center', fig.retina=3}
+
+yieldts_scale %>%
+  ggplot(aes(x = date))+
+  geom_line(aes(y = domestic_10y, color = "red") , size = 1)+
+  geom_line(aes(y = foreign, color = "darkgreen"), size = 1)+
+  facet_wrap(~ year(date), scale = "free")+
+   scale_color_viridis_d(name = "Variable", labels = c("Foreign ownership", "10y-LCB yield"))+
+  ylab("value")+
+  theme_light()+theme(legend.position = "bottom")+scale_x_date(labels = date_format("%b"))+theme_light()+theme(legend.position = "bottom", axis.text=element_text(size=12), axis.title=element_text(size=14),
+                      strip.text.x = element_text(size = 14),
+                      legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12))
+```
+
+---
+### VIX vs 10y-LCB yield
+
+```{r plot-vix, echo = FALSE, ref.label="plot-vix", warning = FALSE,out.width="70%", echo= FALSE, fig.align='center', fig.retina=3}
+
+yieldts_scale %>% 
+  ggplot(aes(x = date))+
+  geom_line(aes(y = domestic_10y, color = "red") , size = 1)+
+  geom_line(aes(y = vix, color = "darkgreen"), size = 1)+
+  facet_wrap(~ year(date), scale = "free")+
+  scale_color_viridis_d(name = "Variable", labels = c("VIX", "10y-LCB yield"))+
+  ylab("value")+
+  theme_light()+theme(legend.position = "bottom")+scale_x_date(labels = date_format("%b"))+theme(legend.position = "bottom", axis.text=element_text(size=12), axis.title=element_text(size=14),
+                      strip.text.x = element_text(size = 14),
+                      legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12))
+```
+---
+### Policy rate vs 10y-LCB yield
+
+```{r plot-rate, echo = FALSE, ref.label="plot-rate", warning = FALSE,out.width="70%", echo= FALSE, fig.align='center', fig.retina=3}
+
+yieldts_scale %>% 
+  filter(year(date) > 2015) %>% 
+  ggplot(aes(x = date))+
+  geom_line(aes(y = domestic_10y, color = "red") , size = 1)+
+  geom_line(aes(y = rate, color = "darkgreen"), size = 1)+
+  facet_wrap(~ year(date), scale = "free")+
+   scale_color_viridis_d(name = "Variable", labels = c("Policy rate", "10y-LCB yield"))+
+  ylab("value")+
+  theme_light()+scale_x_date(labels = date_format("%b"))+
+  theme(legend.position = "bottom", axis.text=element_text(size=12), axis.title=element_text(size=14),
+                      strip.text.x = element_text(size = 14),
+                      legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12))
+```
+---
+
+### Exchange rate vs 10y-LCB yield
+
+```{r plot-fx, echo = FALSE, ref.label="plot-fx", warning = FALSE,out.width="70%", echo= FALSE, fig.align='center', fig.retina=3}
+yieldts_scale %>% 
+  ggplot(aes(x = date))+
+  geom_line(aes(y = domestic_10y, color = "red") , size = 1)+
+  geom_line(aes(y = exchange_mid, color = "darkgreen"), size = 1)+
+  facet_wrap(~ year(date), scale = "free")+
+   scale_color_viridis_d(name = "Variable", labels = c("FX rate", "10y-LCB yield"))+
+  ylab("value")+
+  theme_light()+scale_x_date(labels = date_format("%b"))+
+  theme(legend.position = "bottom", axis.text=element_text(size=12), axis.title=element_text(size=14),
+                      strip.text.x = element_text(size = 14),
+                      legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12))
+```
+---
+
+### Auction day
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+cek5 <- yield_ts %>% as_tibble %>% 
+  select(date, domestic_10y, auction_day) %>% 
+  mutate(date = date(date))
+
+yielddif_auction <- cek5 %>% 
+  ungroup %>%
+  arrange(date) %>% 
+  mutate(
+    auction_lag = lag(auction_day, default = 0),
+    id = cumsum(auction_day != auction_lag)
+  ) %>% 
+  select(-auction_lag) %>% 
+  group_by(id) %>% 
+  mutate(
+    edge = case_when(
+      date == min(date) ~ "from",
+      date == max(date) ~ "to",
+      T ~ NA_character_
+      )
+  ) %>% 
+  ungroup %>% 
+  filter(!is.na(edge)) %>% 
+  pivot_wider(
+    names_from = edge, 
+    values_from = c(date, domestic_10y),
+  ) %>% 
+  select(-id) %>% 
+  mutate(
+    difference = domestic_10y_to - domestic_10y_from
+  )
+
+```
+
+
+```{r plot-auc, echo = FALSE, ref.label="plot-auc", warning = FALSE,out.width="70%", echo= FALSE, fig.align='center', fig.retina=3}
+
+cbPalette <- c("#56B4E9", "#E69F00")
+### yield difference in geom line by year
+## difference between first and last day in auction or non-auction days
+
+yielddif_auction %>% as_data_frame() %>%  mutate(no = as.numeric(rownames(yielddif_auction))) %>% as_tsibble(index = no) %>% ggplot(aes(y = difference, x = date_to, group = factor(auction_day), color = factor(auction_day)))+geom_line(size = 1)+
+ scale_color_manual(name = "Auction days", labels = c("No", "Yes"), values=cbPalette)+theme_light()+theme(legend.position="bottom")
+```
+
+---
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+
+# ARIMA describe autocorrelations in the data
+yield_mod <- yield_fc %>%
+  mutate(dif_foreign = difference(foreign), auction_day = as.factor(auction_day)) %>% rename(lcb_10y = domestic_10y) %>% 
+  select(date, lcb_10y, ust_10y, cds_5y, exchange_mid, vix, rate, dif_foreign, auction_day)
+
+# ARIMA function choose automatically
+fit <- yield_mod %>% rename(exchange_rate = exchange_mid, pol_rate = rate) %>% 
+  model(ARIMA(lcb_10y ~ ust_10y + cds_5y + exchange_rate + vix + pol_rate + dif_foreign + auction_day))
+
+
+fit2 <- yield_mod %>% rename(exchange_rate = exchange_mid, pol_rate = rate) %>% 
+  model(ARIMA(lcb_10y ~ ust_10y + cds_5y + exchange_rate +pol_rate + pdq(2,1,0)+PDQ(0,0,0)))
+
+
+# tidy(fit)
+# LM w/ ARIMA(2,1,0)(1,0,0)[7] errors 
+# 7-day seasonal pattern, non-seasonal AR(2) and seasonal AR(1) with 1 difference.
+
+```
+
+
+
+## Modelling relationship
+
+### Dynamic regression model
+
+$$
+\begin{aligned}
+y_t = &\beta_0 + \beta_1 x_{1t} + \beta_2 x_{2t} + \beta_3 x_{3t} + \beta_4 x_{4t} + \beta_5 x_{5t} + \beta_6 x_{6t} + \beta_7 x_{7t} + \eta_t
+\end{aligned}
+$$
+
+Pre-checking:
+
+1. multicolinearity
+
+2. cointegration
+
+
+---
+
+## Modelling relationship
+
+### Full model
+
+```{r echo = FALSE, out.width="30%"}
+
+tidy(fit) %>% select(term, estimate, p.value) %>% kable("html") %>% kable_styling(bootstrap_options = "striped", font_size = 12)
+```
+
+Result:  
+VIX, dif_foreign, auction_day1 as well as seasonal AR(1) are not significant.
+
+
+---
+## Modelling relationship
+
+### Smaller model
+
+```{r echo = FALSE, out.width="40%"}
+
+tidy(fit2) %>% select(term, estimate, p.value) %>% kable("html") %>% kable_styling(font_size = 12, bootstrap_options = "striped")
+
+```
+
+Result:  
+All variables are significant.
+
+---
+
+## Modelling relationship
+
+### Comparing full and smaller model 
+```{r echo = FALSE, warning = FALSE}
+fit_1 <- glance(fit) %>% select(.model, AICc)
+fit_2 <- glance(fit2) %>% select(.model, AICc)
+
+f_glance <- rbind(fit_1, fit_2) %>% mutate(model = c("Full model", "Smaller model"))
+fit_glance <- f_glance[, c(3, 1, 2)]
+
+# fit_glance %>% mutate(AICc = round(AICc, 0)) %>% 
+#   kable(caption = "Model estimation for full and smaller model") %>% kable_styling(bootstrap_options = "striped", latex_options = c("striped", "hold_position", "scale_down"))
+
+fit_lag <- yield_mod %>% rename(exchange_rate = exchange_mid, pol_rate = rate) %>% 
+model(ARIMA(lcb_10y ~ ust_10y + lag(ust_10y, 1) + cds_5y + lag(cds_5y, 1) + exchange_rate  + pol_rate + pdq(2,1,0)+PDQ(0,0,0)))
+
+fit_3 <- glance(fit_lag) %>% select(.model, AICc)
+fit_glance_lag <- rbind(fit_1, fit_2, fit_3)
+
+fit_glance_12 <- rbind(fit_1, fit_2)
+rownames(fit_glance_12) <- c("full model no lags","smaller model no lags")
+
+rownames(fit_glance_lag) <- c("full model no lags","smaller model no lags","smaller model with lags")
+
+```
+
+
+```{r echo = FALSE, warning = FALSE}
+fit_fxlag <- yield_mod %>% rename(exchange_rate = exchange_mid) %>% 
+  # Restrict data so models use same fitting period [@Hyndman]
+  mutate(lcb_10y = c(NA, NA, NA, lcb_10y[4:nrow(yield_mod)])) %>%
+  # Estimate models
+  model(
+    lag0 = ARIMA(lcb_10y ~ pdq(d = 0) + exchange_rate),
+    lag1 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  exchange_rate +  lag(exchange_rate)),
+    lag2 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  exchange_rate +  lag(exchange_rate) +
+                 lag(exchange_rate, 2)),
+    lag3 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  exchange_rate +  lag(exchange_rate) +
+                  lag(exchange_rate, 2) + lag(exchange_rate, 3))
+    )
+
+fit_ustlag <- yield_mod %>%
+  # Restrict data so models use same fitting period [@Hyndman]
+  mutate(lcb_10y = c(NA, NA, NA, lcb_10y[4:nrow(yield_mod)])) %>%
+  # Estimate models
+  model(
+    lag0 = ARIMA(lcb_10y ~ pdq(d = 0) + ust_10y),
+    lag1 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  ust_10y +  lag(ust_10y)),
+    lag2 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  ust_10y +  lag(ust_10y) +
+                 lag(ust_10y, 2)),
+    lag3 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  ust_10y +  lag(ust_10y) +
+                  lag(ust_10y, 2) + lag(ust_10y, 3))
+    )
+
+fit_cdslag <- yield_mod %>%
+  # Restrict data so models use same fitting period [@Hyndman]
+  mutate(lcb_10y = c(NA, NA, NA, lcb_10y[4:nrow(yield_mod)])) %>%
+  # Estimate models
+  model(
+    lag0 = ARIMA(lcb_10y ~ pdq(d = 0) + cds_5y),
+    lag1 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  cds_5y +  lag(cds_5y)),
+    lag2 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  cds_5y +  lag(cds_5y) +
+                 lag(cds_5y, 2)),
+    lag3 = ARIMA(lcb_10y ~ pdq(d = 0) +
+                  cds_5y +  lag(cds_5y) +
+                  lag(cds_5y, 2) + lag(cds_5y, 3))
+    )
+
+gl_fxlag <- glance(fit_fxlag) %>% select(.model, AICc) %>% mutate(variable = "exchange_rate")
+gl_uslag <- glance(fit_ustlag) %>% select(.model, AICc) %>% mutate(variable = "ust_10y")
+gl_cdslag <- glance(fit_cdslag) %>% select(.model, AICc) %>% mutate(variable = "cds_5y")
+
+a_lag <- rbind(gl_uslag, gl_cdslag)
+all_lag <- rbind(a_lag, gl_fxlag)
+```
+
+
+```{r echo = FALSE, out.width= "40%"}
+# model with lag can be chosen with AICc. The appropiate lag will produce the smallest AICc (@Hyndman)
+
+# all_lag %>% select(variable, .model, AICc) %>% mutate(AICc = round(AICc, 0)) %>% kable() %>% kable_styling(bootstrap_options = "striped", latex_options = c("striped", "hold_position"))
+fit_glance_12 %>% mutate(AICc = round(AICc, 0)) %>% 
+  kable("html") %>% kable_styling(font_size = 12, bootstrap_options = "striped", latex_options = c("striped", "hold_position", "scale_down"))
+
+```
+
+Smaller model is preferred due to slightly better AICc with less predictors. 
+
+---
+## Modelling relationship
+
+### Smaller model with lagged predictors
+
+```{r echo = FALSE}
+fit_tidy <- tidy(fit_lag)
+
+```
+
+```{r echo = FALSE, warning = FALSE, out.width="50%"}
+fit_tidy %>% mutate(pval = round(as.numeric(format(p.value, scientific = F)), digits = 2),
+                    estimate = round(as.numeric(format(estimate, scientific = F)), digits = 4),
+                    std.error = round(as.numeric(format(std.error, scientific = F)), digits = 2),
+                    statistic = round(as.numeric(format(statistic, scientific = F)), digits = 2)) %>% 
+  select(-p.value, -.model) %>% 
+  kable("html") %>% kable_styling(font_size = 12, bootstrap_options = "striped", latex_options = c("hold_position", "striped"))
+```
+
+Result:  
+1. UST yield and its lag-1 are the most important factors that drive the Indonesia's LCB yield of 10y maturity.
+2. Exchange rate is also crucial factor considering that only a modest increase of 1000 USD/IDR, will raise the yield about 40bps (0.4%) on average.
+
+---
+## Modelling relationship
+### Comparing all models
+```{r echo = FALSE, out.width= "40%"}
+# model with lag can be chosen with AICc. The appropiate lag will produce the smallest AICc (@Hyndman)
+
+# all_lag %>% select(variable, .model, AICc) %>% mutate(AICc = round(AICc, 0)) %>% kable() %>% kable_styling(bootstrap_options = "striped", latex_options = c("striped", "hold_position"))
+fit_glance_lag %>% mutate(AICc = round(AICc, 0)) %>% 
+  kable("html") %>% kable_styling(font_size = 12, bootstrap_options = "striped", latex_options = c("striped", "hold_position", "scale_down"))
+
+```
+
+The best model is smaller model with lagged predictors due to the smallest AICc.
+
+---
+
+## Model's performance evaluation
+
+### Residuals check
+
+.pull-left[
+#### Visualization using gg_tsresiduals
+
+```{r echo = FALSE, out.width= "90%", fig.retina=3, fig.align='center', warning=FALSE}
+
+fit_lag %>% gg_tsresiduals()
+  
+
+```
+]
+
+.pull-right[
+#### Ljung-Box test on innovation residuals
+```{r echo = FALSE, warning=FALSE}
+box_test <- augment(fit_lag) %>%
+  features(.innov, ljung_box, lag = 21) %>% select(lb_stat, lb_pvalue)
+```
+
+```{r echo = FALSE, warning=FALSE}
+box_test %>% mutate(lb_pvalue = round(lb_pvalue, 2)) %>% 
+kable("html") %>% 
+  kable_styling(bootstrap_options = "striped", font_size = 14, latex_options = c("striped", "hold_position"))
+```
+]
+
+---
+## Model's performance evaluation
+### Prediction using best model
+
+```{r echo = FALSE, warning=FALSE}
+# reserve 2021 for test data
+train <- yield_mod   %>% 
+  filter_index(.~ "2020-12-31")
+
+test <- yield_mod %>% 
+  filter(date >= '2020-12-31') 
+
+#fit the same model
+myfit <- train %>%
+  model(ARIMA(lcb_10y ~ ust_10y + lag(ust_10y, 1) + cds_5y + lag(cds_5y, 1) + exchange_mid  + rate + pdq(2,1,0)+PDQ(0,0,0)))
+
+# tidy(myfit) %>% mutate(pval = round(as.numeric(format(p.value, scientific = F)), digits = 3)) %>% 
+#   select(-p.value, -.model) %>% 
+#   kable(caption = "Model statistic of smaller model with lags on training data") %>% kable_styling(bootstrap_options = "striped", latex_options = c("hold_position", "striped"))
+```
+
+
+```{r echo = FALSE, fig.retina=3, fig.width=7, fig.height=5, fig.align='center'}
+myfit %>%
+  forecast(test) %>% 
+  autoplot(yield_mod)+
+  ylab("10y-LCB yield")+
+  theme_light()
+```
+
+Accuracy scores (RMSE and MASE) are  0.26 and 1.78 respectively.
+---
+
+# Thank you!
+
+*Acknowledgement:*  
+This reports is written with the help from:
+1. Prof Dianne Cook who provide useful advice and supervision during the writing
+2. Prof Rob Hyndman for his lecture on forecasting, otext3 book, and his feedback on author's question during writing
+3. Muhammad Aulia, Sandi Arifianto and several colleagues at Indonesia's Ministry of Finance who give inspiration as well as collect Bloomberg and auction data
+5. Handi Yunianto, head of research at Mandiri Securities Indonesia for his insights on financial events observed in the analysis.
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
